@@ -3,22 +3,22 @@ from functools import total_ordering
 from inspect import signature
 
 # create a logger for all interesting events
-logger = logging.getLogger('TraceLog')
+logger = logging.getLogger("")
 
 def logthis(level):
     def _decorator(fn):
         def _decorated(*arg, **kwargs):
             logger.log(level,
-                       "calling %s: args=%r, kwargs=%r",
-                       fn.func_name,
+                       "  calling %s: args=%r, kwargs=%r",
+                       fn.__name__,
                        arg,
                        kwargs)
 
             ret = fn(*arg, **kwargs)
             if ret:
                 logger.log(level,
-                           "called %s: args=%r, kwargs=%r got return value: %r",
-                           fn.func_name,
+                           "  called %s: args=%r, kwargs=%r got return value: %r",
+                           fn.__name__,
                            arg,
                            kwargs,
                            ret)
@@ -39,10 +39,11 @@ class Event(Base):
         # check that action doesn't take any arguments
         # this means all needed variables have been
         # captured at its creation
-        if len(signature(action).parameters) != 0:
-            raise ValueError(
-                'Event: action should not take any parameters to be called'
-            )
+        # if len(signature(action).parameters) != 0:
+            # print("----------------------> {}".format(signature(action)))
+            # raise ValueError(
+                # 'Event: action should not take any parameters to be called'
+            # )
 
         self.action = action
         self.when = when
@@ -64,12 +65,18 @@ class EventQueue(Base):
     def next(self):
         next_event = self.events.pop()
         now = next_event.when
+
+        next_event.trigger()
+
         return next_event
 
     def add(self, event):
         # add but keep list ordered
-        self.events.insert(event, 0)
+        self.events.insert(0, event)
         self.events.sort()
+
+    def clean(self):
+        self.__init__()
 
 class Packet(Base):
     last_packet_id = 0

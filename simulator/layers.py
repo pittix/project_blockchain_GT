@@ -21,7 +21,7 @@ class Layer(Base):
         # store in a dict all Layers created, in order to look them up by id
         Layer.all_layers[self.id_] = self
 
-    @logthis(logger.INFO)
+    @logthis(logging.INFO)
     def send_up(self, packet, upper_layer_id=None):
         if len(self.upper_layers_id) == 0:
             raise ValueError("Layer {} has no upper layers!".format(self))
@@ -34,7 +34,7 @@ class Layer(Base):
         upper_layer = Layer.all_layers[upper_layer_id]
         upper_layer.recv_from_down(packet, self.id_)
 
-    @logthis(logger.INFO)
+    @logthis(logging.INFO)
     def send_down(self, packet, lower_layer_id=None):
         if len(self.lower_layers_id) == 0:
             raise ValueError("Layer {} has no lower layers!".format(self))
@@ -47,18 +47,20 @@ class Layer(Base):
         lower_layer = Layer.all_layers[lower_layer_id]
         lower_layer.recv_from_up(packet, self.id_)
 
-    @logthis(logger.DEBUG)
-    def connect_lower_layer(self, lower_layer_id):
+    @logthis(logging.DEBUG)
+    def connect_lower_layer(self, lower_layer):
         # this function always connects lower layers
         # to upper layers, by convention
-        self.lower_layers_id.append(lower_layer_id)
+        self.lower_layers_id.append(lower_layer.id_)
 
         # add self layer id_ to lower layer (connect both ways)
-        Layer.all_layers[lower_layer_id].upper_layers_id.append(self.id_)
+        lower_layer.upper_layers_id.append(self.id_)
 
+    @logthis(logging.DEBUG)
     def recv_from_up(self, packet, upper_layer_id):
         raise NotImplemented
 
+    @logthis(logging.DEBUG)
     def recv_from_down(self, packet, lower_layer_id):
         raise NotImplemented
 
@@ -74,15 +76,17 @@ class Channel(Layer):
 
     def recv_from_up(self, packet, upper_layer_id):
         # physical location pertains to upper layer (lowest for each node)
-        position = Layer.all_layers[upper_layer_id].position
+        # position = Layer.all_layers[upper_layer_id].position
 
         # TODO compute packet error probability *based on position, ...*
-        Pe = 0.5
+        Pe = -1
 
         # if error does not happen
         if random() > Pe:
+            logging.log(logging.INFO, "CHANNEL: Packet {} transmitted successfully".format(packet))
+
             # we have IP layer (batman) just above channel
-            dest_upper_layer_id = packet.header['ip.dest']
+            dest_upper_layer_id = packet.header['dst_ip']
 
             # check if it is a good idea to set one
             # network should be small enough to be negligible though
@@ -95,6 +99,8 @@ class Channel(Layer):
             # if tp=0, no event scheduling is needed
             event_queue.add(Event(handle_packet,
                                   when=propagation_time + event_queue.now))
+        else:
+            logging.log(logging.INFO, "CHANNEL: Packet {} lost".format(packet))
 
 class BatmanLayer(Layer):
     def __init__(self, local_ip, position=(0, 0)):
@@ -107,7 +113,7 @@ class BatmanLayer(Layer):
     def recv_from_up(packet, upper_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
-        # ex. pkt.header['ip.next_hop'] = 10
+        # ex. pkt.header['next_hop_ip'] = 10
         sendDown(packet)
 
     def recv_from_down(packet, lower_layer_id):
@@ -140,12 +146,15 @@ class ApplicationLayer(Layer):
 
         # count correctly received packets
         self.rx_packet_count = 0
+        self.rx_packet_size = 0
         self.tx_packet_count = 0
+        self.tx_packet_size = 0
 
         # end-to-end connection from src to dst ips
         # is handled here, for simplicity
         self.local_ip = local_ip
 
+    @logthis(logging.INFO)
     def generate_pkts(self):
         size = next(self.size_gen)
         time_delta = next(self.interarrival_gen)
@@ -155,19 +164,20 @@ class ApplicationLayer(Layer):
             # send packet to lower layer
             p = Packet(size=size,
                        header = {
-                           'src_ip': local_ip,
-                           'src_port': local_port,
-                           'dst_ip': remote_ip,
-                           'dst_port': remote_port
+                           'src_ip': self.local_ip,
+                           'src_port': self.local_port,
+                           'dst_ip': self.remote_ip,
+                           'dst_port': self.remote_port
                        })
 
             self.tx_packet_count += 1
+            self.tx_packet_size += p.size
             self.send_down(p)
 
             # call function again after interarrival
             event_queue.add(Event(self.generate_pkts, when=next_gen_time))
 
-    def recv_from_down(packet, lower_layer_id):
+    def recv_from_down(self, packet, lower_layer_id):
         if packet.header['dst_ip'] == self.local_ip and \
            packet.header['dst_port'] == self.local_port and \
            packet.header['src_ip'] == self.remote_ip and \
@@ -175,3 +185,4 @@ class ApplicationLayer(Layer):
 
             # increment count if packet is for this layer
             self.rx_packet_count += 1
+            self.rx_packet_size += packet.size
