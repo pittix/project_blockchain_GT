@@ -1,6 +1,30 @@
+import logging
 from functools import total_ordering
 from inspect import signature
 
+# create a logger for all interesting events
+logger = logging.getLogger('TraceLog')
+
+def logthis(level):
+    def _decorator(fn):
+        def _decorated(*arg, **kwargs):
+            logger.log(level,
+                       "calling %s: args=%r, kwargs=%r",
+                       fn.func_name,
+                       arg,
+                       kwargs)
+
+            ret = fn(*arg, **kwargs)
+            if ret:
+                logger.log(level,
+                           "called %s: args=%r, kwargs=%r got return value: %r",
+                           fn.func_name,
+                           arg,
+                           kwargs,
+                           ret)
+            return ret
+        return _decorated
+    return _decorator
 
 class Base:
     # create a nice representation of current object
@@ -46,9 +70,6 @@ class EventQueue(Base):
         # add but keep list ordered
         self.events.insert(event, 0)
         self.events.sort()
-
-    def now(self):
-        return 0
 
 class Packet(Base):
     last_packet_id = 0

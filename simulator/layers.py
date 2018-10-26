@@ -1,3 +1,4 @@
+import logging
 from random import random
 
 from .core import *
@@ -20,6 +21,7 @@ class Layer(Base):
         # store in a dict all Layers created, in order to look them up by id
         Layer.all_layers[self.id_] = self
 
+    @logthis(logger.INFO)
     def send_up(self, packet, upper_layer_id=None):
         if len(self.upper_layers_id) == 0:
             raise ValueError("Layer {} has no upper layers!".format(self))
@@ -32,6 +34,7 @@ class Layer(Base):
         upper_layer = Layer.all_layers[upper_layer_id]
         upper_layer.recv_from_down(packet, self.id_)
 
+    @logthis(logger.INFO)
     def send_down(self, packet, lower_layer_id=None):
         if len(self.lower_layers_id) == 0:
             raise ValueError("Layer {} has no lower layers!".format(self))
@@ -44,6 +47,7 @@ class Layer(Base):
         lower_layer = Layer.all_layers[lower_layer_id]
         lower_layer.recv_from_up(packet, self.id_)
 
+    @logthis(logger.DEBUG)
     def connect_lower_layer(self, lower_layer_id):
         # this function always connects lower layers
         # to upper layers, by convention
