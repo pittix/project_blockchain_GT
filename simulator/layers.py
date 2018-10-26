@@ -105,7 +105,7 @@ class BatmanLayer(Layer):
 
         # TODO add BATMAN parameters
 
-    def recv_from_up(packet, upper_layer_id):
+    def recv_from_up(packet, lower_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
         # ex. pkt.header['ip.next_hop'] = 10
