@@ -97,23 +97,39 @@ class Channel(Layer):
                                   when=propagation_time + event_queue.now))
 
 class BatmanLayer(Layer):
-    def __init__(self, ip, position=(0, 0)):
+    def __init__(self, local_ip, position=(0, 0)):
         super(self.__class__, self).__init__()
 
         self.position = position
-        self.ip = self.ip
-
+        self.local_ip = local_ip
         # TODO add BATMAN parameters
 
-    def recv_from_up(packet, lower_layer_id):
+    def recv_from_up(packet, upper_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
         # ex. pkt.header['ip.next_hop'] = 10
         sendDown(packet)
 
+    def recv_from_down(packet, lower_layer_id):
+        # TODO use packet.header['next_hop_ip'] to perform routing
+        # (and distinguish between next hop and destination ip)
+
+        # if this node is destination, send to each one of the apps:
+        # the application will take care of discarding packets not for it
+        if packet.header['dst_ip'] == local_ip:
+            for layer_id in self.upper_layers_id:
+                sendUp(packet, layer_id)
+
 class ApplicationLayer(Layer):
-    def __init__(self, interarrival_gen, size_gen, stop_time):
-        super(ApplicationLayer, self).__init__()
+    def __init__(self, interarrival_gen, size_gen, stop_time,
+                 local_ip, local_port, remote_ip, remote_port):
+        super(self.__class__, self).__init__()
+
+        # save address details
+        self.local_ip = local_ip
+        self.local_port = local_port
+        self.remote_ip = remote_ip
+        self.remote_port = remote_port
 
         # define the arrival process
         self.interarrival_gen = interarrival_gen
@@ -122,6 +138,14 @@ class ApplicationLayer(Layer):
         # set when packet generation has to stop
         self.stop_time = stop_time
 
+        # count correctly received packets
+        self.rx_packet_count = 0
+        self.tx_packet_count = 0
+
+        # end-to-end connection from src to dst ips
+        # is handled here, for simplicity
+        self.local_ip = local_ip
+
     def generate_pkts(self):
         size = next(self.size_gen)
         time_delta = next(self.interarrival_gen)
@@ -129,8 +153,25 @@ class ApplicationLayer(Layer):
 
         if next_gen_time < self.stop_time:
             # send packet to lower layer
-            p = Packet(size=size)
+            p = Packet(size=size,
+                       header = {
+                           'src_ip': local_ip,
+                           'src_port': local_port,
+                           'dst_ip': remote_ip,
+                           'dst_port': remote_port
+                       })
+
+            self.tx_packet_count += 1
             self.send_down(p)
 
             # call function again after interarrival
             event_queue.add(Event(self.generate_pkts, when=next_gen_time))
+
+    def recv_from_down(packet, lower_layer_id):
+        if packet.header['dst_ip'] == self.local_ip and \
+           packet.header['dst_port'] == self.local_port and \
+           packet.header['src_ip'] == self.remote_ip and \
+           packet.header['src_port'] == self.remote_port:
+
+            # increment count if packet is for this layer
+            self.rx_packet_count += 1
