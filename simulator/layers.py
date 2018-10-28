@@ -74,6 +74,15 @@ class Channel(Layer):
         if seed:
             random.seed(seed)
 
+    def get_id_from_ip(self, dst_ip):
+        for id_ in self.upper_layers_id:
+            layer = Layer.all_layers[id_]
+
+            if dst_ip == layer.local_ip:
+                return layer.id_
+
+        raise ValueError("Invalid IP {}: maybe layer not connected to channel?".format(dst_ip))
+
     def recv_from_up(self, packet, upper_layer_id):
         # physical location pertains to upper layer (lowest for each node)
         # position = Layer.all_layers[upper_layer_id].position
@@ -86,7 +95,7 @@ class Channel(Layer):
             logging.log(logging.INFO, "CHANNEL: Packet {} transmitted successfully".format(packet))
 
             # we have IP layer (batman) just above channel
-            dest_upper_layer_id = packet.header['dst_ip']
+            dest_upper_layer_id = self.get_id_from_ip(packet.header['dst_ip'])
 
             # check if it is a good idea to set one
             # network should be small enough to be negligible though
