@@ -1,6 +1,7 @@
 import logging
 from functools import total_ordering
 from inspect import signature
+from types import FunctionType, GeneratorType
 
 # create a logger for all interesting events
 logger = logging.getLogger("")
@@ -29,9 +30,16 @@ def logthis(level):
 class Base:
     # create a nice representation of current object
     def __repr__(self):
-        arguments = ", ".join(["{}: {!r}".format(key, value) \
-                               for key, value in self.__dict__.items()])
-        return "<{}({})>".format(self.__class__.__name__, arguments)
+        arguments = []
+
+        for key, value in self.__dict__.items():
+            if isinstance(value, FunctionType) or \
+               isinstance(value, GeneratorType):
+                arguments.append("key: {}".format(value.__name__))
+            else:
+                arguments.append("{}: {!r}".format(key, value))
+
+        return "<{}({})>".format(self.__class__.__name__, ", ".join(arguments))
 
 @total_ordering
 class Event(Base):
