@@ -95,7 +95,7 @@ class Channel(Layer):
             logging.log(logging.INFO, "CHANNEL: Packet {} transmitted successfully".format(packet))
 
             # we have IP layer (batman) just above channel
-            dest_upper_layer_id = self.get_id_from_ip(packet.header['dst_ip'])
+            dest_upper_layer_id = self.get_id_from_ip(packet['dst_ip'])
 
             # check if it is a good idea to set one
             # network should be small enough to be negligible though
@@ -122,16 +122,16 @@ class BatmanLayer(Layer):
     def recv_from_up(packet, upper_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
-        # ex. pkt.header['next_hop_ip'] = 10
+        # ex. pkt['next_hop_ip'] = 10
         sendDown(packet)
 
     def recv_from_down(packet, lower_layer_id):
-        # TODO use packet.header['next_hop_ip'] to perform routing
+        # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
-        if packet.header['dst_ip'] == local_ip:
+        if packet['dst_ip'] == local_ip:
             for layer_id in self.upper_layers_id:
                 sendUp(packet, layer_id)
 
@@ -187,10 +187,10 @@ class ApplicationLayer(Layer):
             event_queue.add(Event(self.generate_pkts, when=next_gen_time))
 
     def recv_from_down(self, packet, lower_layer_id):
-        if packet.header['dst_ip'] == self.local_ip and \
-           packet.header['dst_port'] == self.local_port and \
-           packet.header['src_ip'] == self.remote_ip and \
-           packet.header['src_port'] == self.remote_port:
+        if packet['dst_ip'] == self.local_ip and \
+           packet['dst_port'] == self.local_port and \
+           packet['src_ip'] == self.remote_ip and \
+           packet['src_port'] == self.remote_port:
 
             # increment count if packet is for this layer
             self.rx_packet_count += 1

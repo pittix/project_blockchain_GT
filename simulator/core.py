@@ -95,3 +95,14 @@ class Packet(Base):
 
         Packet.last_packet_id += 1
         self.id_ = Packet.last_packet_id
+
+    def __setitem__(self, key, item):
+        self.header[key] = item
+
+    def __getitem__(self, key):
+        value = self.header[key]
+
+        if value is None:
+            raise ValueError("key = {} not in Packet {}".format(key, self))
+
+        return value
