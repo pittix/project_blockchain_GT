@@ -72,7 +72,7 @@ class EventQueue(Base):
 
     def next(self):
         next_event = self.events.pop()
-        now = next_event.when
+        self.now = next_event.when
 
         next_event.trigger()
 
@@ -81,7 +81,7 @@ class EventQueue(Base):
     def add(self, event):
         # add but keep list ordered
         self.events.insert(0, event)
-        self.events.sort()
+        self.events.sort(reverse=True)
 
     def clean(self):
         self.__init__()
