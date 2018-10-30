@@ -3,6 +3,9 @@ from functools import total_ordering
 from inspect import signature
 from types import FunctionType, GeneratorType
 
+# speed of light [m/s]
+c0 = 3e8
+
 # create a logger for all interesting events
 logger = logging.getLogger("")
 

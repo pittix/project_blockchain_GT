@@ -75,9 +75,7 @@ class Channel(Layer):
             random.seed(seed)
 
         # read Friis parameters
-        self.Prx = kwargs['Prx']
-        self.Gtx = kwargs['Gtx']
-        self.Grx = kwargs['Grx']
+        self.G = kwargs['G'] # antennas are symmetrical
         self.Pin = kwargs['Pin']
         self.lambda_ = kwargs['lambda_']
 
@@ -88,14 +86,22 @@ class Channel(Layer):
         self.positions[upper_layer.id_] = kwargs['position']
         self.ip_id_mapping[upper_layer.local_ip] = upper_layer.id_
 
-    def compute_Pe(self, distance):
+    def compute_Pe(self, upper_layer_id, dst_layer_id):
+        p1 = self.positions[upper_layer_id]
+        p2 = self.positions[dst_layer_id]
+
+        delta_x = p1[0] - p2[0]
+        delta_y = p1[1] - p2[1]
+
+        distance = sqrt(delta_x**2 + delta_y**2)
+
         # Friis formula
-        self.Prx = self.Gtx * self.Grx * self.Pin * (self.lambda_ / (4 * pi * distance))**2
+        Prx = self.G**2 * self.Pin * (self.lambda_ / (4 * pi * distance))**2
 
         # read modulation parameters and compute probability TODO
         Pe = 0
 
-        return Pe
+        return Pe, distance
 
     def recv_from_up(self, packet, upper_layer_id):
         # physical location pertains to upper layer (lowest for each node)
@@ -103,17 +109,8 @@ class Channel(Layer):
 
         dst_layer_id = self.ip_id_mapping[packet['dst_ip']]
 
-        # compute distance between source and destination
-        p1 = self.positions[upper_layer_id]
-        p2 = self.positions[dst_layer_id]
-
-        delta_x = p1.0 - p2.0
-        delta_y = p1.1 - p2.1
-
-        distance = sqrt(delta_x**2 + delta_y**2)
-
         # compute packet error probability based on nodes distance
-        Pe = self.compute_Pe(distance)
+        Pe, distance = self.compute_Pe(upper_layer_id, dst_layer_id)
 
         # if error does not happen
         if random() > Pe:
@@ -122,7 +119,6 @@ class Channel(Layer):
 
             # check if it is a good idea to set one
             # network should be small enough to be negligible though
-            c0 = 3e8
             propagation_time = distance / c0
 
             def handle_packet():
@@ -141,28 +137,27 @@ class Channel(Layer):
             logging.log(logging.DEBUG, "CHANNEL: Packet {} lost".format(packet))
 
 class BatmanLayer(Layer):
-    def __init__(self, local_ip, position=(0, 0)):
+    def __init__(self, local_ip):
         super(self.__class__, self).__init__()
 
-        self.position = position
         self.local_ip = local_ip
         # TODO add BATMAN parameters
 
-    def recv_from_up(packet, upper_layer_id):
+    def recv_from_up(self, packet, upper_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
         # ex. pkt['next_hop_ip'] = 10
-        send_down(packet)
+        self.send_down(packet)
 
-    def recv_from_down(packet, lower_layer_id):
+    def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
-        if packet['dst_ip'] == local_ip:
+        if packet['dst_ip'] == self.local_ip:
             for layer_id in self.upper_layers_id:
-                send_up(packet, layer_id)
+                self.send_up(packet, layer_id)
 
     def connect_upper_layer(self, upper_layer, **kwargs):
         super(self.__class__, self).connect_upper_layer(upper_layer, **kwargs)
@@ -171,7 +166,7 @@ class BatmanLayer(Layer):
         upper_layer.local_ip = self.local_ip
 
 class ApplicationLayer(Layer):
-    def __init__(self, interarrival_gen, size_gen, stop_time, local_port, local_ip=None):
+    def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, local_ip=None):
         super(self.__class__, self).__init__()
 
         # save address details
@@ -193,6 +188,9 @@ class ApplicationLayer(Layer):
         # end-to-end connection from src to dst ips
         # is handled here, for simplicity
         self.local_ip = local_ip
+
+        # schedule start of transmissions
+        event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
 
     def connect_app(self, other):
         # exchange local and remote ip address
