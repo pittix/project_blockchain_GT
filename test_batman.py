@@ -1,17 +1,23 @@
 import logging
 from random import randint, random, randrange
 
+from scipy.constants import Boltzmann, pi
+
 from simulator import *
 
 logging.basicConfig(level=logging.DEBUG)
 
 event_queue.clean()
 
-freq = 2.5e9 # wifi is supposed
+freq = 2.5e9 # ~ wifi is supposed
+Temp = 293   # 20°C of noise temperature
+
 channel = Channel(
     G=1.63,     # no dissipation is supposed in half-wave dipole, so gain = directivity
     Pin=10e-3,    # 10mW
-    lambda_=c0 / freq
+    lambda_=c0/freq,
+    Ts=2/freq, # use Nyquist limit
+    No=Boltzmann*Temp,
 )
 
 def interarrival_gen():

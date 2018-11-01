@@ -1,6 +1,9 @@
 import logging
-from math import pi, sqrt
+from math import sqrt
 from random import random
+
+from scipy.constants import Boltzmann, pi
+from scipy.special import erfc
 
 from .core import *
 
@@ -79,6 +82,10 @@ class Channel(Layer):
         self.Pin = kwargs['Pin']
         self.lambda_ = kwargs['lambda_']
 
+        # noise and time per bit
+        self.No = kwargs['No']
+        self.Ts = kwargs['Ts'] # symbol period
+
     def connect_upper_layer(self, upper_layer, **kwargs):
         super(self.__class__, self).connect_upper_layer(upper_layer, **kwargs)
 
@@ -86,7 +93,7 @@ class Channel(Layer):
         self.positions[upper_layer.id_] = kwargs['position']
         self.ip_id_mapping[upper_layer.local_ip] = upper_layer.id_
 
-    def compute_Pe(self, upper_layer_id, dst_layer_id):
+    def compute_Pe_distance(self, upper_layer_id, dst_layer_id, packet_size):
         p1 = self.positions[upper_layer_id]
         p2 = self.positions[dst_layer_id]
 
@@ -95,11 +102,21 @@ class Channel(Layer):
 
         distance = sqrt(delta_x**2 + delta_y**2)
 
-        # Friis formula
+        # Friis formula: antenna are coordinated (no efficiency loss)
         Prx = self.G**2 * self.Pin * (self.lambda_ / (4 * pi * distance))**2
 
-        # read modulation parameters and compute probability TODO
-        Pe = 0
+        print(Prx)
+        # symbol are 0/1: 1 bit per symbol
+        # use simple BPSK modulation
+        Pb = 1/2 * erfc(sqrt(Prx * self.Ts / self.No))
+
+        # suppose iid channel
+        Pe = 1 - (1 - Pb) ** packet_size
+
+        # check probabilities are indeed correct
+        logging.log(logging.DEBUG,
+                    "CHANNEL: Pe = {} for packet size {}"\
+                    .format(Pe, packet_size))
 
         return Pe, distance
 
@@ -110,7 +127,7 @@ class Channel(Layer):
         dst_layer_id = self.ip_id_mapping[packet['dst_ip']]
 
         # compute packet error probability based on nodes distance
-        Pe, distance = self.compute_Pe(upper_layer_id, dst_layer_id)
+        Pe, distance = self.compute_Pe_distance(upper_layer_id, dst_layer_id, packet['size'])
 
         # if error does not happen
         if random() > Pe:
