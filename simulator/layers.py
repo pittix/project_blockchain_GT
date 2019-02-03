@@ -177,12 +177,21 @@ class BatmanLayer(Layer):
             #discovery of the neighbours. If Join=0, then it's in no nw
             #Join != 0 is the nw ID to join
             if bool(self.oth_neigh_succ): #check if there are elements
-                pkt = Packet(size=1,header={'src_ip'=local_ip, 'dst_ip'=0,
-                                        'join'=1, 'oth_table'=False})
+                pkt = Packet(size=1,
+                             header={
+                                 'src_ip': local_ip,
+                                 'dst_ip': 0,
+                                 'join': 1,
+                                 'oth_table': False
+                             })
             else:
-                pkt = Packet(size=1,header={'src_ip'=local_ip, 'dst_ip'=0,
-                                        'join'=1,
-                                        'oth_table'=dict(self.glob_neigh_succ)})
+                pkt = Packet(size=1,
+                             header={
+                                 'src_ip': local_ip,
+                                 'dst_ip': 0,
+                                 'join': 1,
+                                 'oth_table': dict(self.glob_neigh_succ)
+                             })
             self.send_down(pkt)
             self.update_neigh()
 
@@ -203,25 +212,28 @@ class BatmanLayer(Layer):
                     self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
             #update the statistics to keep the nw stable
         else:
+            prev_hop = packet['prev_hop_ip']
+
             if packet['is_ok']:
                 #add source node to the list of surrounding nodes
                 if not packet['src_ip'] in neighbour_succ:
-                     self.neighbour_succ[packet['src_ip']] =[packet['size'],
-                                                            packet['size'],
-                                                        packet['prev_hop_ip']]
-                self.neighbour_succ[packet['prev_hop_ip']][0] +=packet['size']
-                self.neighbour_succ[packet['prev_hop_ip']][1] +=packet['size']
+                    self.neighbour_succ[packet['src_ip']] =[
+                        packet['size'],
+                        packet['size'],
+                        prev_hop
+                    ]
+                self.neighbour_succ[prev_hop][0] +=packet['size']
+                self.neighbour_succ[prev_hop][1] +=packet['size']
                 #update global table
                 self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
-
-
             else:
-                self.neighbour_succ[packet['prev_hop_ip']][1] +=packet['size']
+                self.neighbour_succ[prev_hop][1] += packet['size']
+
             #direct neighbour
-            if self.neighbour_succ[dst_ip][2] ==0:
-                packet['next_hop_ip']=packet['dst_ip']
+            if self.neighbour_succ[dst_ip][2] == 0:
+                packet['next_hop_ip'] = packet['dst_ip']
             else:
-                packet['next_hop_ip']=self.neighbour_succ[dst_ip][2][0] #select first for now
+                packet['next_hop_ip'] = self.neighbour_succ[dst_ip][2][0] #select first for now
 
             packet['prev_hop_ip'] = self.local_ip
             self.send_down(packet)
