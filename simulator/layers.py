@@ -87,6 +87,10 @@ class Channel(Layer):
         self.No = kwargs['No']
         self.Ts = kwargs['Ts'] # symbol period
 
+        # keep track of the next time the channel will be idle
+        # at the beginning of course it is idle
+        self.next_tx_time = 0
+
     def connect_upper_layer(self, upper_layer, **kwargs):
         super(self.__class__, self).connect_upper_layer(upper_layer, **kwargs)
 
@@ -134,9 +138,20 @@ class Channel(Layer):
         # set processing time to 1ms
         round_trip_time = 2 * distance / c0 + 1e-3
 
+        # transmission will start either now or when the channel is idle
+        t_tx = max(self.next_idle_time, event_queue.now)
+
+        # reception will need a certain number of retx
+        t_rx = round_trip_time * n_retx + t_tx
+
+        # channel will be busy until then
+        self.next_idle_time = t_rx
+
         # schedule arrival at receiver
-        event_queue.add(Event(action=lambda: self.send_up(packet, dst_upper_layer_id),
-                              when=n_retx * round_trip_time + event_queue.now))
+        event_queue.add(Event(
+            action=lambda: self.send_up(packet, dst_upper_layer_id),
+            when=t_rx
+        ))
 
         logging.debug(
             "CHANNEL: Packet {} will be received successfully at time {}",
