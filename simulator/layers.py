@@ -104,7 +104,7 @@ class Channel(Layer):
         distance = sqrt(delta_x**2 + delta_y**2)
 
         # Friis formula: antenna are coordinated (no efficiency loss)
-        Prx = self.G**2 * self.Pin * (self.lambda_ / (4 * pi * distance))**2
+        Prx = self.G**2 * self.Pin * (self.lambda_ / (4 * pi * distance)) ** 2
 
         # symbol are 0/1: 1 bit per symbol
         # use simple BPSK modulation
@@ -149,23 +149,26 @@ class BatmanLayer(Layer):
 
         self.local_ip = local_ip
         # TODO add BATMAN parameters
-        #probability of success of the transmission with ExOR algorithm
-        #the value associated to each key is a list  (pkt ok, pkt received, next_hop_ip)
-        self.neighbour_succ={}
-        #tables of all other neighbours
-        self.glob_neigh_succ={}
-        #count of packet sent to ip, so that it will be balanced
-        self.pkt_count={}
-        #send a neighbour discover
-        self.neigh_disc=0
+        # probability of success of the transmission with ExOR algorithm
+        # the value associated to each key is a list  (pkt ok, pkt received, next_hop_ip)
+        self.neighbour_succ = {}
+
+        # tables of all other neighbours
+        self.glob_neigh_succ = {}
+
+        # count of packet sent to ip, so that it will be balanced
+        self.pkt_count = {}
+
+        # send a neighbour discover
+        self.neigh_disc = 0
 
     def recv_from_up(self, packet, upper_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
         # ex. pkt['next_hop_ip'] = 10
         if self.neigh_disc % 50 == 0:
-            #discovery of the neighbours. If Join=0, then it's in no nw
-            #Join != 0 is the nw ID to join
+            # discovery of the neighbours. If Join=0, then it's in no nw
+            # Join != 0 is the nw ID to join
             if bool(self.oth_neigh_succ): #check if there are elements
                 pkt = Packet(size=1,
                              header={
@@ -191,39 +194,41 @@ class BatmanLayer(Layer):
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
-        if packet['dst_ip']!= self.local_ip:
-            #node discovery
-            if packet['dst_ip']==0:
-                if neighbour_succ['src_ip'] is None and packet['join']==1:
+        if packet['dst_ip'] != self.local_ip:
+            # node discovery
+            if packet['dst_ip'] == 0:
+                if neighbour_succ['src_ip'] is None and packet['join'] == 1:
                     neighbour_succ['src_ip'] = [0,0,0]
                 if packet['oth_table'] is False:
                     pass
                 else:
                     self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
-            #update the statistics to keep the nw stable
+            # update the statistics to keep the nw stable
         else:
             prev_hop = packet['prev_hop_ip']
 
             if packet['is_ok']:
-                #add source node to the list of surrounding nodes
+                # add source node to the list of surrounding nodes
                 if not packet['src_ip'] in neighbour_succ:
                     self.neighbour_succ[packet['src_ip']] =[
                         packet['size'],
                         packet['size'],
                         prev_hop
                     ]
-                self.neighbour_succ[prev_hop][0] +=packet['size']
-                self.neighbour_succ[prev_hop][1] +=packet['size']
-                #update global table
+                self.neighbour_succ[prev_hop][0] += packet['size']
+                self.neighbour_succ[prev_hop][1] += packet['size']
+
+                # update global table
                 self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
             else:
                 self.neighbour_succ[prev_hop][1] += packet['size']
 
-            #direct neighbour
+            # direct neighbour
             if self.neighbour_succ[dst_ip][2] == 0:
                 packet['next_hop_ip'] = packet['dst_ip']
             else:
-                packet['next_hop_ip'] = self.neighbour_succ[dst_ip][2][0] #select first for now
+                # select first for now
+                packet['next_hop_ip'] = self.neighbour_succ[dst_ip][2][0]
 
             packet['prev_hop_ip'] = self.local_ip
             self.send_down(packet)
@@ -231,7 +236,8 @@ class BatmanLayer(Layer):
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
         if packet['dst_ip'] == self.local_ip and packet['to_bat'] is True:
-            self.neighbour_succ[packet['src_ip']][2]=0 # set as a direct neighbour and this is a protocol specific packet
+            # set as a direct neighbour and this is a protocol specific packet
+            self.neighbour_succ[packet['src_ip']][2] = 0
         else:
             for layer_id in self.upper_layers_id:
                 self.send_up(packet, layer_id)
