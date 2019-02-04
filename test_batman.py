@@ -56,10 +56,17 @@ def create_node(ip, n_apps):
 
 # create n nodes with two apps each
 n = 2
-nodes = [create_node(i) for i in range(n)]
+nodes = [create_node(i, 3) for i in range(n)]
 
 for node in nodes:
     # connect each app to the corresponding one in a random node
     for i, app in enumerate(node['apps']):
         remote_app = nodes[randrange(n)]['apps'][i]
         app.connect_app(remote_app) # app now knows even remote IP
+
+## run the simulation ##
+
+while True:
+    # trigger events until we run out of them
+    if event_queue.next() is None:
+        break
