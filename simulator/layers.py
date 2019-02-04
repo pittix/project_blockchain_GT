@@ -2,6 +2,7 @@ import logging
 from math import sqrt
 from random import random
 
+from numpy.random import geometric
 from scipy.constants import Boltzmann, pi
 from scipy.special import erfc
 
@@ -105,7 +106,6 @@ class Channel(Layer):
         # Friis formula: antenna are coordinated (no efficiency loss)
         Prx = self.G**2 * self.Pin * (self.lambda_ / (4 * pi * distance))**2
 
-        print(Prx)
         # symbol are 0/1: 1 bit per symbol
         # use simple BPSK modulation
         Pb = 1/2 * erfc(sqrt(Prx * self.Ts / self.No))
@@ -121,37 +121,27 @@ class Channel(Layer):
         return Pe, distance
 
     def recv_from_up(self, packet, upper_layer_id):
-        # physical location pertains to upper layer (lowest for each node)
-        # position = Layer.all_layers[upper_layer_id].position
-
+        # we have IP layer (batman) just above channel
         dst_layer_id = self.ip_id_mapping[packet['dst_ip']]
 
         # compute packet error probability based on nodes distance
-        Pe, distance = self.compute_Pe_distance(upper_layer_id, dst_layer_id, packet['size'])
+        Pe, distance = self.compute_Pe_distance(upper_layer_id,
+                                                dst_layer_id,
+                                                packet['size'])
 
-        # if error does not happen
-        if random() > Pe:
-            # we have IP layer (batman) just above channel
-            dst_upper_layer_id = self.ip_id_mapping[packet['dst_ip']]
+        # evaluate the number of retransmissions required to deliver the packet
+        n_retx = geometric(1 - Pe)
 
-            # check if it is a good idea to set one
-            # network should be small enough to be negligible though
-            propagation_time = distance / c0
+        # set processing time to 1ms
+        round_trip_time = 2 * distance / c0 + 1e-3
 
-            def handle_packet():
-                self.send_up(packet, dst_upper_layer_id)
+        # schedule arrival at receiver
+        event_queue.add(Event(action=lambda: self.send_up(packet, dst_upper_layer_id),
+                              when=n_retx * round_trip_time + event_queue.now))
 
-            rx_time = propagation_time + event_queue.now
-
-            # if tp=0, no event scheduling is needed
-            event_queue.add(Event(handle_packet, when=rx_time))
-
-            logging.log(logging.DEBUG,
-                        "CHANNEL: Packet {} will be received successfully at time {}"\
-                        .format(packet, rx_time))
-
-        else:
-            logging.log(logging.DEBUG, "CHANNEL: Packet {} lost".format(packet))
+        logging.log(logging.DEBUG,
+                    "CHANNEL: Packet {} will be received successfully at time {}"\
+                    .format(packet, rx_time))
 
 class BatmanLayer(Layer):
     def __init__(self, local_ip):
