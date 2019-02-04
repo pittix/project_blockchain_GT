@@ -114,9 +114,8 @@ class Channel(Layer):
         Pe = 1 - (1 - Pb) ** packet_size
 
         # check probabilities are indeed correct
-        logging.log(logging.DEBUG,
-                    "CHANNEL: Pe = {} for packet size {}"\
-                    .format(Pe, packet_size))
+        logging.debug("CHANNEL: Pe = {} for packet size {}",
+                      Pe, packet_size)
 
         return Pe, distance
 
@@ -139,9 +138,9 @@ class Channel(Layer):
         event_queue.add(Event(action=lambda: self.send_up(packet, dst_upper_layer_id),
                               when=n_retx * round_trip_time + event_queue.now))
 
-        logging.log(logging.DEBUG,
-                    "CHANNEL: Packet {} will be received successfully at time {}"\
-                    .format(packet, rx_time))
+        logging.debug(
+            "CHANNEL: Packet {} will be received successfully at time {}",
+            packet, rx_time)
 
 class BatmanLayer(Layer):
     def __init__(self, local_ip):
