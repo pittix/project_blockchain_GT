@@ -7,48 +7,50 @@ from simulator import *
 
 logging.basicConfig(level=logging.DEBUG)
 
+# 1) load queue for events created in simulator module
 event_queue.clean()
 
+# 2) create common channel
 freq = 2.5e9 # ~ wifi is supposed
 Temp = 293   # 20°C of noise temperature
 
 channel = Channel(
-    G=1.63,     # no dissipation is supposed in half-wave dipole, so gain = directivity
-    Pin=10e-3,    # 10mW
+    G=1.63,           # no dissipation is supposed in half-wave dipole, so gain = directivity
+    Pin=10e-3,        # 10mW
     lambda_=c0/freq,
-    Ts=2/freq, # use Nyquist limit
+    Ts=2/freq,        # use Nyquist limit
     No=Boltzmann*Temp,
 )
 
-def interarrival_gen():
-    while True:
-        yield random() * 10
+def create_node(ip, n_apps):
+    # define interarrival and packet size for the app layer
+    def interarrival_gen():
+        while True:
+            yield random() * 10
 
-def size_gen():
-    while True:
-        yield randint(100, 200)
+    def size_gen():
+        while True:
+            yield randint(100, 200)
 
-def create_node(ip):
-    app1 = ApplicationLayer(interarrival_gen(),
-                            size_gen(),
-                            start_time=0,
-                            stop_time=5000,
-                            local_port=1)
+    # create n app layers
+    apps = [ ApplicationLayer(interarrival_gen(),
+                              size_gen(),
+                              start_time=0,
+                              stop_time=5000,
+                              local_port=n + 1) for n in range(n_apps) ]
 
-    app2 = ApplicationLayer(interarrival_gen(),
-                            size_gen(),
-                            start_time=4999,
-                            stop_time=5000,
-                            local_port=2)
-
+    # create a single batman layer
     b = BatmanLayer(ip)
-    b.connect_upper_layer(app1) # app1 now knows local IP
-    b.connect_upper_layer(app2) # app2 now knows local IP
 
+    # connect apps to batman layer
+    for app in apps:
+        b.connect_upper_layer(app)
+
+    # connect the batman layer to the channel
     channel.connect_upper_layer(b, position=(random(), random()))
 
     return {
-        'apps' : [app1, app2],
+        'apps'  : apps,
         'batman': b
     }
 
