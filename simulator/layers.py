@@ -20,52 +20,59 @@ class Layer(Base):
         Layer.last_layer_id += 1
         self.id_ = Layer.last_layer_id
 
-        self.lower_layers_id = []
-        self.upper_layers_id = []
-
         # store in a dict all Layers created, in order to look them up by id
         Layer.all_layers[self.id_] = self
 
     @logthis(logging.INFO)
-    def send_up(self, packet, upper_layer_id=None):
-        if len(self.upper_layers_id) == 0:
-            raise ValueError("Layer {} has no upper layers!".format(self))
-
-        # set first upper layer as default one
-        if not upper_layer_id:
-            upper_layer_id = self.upper_layers_id[0]
-
+    def send_up(self, packet, upper_layer_id):
         # event is immediate, fire it now without passing through event queue
         upper_layer = Layer.all_layers[upper_layer_id]
         upper_layer.recv_from_down(packet, self.id_)
 
     @logthis(logging.INFO)
-    def send_down(self, packet, lower_layer_id=None):
-        if len(self.lower_layers_id) == 0:
-            raise ValueError("Layer {} has no lower layers!".format(self))
-
-        # set first lower layer as default one
-        if not lower_layer_id:
-            lower_layer_id = self.lower_layers_id[0]
-
+    def send_down(self, packet, lower_layer_id):
         # event is immediate, fire it now without passing through event queue
         lower_layer = Layer.all_layers[lower_layer_id]
         lower_layer.recv_from_up(packet, self.id_)
-
-    @logthis(logging.DEBUG)
-    def connect_upper_layer(self, upper_layer, **kwargs):
-        # this function always connects upper layers
-        # to lower layers, by convention
-        self.upper_layers_id.append(upper_layer.id_)
-
-        # add self layer id_ to upper layer (connect both ways)
-        upper_layer.lower_layers_id.append(self.id_)
 
     def recv_from_up(self, packet, upper_layer_id):
         raise NotImplemented
 
     def recv_from_down(self, packet, lower_layer_id):
         raise NotImplemented
+
+class Channel(Layer):
+    def __init__(self, p_retx, dest_id, rtt):
+        self.p_retx = p_retx
+        self.dest_id = dest_id
+        self.rtt = rtt
+
+        self.queue = []
+
+    def recv_from_up(self, packet, upper_layer_id):
+        # add packet to the queue
+        self.queue.append(packet)
+
+        # if it is the first in the queue, schedule its reception at dest_id
+        if len(self.queue) == 1:
+            self.schedule_tx()
+
+    def schedule_tx(self):
+        """ Add the next transmission to the event queue """
+        tx_time = geometric(self.p_retx) * self.rtt
+        event_queue.add(Event(action=self.transmit,
+                              when=event_queue.now + tx_time))
+
+    def transmit(self):
+        """ Transmit the next packet waiting """
+        assert len(self.queue) > 0, 'Empty queue while tx in {}'.format(self)
+
+        # send the packet to destination
+        self.send_up(self.queue.pop(), upper_layer_id=self.dest_id)
+
+        # schedule the next transmission, if queue is not empty
+        if len(self.queue) > 0:
+            self.schedule_tx()
 
 class BatmanLayer(Layer):
     def __init__(self, local_ip, neigh_disc_interval):
