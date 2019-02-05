@@ -232,33 +232,40 @@ class BatmanLayer(Layer):
                 size = packet['size']
                 time = packet['rx_time'] - packet['tx_time']
                 self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
+                self.send_up(packet)
+                return
 
-        else:
-            # node discovery
-            if packet['dst_ip'] == 0:
-                if self.neighbour_succ['src_ip'] is None and packet['join'] == 1:
-                    self.neighbour_succ['src_ip'] = [0, 0, 0]
-                if packet['oth_table'] is False:
-                    pass
-                else:
-                    self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
-            # update the statistics to keep the nw stable
-        # else:
-        #     prev_hop = packet['prev_hop_ip']
-
+        elif packet['dst_ip'] == 0:       # node discovery
+            if self.neighbour_succ['src_ip'] is None:
+                # and packet['join'] == 1: ignored as we're not into groups
+                self.neighbour_succ['src_ip'] = [0, 0, 0]
+            if packet['oth_table'] is False:
+                pass
+            else:
+                self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
+                self.update_neigh()
+                return
             # TODO TO CHECK
             # add source node to the list of surrounding nodes
             if not packet['src_ip'] in self.neighbour_succ:
                 self.neighbour_succ[packet['src_ip']] = [
                     packet['size'],
-                    packet['size'],
-                    prev_hop
+                    packet['rx_time'] - packet['rx_time'],
+                    packet['prev_hop_ip']
                 ]
-            self.neighbour_succ[prev_hop][self.NEIGH_PKT_SIZE] += packet['size']
-            time = packet['rx_time'] - packet['tx_time']
-            self.neighbour_succ[prev_hop][self.NEIGH_TX_TIME] += time
-            # update global table
-            self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
+            # add also the direct neighbour
+            if not packet['prev_hop_ip'] in self.neighbour_succ:
+                self.neighbour_succ[packet['prev_hop_ip']] = [
+                    packet['size'],
+                    packet['rx_time'] - packet['rx_time'],
+                    0
+                ]
+
+            # self.neighbour_succ[prev_hop][self.NEIGH_PKT_SIZE] += packet['size']
+            # time = packet['rx_time'] - packet['tx_time']
+            # self.neighbour_succ[prev_hop][self.NEIGH_TX_TIME] += time
+            # # update global table
+            # self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
         # direct neighbour
         if self.neighbour_succ[packet['dst_ip']][self.NEIGH_NEXT_HOP] == 0:
             packet['next_hop_ip'] = packet['dst_ip']
@@ -287,12 +294,43 @@ class BatmanLayer(Layer):
     def update_neigh(self):
         # Start w/ one node in the neighbour and look for the other way around
         allNodes = self.glob_neigh_succ.keys()
-        for node in allNodes:
-            self.oth_neigh_succ[node]
-            pass
-        # choose the worst possibility
-
-        pass
+        temp_links = {}  # dict with nodes that don't have any pkt sent
+        links_metric = []  # each node will have a metric
+        # calculate link metrics
+        for tmp_node_from in allNodes:
+            for tmp_node_to in self.glob_neigh_succ[tmp_node_from]
+                rate = tmp_node_to[self.NEIGH_PKT_SIZE] /  tmp_node_to[self.NEIGH_TX_TIME]
+                via = tmp_node_to[self.NEIGH_NEXT_HOP]
+                if via == 0:  # direct neighbour, so no calculation needed
+                    pass
+                if links_metric[(tmp_node_from, tmp_node_to)] is None:
+                    if links_metric[(tmp_node_to, tmp_node_from)] is None:
+                        # add the metric for the first time
+                        links_metric[(tmp_node_to, tmp_node_from)] = (
+                                1/rate, via)
+                    else:  # it already exists with the opposite direction
+                        prev_rate = links_metric[(tmp_node_to, tmp_node_from)][0]
+                        prev_via = links_metric[(tmp_node_to, tmp_node_from)][1]
+                        metric_ok = max(prev_rate, 1/rate)  # worst case
+                        if metric_ok == prev_rate:  # choose the worst one
+                            links_metric[(tmp_node_from, tmp_node_to)] = (
+                            metric_ok, prev_via)
+                        else:
+                            links_metric[(tmp_node_from, tmp_node_to)] = (
+                            metric_ok, via)
+                else:  # direct approach
+                    # choose the minimum of the rates
+                    prev_rate = links_metric[(tmp_node_from, tmp_node_to)][0]
+                    prev_via = links_metric[(tmp_node_from, tmp_node_to)][1]
+                    metric_ok = max(prev_rate, 1/rate)  # worst case
+                    if metric_ok == prev_rate:
+                        links_metric[(tmp_node_from, tmp_node_to)] = (
+                        metric_ok, prev_via)
+                    else:
+                        links_metric[(tmp_node_from, tmp_node_to)] = (
+                        metric_ok, via)
+        # done the metrics calculation. now I need to write the shortest path
+        #TODO
 
     def find_next_hop(self, dst_ip):
         if len(self.neighbour_succ[dst_ip]) == 1:
