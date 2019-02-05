@@ -10,6 +10,7 @@ from .core import *
 
 event_queue = EventQueue()
 
+
 class Layer(Base):
     # static class variables
     last_layer_id = 0
@@ -79,13 +80,13 @@ class Channel(Layer):
             random.seed(seed)
 
         # read Friis parameters
-        self.G = kwargs['G'] # antennas are symmetrical
+        self.G = kwargs['G']  # antennas are symmetrical
         self.Pin = kwargs['Pin']
         self.lambda_ = kwargs['lambda_']
 
         # noise and time per bit
         self.No = kwargs['No']
-        self.Ts = kwargs['Ts'] # symbol period
+        self.Ts = kwargs['Ts']  # symbol period
 
     def connect_upper_layer(self, upper_layer, **kwargs):
         super(self.__class__, self).connect_upper_layer(upper_layer, **kwargs)
@@ -143,7 +144,13 @@ class Channel(Layer):
                     "CHANNEL: Packet {} will be received successfully at time {}"\
                     .format(packet, rx_time))
 
+
 class BatmanLayer(Layer):
+    # position in array of theparameters
+    NEIGH_PKT_SIZE = 0
+    NEIGH_TX_TIME = 1
+    NEIGH_NEXT_HOP = 2
+
     def __init__(self, local_ip):
         super(self.__class__, self).__init__()
 
@@ -155,6 +162,8 @@ class BatmanLayer(Layer):
         self.neighbour_succ = {}
         # tables of all other neighbours
         self.glob_neigh_succ = {}
+        # node table about all other neighbour
+        self.oth_neigh_succ = {}
         # count of packet sent to ip, so that it will be balanced
         self.pkt_count = {}
         # send a neighbour discover
@@ -192,7 +201,39 @@ class BatmanLayer(Layer):
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
-        if packet['dst_ip'] != self.local_ip:
+        if packet['dst_ip'] == self.local_ip: # handle packet for me
+            # I already have a link. Let's see if this is the same I stored
+            src = packet['src_ip']
+            if packet['src_ip'] in self.neighbour_succ.keys():
+                for i, element in enumerate(self.neighbour_succ[src]):
+                    if next_hop == packet['prev_hop_ip']:
+                        updated = []
+                        # add this transmission time
+                        updated[self.NEIGH_TX_TIME] = self.neighbour_succ[src][i][self.NEIGH_TX_TIME] + packet['rx_time'] -  packet['tx_time']
+                        # keep the previous hop
+                        updated[self.NEIGH_NEXT_HOP] = packet['prev_hop_ip']
+                        # update size
+                        updated[self.NEIGH_PKT_SIZE] = packet['size'] + \ self.neighbour_succ[src][i][self.NEIGH_PKT_SIZE]
+                        self.neighbour_succ[src][i] = updated
+                        # I've done everything I need, so send up the packet
+                        # and return
+                        self.send_up(packet)
+                        return
+                # If I got here, the block inside the if inside the for ways
+                # never executed. I add the entry as it's a new link and return
+                size = packet['size']
+                time = packet['rx_time'] - packet['tx_time']
+                self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
+                updated = [size, time, packet['prev_hop_ip']]
+                self.neighbour_succ[src].append(updated)
+                self.send_up(packet)
+                return
+            else:  # add first entry
+                size = packet['size']
+                time = packet['rx_time'] - packet['tx_time']
+                self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
+
+        else:
             # node discovery
             if packet['dst_ip'] == 0:
                 if self.neighbour_succ['src_ip'] is None and packet['join'] == 1:
@@ -202,33 +243,30 @@ class BatmanLayer(Layer):
                 else:
                     self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
             # update the statistics to keep the nw stable
+        # else:
+        #     prev_hop = packet['prev_hop_ip']
+
+            # add source node to the list of surrounding nodes
+            if not packet['src_ip'] in self.neighbour_succ:
+                self.neighbour_succ[packet['src_ip']] = [
+                    packet['size'],
+                    packet['size'],
+                    prev_hop
+                ]
+            self.neighbour_succ[prev_hop][self.NEIGH_PKT_SIZE] += packet['size']
+            time = packet['rx_time'] - packet['tx_time']
+            self.neighbour_succ[prev_hop][self.NEIGH_TX_TIME] += time
+            # update global table
+            self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
+        # direct neighbour
+        if self.neighbour_succ[packet['dst_ip']][self.NEIGH_NEXT_HOP] == 0:
+            packet['next_hop_ip'] = packet['dst_ip']
         else:
-            prev_hop = packet['prev_hop_ip']
+            packet['next_hop_ip'] = self.find_next_hop(packet['dst_ip'])
+            # self.neighbour_succ[packet['dst_ip']][2][0]
 
-            if packet['is_ok']:
-                # add source node to the list of surrounding nodes
-                if not packet['src_ip'] in self.neighbour_succ:
-                    self.neighbour_succ[packet['src_ip']] = [
-                        packet['size'],
-                        packet['size'],
-                        prev_hop
-                    ]
-                self.neighbour_succ[prev_hop][0] += packet['size']
-                self.neighbour_succ[prev_hop][1] += packet['size']
-                # update global table
-                self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
-            else:
-                self.neighbour_succ[prev_hop][1] += packet['size']
-
-            # direct neighbour
-            if self.neighbour_succ[packet['dst_ip']][2] == 0:
-                packet['next_hop_ip'] = packet['dst_ip']
-            else:
-                # select first for now
-                packet['next_hop_ip'] = self.neighbour_succ[packet['dst_ip']][2][0]
-
-            packet['prev_hop_ip'] = self.local_ip
-            self.send_down(packet)
+        packet['prev_hop_ip'] = self.local_ip
+        self.send_down(packet)
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
@@ -245,8 +283,28 @@ class BatmanLayer(Layer):
         # set local ip in application layer
         upper_layer.local_ip = self.local_ip
 
-    def update_neigh():
+    def update_neigh(self):
+        # Start w/ one node in the neighbour and look for the other way around
+        allNodes = self.glob_neigh_succ.keys()
+        for node in allNodes:
+            self.oth_neigh_succ[node]
+            pass
+        # choose the worst possibility
+
         pass
+
+    def find_next_hop(self, dst_ip):
+        if len(self.neighbour_succ[dst_ip]) == 1:
+            return self.neighbour_succ[dst_ip][self.NEIGH_NEXT_HOP]
+        elif len(self.neighbour_succ[dst_ip]) == 0:
+            return 0  # broadcast the message
+        else:
+            numEl = len(self.neighbour_succ[dst_ip])
+            rand = random()
+            for i in range(numEl):  # i look in which bucket the random fell
+                if rand < (i+1)/numEl:  # I chose the neighbour in this bucket
+                    return self.neighbour_succ[dst_ip][i][self.NEIGH_NEXT_HOP]
+
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, local_ip=None):
