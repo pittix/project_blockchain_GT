@@ -74,6 +74,10 @@ class EventQueue(Base):
         self.now = 0
 
     def next(self):
+        # declare stop running out of events
+        if len(self.events) == 0:
+            return None
+
         next_event = self.events.pop()
         self.now = next_event.when
 
@@ -83,7 +87,7 @@ class EventQueue(Base):
 
     def add(self, event):
         # add but keep list ordered
-        self.events.insert(0, event)
+        self.events.append(event)
         self.events.sort(reverse=True)
 
     def clean(self):

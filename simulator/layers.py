@@ -246,6 +246,7 @@ class BatmanLayer(Layer):
         # else:
         #     prev_hop = packet['prev_hop_ip']
 
+            # TODO TO CHECK
             # add source node to the list of surrounding nodes
             if not packet['src_ip'] in self.neighbour_succ:
                 self.neighbour_succ[packet['src_ip']] = [
