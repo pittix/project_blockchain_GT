@@ -67,101 +67,13 @@ class Layer(Base):
     def recv_from_down(self, packet, lower_layer_id):
         raise NotImplemented
 
-class Channel(Layer):
-    def __init__(self, seed=None, **kwargs):
-        super(self.__class__, self).__init__()
-
-        self.positions = {}
-        self.ip_id_mapping = {}
-
-        # seed for packet error probability generation
-        if seed:
-            random.seed(seed)
-
-        # read Friis parameters
-        self.G = kwargs['G'] # antennas are symmetrical
-        self.Pin = kwargs['Pin']
-        self.lambda_ = kwargs['lambda_']
-
-        # noise and time per bit
-        self.No = kwargs['No']
-        self.Ts = kwargs['Ts'] # symbol period
-
-        # keep track of the next time the channel will be idle
-        # at the beginning of course it is idle
-        self.next_tx_time = 0
-
-    def connect_upper_layer(self, upper_layer, **kwargs):
-        super(self.__class__, self).connect_upper_layer(upper_layer, **kwargs)
-
-        # store position and ip->id mapping
-        self.positions[upper_layer.id_] = kwargs['position']
-        self.ip_id_mapping[upper_layer.local_ip] = upper_layer.id_
-
-    def compute_Pe_distance(self, upper_layer_id, dst_layer_id, packet_size):
-        p1 = self.positions[upper_layer_id]
-        p2 = self.positions[dst_layer_id]
-
-        delta_x = p1[0] - p2[0]
-        delta_y = p1[1] - p2[1]
-
-        distance = sqrt(delta_x**2 + delta_y**2)
-
-        # Friis formula: antenna are coordinated (no efficiency loss)
-        Prx = self.G**2 * self.Pin * (self.lambda_ / (4 * pi * distance)) ** 2
-
-        # symbol are 0/1: 1 bit per symbol
-        # use simple BPSK modulation
-        Pb = 1/2 * erfc(sqrt(Prx * self.Ts / self.No))
-
-        # suppose iid channel
-        Pe = 1 - (1 - Pb) ** packet_size
-
-        # check probabilities are indeed correct
-        logging.debug("CHANNEL: Pe = {} for packet size {}",
-                      Pe, packet_size)
-
-        return Pe, distance
-
-    def recv_from_up(self, packet, upper_layer_id):
-        # we have IP layer (batman) just above channel
-        dst_layer_id = self.ip_id_mapping[packet['dst_ip']]
-
-        # compute packet error probability based on nodes distance
-        Pe, distance = self.compute_Pe_distance(upper_layer_id,
-                                                dst_layer_id,
-                                                packet['size'])
-
-        # evaluate the number of retransmissions required to deliver the packet
-        n_retx = geometric(1 - Pe)
-
-        # set processing time to 1ms
-        round_trip_time = 2 * distance / c0 + 1e-3
-
-        # transmission will start either now or when the channel is idle
-        t_tx = max(self.next_idle_time, event_queue.now)
-
-        # reception will need a certain number of retx
-        t_rx = round_trip_time * n_retx + t_tx
-
-        # channel will be busy until then
-        self.next_idle_time = t_rx
-
-        # schedule arrival at receiver
-        event_queue.add(Event(
-            action=lambda: self.send_up(packet, dst_upper_layer_id),
-            when=t_rx
-        ))
-
-        logging.debug(
-            "CHANNEL: Packet {} will be received successfully at time {}",
-            packet, rx_time)
-
 class BatmanLayer(Layer):
-    def __init__(self, local_ip):
+    def __init__(self, local_ip, neigh_disc_interval):
         super(self.__class__, self).__init__()
 
         self.local_ip = local_ip
+        self.neigh_disc_interval = neigh_disc_interval
+
         # TODO add BATMAN parameters
         # probability of success of the transmission with ExOR algorithm
         # the value associated to each key is a list  (pkt ok, pkt received, next_hop_ip)
@@ -177,10 +89,7 @@ class BatmanLayer(Layer):
         self.neigh_disc = 0
 
     def recv_from_up(self, packet, upper_layer_id):
-        # TODO do BATMAN stuff
-        # header modifications are kept in a dictionary inside packet class
-        # ex. pkt['next_hop_ip'] = 10
-        if self.neigh_disc % 50 == 0:
+        if self.neigh_disc % self.neigh_disc_interval == 0:
             # discovery of the neighbours. If Join=0, then it's in no nw
             # Join != 0 is the nw ID to join
             if bool(self.oth_neigh_succ): #check if there are elements
