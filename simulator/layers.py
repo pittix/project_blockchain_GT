@@ -127,10 +127,18 @@ class BatmanLayer(Layer):
         """ Connect self with other node through Channel objects """
 
         # create two symmetric channels for the two directions
-        c1 = Channel(**kwargs, dst_id=other.id_)
+        c1 = Channel(**kwargs,
+                     dst_id=other.id_,
+                     src_ip=self.local_ip,
+                     dst_ip=other.dst_ip)
+
         self.neighbour_table[other.local_ip] = c1.id_
 
-        c2 = Channel(**kwargs, dst_id=self.id_)
+        c2 = Channel(**kwargs,
+                     dst_id=self.id_,
+                     src_ip=other.local_ip,
+                     dst_ip=self.dst_ip)
+
         other.neighbour_table[self.local_ip] = c2.id_
 
         return {
