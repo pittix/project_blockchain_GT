@@ -53,16 +53,8 @@ for ip1, ip2, p_succ, rtt in graph:
 
 ## schedule update of neighbour tables in batman nodes
 UPDATE_TIME = 10
-def update_neigh():
-    # collect tables
-    # exchange tables among batman nodes
-    tables = {ip: batman.neighbour_succ for ip, batman in batmans.items()}
-
-    # TODO use tables
-
-    event_queue.add(Event(action=update_neigh, when=event_queue.now + UPDATE_TIME))
-
-event_queue.add(Event(action=update_neigh, when=event_queue.now))
+def ask_path(src, dst):
+    pass
 
 ## create a couple of application for each end-to-end stream: for the simulation
 ## to be reasonable, each node has to have at least one application
