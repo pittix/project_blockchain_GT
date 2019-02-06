@@ -128,10 +128,10 @@ class BatmanLayer(Layer):
 
         # create two symmetric channels for the two directions
         c1 = Channel(**kwargs, dest_id=other.id_)
-        self.neighbour_table[other.ip] = c1.id_
+        self.neighbour_table[other.local_ip] = c1.id_
 
         c2 = Channel(**kwargs, dest_id=self.id_)
-        other.neighbour_table[self.ip] = c2.id_
+        other.neighbour_table[self.local_ip] = c2.id_
 
     def connect_app(self, app_layer):
         # save information about upper layer
@@ -191,7 +191,8 @@ class BatmanLayer(Layer):
                         # keep the previous hop
                         updated[self.NEIGH_NEXT_HOP] = packet['prev_hop_ip']
                         # update size
-                        updated[self.NEIGH_PKT_SIZE] = packet['size'] + \ self.neighbour_succ[src][i][self.NEIGH_PKT_SIZE]
+                        updated[self.NEIGH_PKT_SIZE] = packet['size'] + \
+                            self.neighbour_succ[src][i][self.NEIGH_PKT_SIZE]
                         self.neighbour_succ[src][i] = updated
                         # I've done everything I need, so send up the packet
                         # and return
@@ -257,7 +258,7 @@ class BatmanLayer(Layer):
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
-        if packet['dst_ip'] == self.ip:
+        if packet['dst_ip'] == self.local_ip:
             assert packet['dst_port'] in self.app_table
 
             upper_layer_id = self.app_table[packet['dst_port']]
