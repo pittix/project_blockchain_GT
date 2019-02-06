@@ -8,7 +8,6 @@ from scipy.special import erfc
 
 from .core import *
 
-event_queue = EventQueue()
 
 class Layer(Base):
     # static class variables
@@ -41,11 +40,22 @@ class Layer(Base):
     def recv_from_down(self, packet, lower_layer_id):
         raise NotImplemented
 
+class Sink(Layer):
+    @logthis(logging.INFO)
+    def recv_from_up(self, packet, upper_layer_id):
+        pass
+
+    @logthis(logging.INFO)
+    def recv_from_down(self, packet, lower_layer_id):
+        pass
+
 class Channel(Layer):
-    def __init__(self, p_retx, dest_id, rtt):
+    def __init__(self, p_retx, rtt, dest_id=None):
+        super(self.__class__, self).__init__()
+
         self.p_retx = p_retx
-        self.dest_id = dest_id
         self.rtt = rtt
+        self.dest_id = dest_id
 
         self.queue = []
 
@@ -67,6 +77,9 @@ class Channel(Layer):
         """ Transmit the next packet waiting """
         assert len(self.queue) > 0, 'Empty queue while tx in {}'.format(self)
 
+        if self.dest_id is None:
+            raise ValueError("Destination ID not set in {}".format(self))
+
         # send the packet to destination
         self.send_up(self.queue.pop(), upper_layer_id=self.dest_id)
 
@@ -81,9 +94,9 @@ class BatmanLayer(Layer):
         self.local_ip = local_ip
         self.neigh_disc_interval = neigh_disc_interval
 
-        # TODO add BATMAN parameters
-        # probability of success of the transmission with ExOR algorithm
-        # the value associated to each key is a list  (pkt ok, pkt received, next_hop_ip)
+        # TODO add BATMAN parameters probability of success of the transmission
+        # with ExOR algorithm the value associated to each key is a list
+        # (pkt ok, pkt received, next_hop_ip)
         self.neighbour_succ = {}
 
         # tables of all other neighbours
