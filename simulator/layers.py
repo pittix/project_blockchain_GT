@@ -2,7 +2,6 @@ import logging
 from math import sqrt
 from random import random
 
-import networkx as nx
 from numpy.random import geometric
 from scipy.constants import Boltzmann, pi
 from scipy.special import erfc
@@ -153,8 +152,8 @@ class BatmanLayer(Layer):
         app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
-        path = nx.shortest_path(G, self.local_ip, packet['dst_ip'])
-        packet['path'] = path
+        path = G.shortest_path(self.local_ip, packet['dst_ip'])
+        packet['path'] = path[1:]
         self.send_down(packet,
                        self.neighbour_table[packet['path'][0]])
 
