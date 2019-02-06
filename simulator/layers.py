@@ -88,7 +88,12 @@ class Channel(Layer):
             self.schedule_tx()
 
 class BatmanLayer(Layer):
-    def __init__(self, ip, neigh_disc_interval):
+    # position in array of theparameters
+    NEIGH_PKT_SIZE = 0
+    NEIGH_TX_TIME = 1
+    NEIGH_NEXT_HOP = 2
+
+    def __init__(self, local_ip):
         super(self.__class__, self).__init__()
 
         ## single hop connection to neighbour layers
@@ -101,22 +106,20 @@ class BatmanLayer(Layer):
         }
 
         ## routing address of node
-        assert ip > 0, "Invalid reserved address {}".format(ip)
-        self.ip = ip
+        assert local_ip > 0, "Invalid reserved address {}".format(local_ip)
+        self.local_ip = local_ip
 
-        self.neigh_disc_interval = neigh_disc_interval
-
-        # TODO add BATMAN parameters probability of success of the transmission
-        # with ExOR algorithm the value associated to each key is a list
-        # (pkt ok, pkt received, next_hop_ip)
+        # TODO add BATMAN parameters
+        # probability of success of the transmission with ExOR algorithm
+        # the value associated to each key is a list  (pkt ok, pkt received,
+        #  next_hop_ip)
         self.neighbour_succ = {}
-
         # tables of all other neighbours
         self.glob_neigh_succ = {}
-
+        # node table about all other neighbour
+        self.oth_neigh_succ = {}
         # count of packet sent to ip, so that it will be balanced
         self.pkt_count = {}
-
         # send a neighbour discover
         self.neigh_disc = 0
 
@@ -138,14 +141,16 @@ class BatmanLayer(Layer):
         app_layer.lower_layer_id = b_layer.id_
 
     def recv_from_up(self, packet, upper_layer_id):
-        ## perform discrovery, if it is time to do so
-        if self.neigh_disc % self.neigh_disc_interval == 0:
+        # TODO do BATMAN stuff
+        # header modifications are kept in a dictionary inside packet class
+        # ex. pkt['next_hop_ip'] = 10
+        if self.neigh_disc % 50 == 0:
             # discovery of the neighbours. If Join=0, then it's in no nw
             # Join != 0 is the nw ID to join
-            if bool(self.oth_neigh_succ): #check if there are elements
+            if bool(self.oth_neigh_succ):  # check if there are elements
                 pkt = Packet(size=1,
                              header={
-                                 'src_ip': self.ip,
+                                 'src_ip': self.local_ip,
                                  'dst_ip': 0,
                                  'join': 1,
                                  'oth_table': False
@@ -153,7 +158,7 @@ class BatmanLayer(Layer):
             else:
                 pkt = Packet(size=1,
                              header={
-                                 'src_ip': self.ip,
+                                 'src_ip': self.local_ip,
                                  'dst_ip': 0,
                                  'join': 1,
                                  'oth_table': dict(self.glob_neigh_succ)
@@ -169,48 +174,86 @@ class BatmanLayer(Layer):
         assert packet['next_hop_ip'] in self.neighbour_table, "Invalid next hop"
         self.send_down(packet,
                        self.neighbour_table[packet['next_hop_ip']])
+        self.neigh_disc += 1
 
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
-        if packet['dst_ip'] != self.ip:
-            # node discovery
-            if packet['dst_ip'] == 0:
-                if neighbour_succ['src_ip'] is None and packet['join'] == 1:
-                    neighbour_succ['src_ip'] = [0,0,0]
-                if packet['oth_table'] is False:
-                    pass
-                else:
-                    self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
-            # update the statistics to keep the nw stable
+        if packet['dst_ip'] == self.local_ip: # handle packet for me
+            # I already have a link. Let's see if this is the same I stored
+            src = packet['src_ip']
+            if packet['src_ip'] in self.neighbour_succ.keys():
+                for i, element in enumerate(self.neighbour_succ[src]):
+                    if next_hop == packet['prev_hop_ip']:
+                        updated = []
+                        # add this transmission time
+                        updated[self.NEIGH_TX_TIME] = self.neighbour_succ[src][i][self.NEIGH_TX_TIME] + packet['rx_time'] -  packet['tx_time']
+                        # keep the previous hop
+                        updated[self.NEIGH_NEXT_HOP] = packet['prev_hop_ip']
+                        # update size
+                        updated[self.NEIGH_PKT_SIZE] = packet['size'] + \ self.neighbour_succ[src][i][self.NEIGH_PKT_SIZE]
+                        self.neighbour_succ[src][i] = updated
+                        # I've done everything I need, so send up the packet
+                        # and return
+                        self.send_up(packet)
+                        return
+                # If I got here, the block inside the if inside the for ways
+                # never executed. I add the entry as it's a new link and return
+                size = packet['size']
+                time = packet['rx_time'] - packet['tx_time']
+                self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
+                updated = [size, time, packet['prev_hop_ip']]
+                self.neighbour_succ[src].append(updated)
+                self.send_up(packet)
+                return
+            else:  # add first entry
+                size = packet['size']
+                time = packet['rx_time'] - packet['tx_time']
+                self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
+                self.send_up(packet)
+                return
+
+        elif packet['dst_ip'] == 0:       # node discovery
+            if self.neighbour_succ['src_ip'] is None:
+                # and packet['join'] == 1: ignored as we're not into groups
+                self.neighbour_succ['src_ip'] = [0, 0, 0]
+            if packet['oth_table'] is False:
+                pass
+            else:
+                self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
+                self.update_neigh()
+                return
+            # TODO TO CHECK
+            # add source node to the list of surrounding nodes
+            if not packet['src_ip'] in self.neighbour_succ:
+                self.neighbour_succ[packet['src_ip']] = [
+                    packet['size'],
+                    packet['rx_time'] - packet['rx_time'],
+                    packet['prev_hop_ip']
+                ]
+            # add also the direct neighbour
+            if not packet['prev_hop_ip'] in self.neighbour_succ:
+                self.neighbour_succ[packet['prev_hop_ip']] = [
+                    packet['size'],
+                    packet['rx_time'] - packet['rx_time'],
+                    0
+                ]
+
+            # self.neighbour_succ[prev_hop][self.NEIGH_PKT_SIZE] += packet['size']
+            # time = packet['rx_time'] - packet['tx_time']
+            # self.neighbour_succ[prev_hop][self.NEIGH_TX_TIME] += time
+            # # update global table
+            # self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
+        # direct neighbour
+        if self.neighbour_succ[packet['dst_ip']][self.NEIGH_NEXT_HOP] == 0:
+            packet['next_hop_ip'] = packet['dst_ip']
         else:
-            prev_hop = packet['prev_hop_ip']
+            packet['next_hop_ip'] = self.find_next_hop(packet['dst_ip'])
+            # self.neighbour_succ[packet['dst_ip']][2][0]
 
-            if packet['is_ok']:
-                # add source node to the list of surrounding nodes
-                if not packet['src_ip'] in neighbour_succ:
-                    self.neighbour_succ[packet['src_ip']] =[
-                        packet['size'],
-                        packet['size'],
-                        prev_hop
-                    ]
-                self.neighbour_succ[prev_hop][0] += packet['size']
-                self.neighbour_succ[prev_hop][1] += packet['size']
-
-                # update global table
-                self.glob_neigh_succ[self.ip] = self.neighbour_succ
-            else:
-                self.neighbour_succ[prev_hop][1] += packet['size']
-
-            # direct neighbour
-            if self.neighbour_succ[dst_ip][2] == 0:
-                packet['next_hop_ip'] = packet['dst_ip']
-            else:
-                # select first for now
-                packet['next_hop_ip'] = self.neighbour_succ[dst_ip][2][0]
-
-            packet['prev_hop_ip'] = self.ip
-            self.send_down(packet)
+        packet['prev_hop_ip'] = self.local_ip
+        # TODO set lower layer (channel) id
+        self.send_down(packet)
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
@@ -220,8 +263,59 @@ class BatmanLayer(Layer):
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
 
-    def update_neigh():
-        pass
+    def update_neigh(self):
+        # Start w/ one node in the neighbour and look for the other way around
+        allNodes = self.glob_neigh_succ.keys()
+        temp_links = {}  # dict with nodes that don't have any pkt sent
+        links_metric = []  # each node will have a metric
+        # calculate link metrics
+        for tmp_node_from in allNodes:
+            for tmp_node_to in self.glob_neigh_succ[tmp_node_from]
+                rate = tmp_node_to[self.NEIGH_PKT_SIZE] /  tmp_node_to[self.NEIGH_TX_TIME]
+                via = tmp_node_to[self.NEIGH_NEXT_HOP]
+                if via == 0:  # direct neighbour, so no calculation needed
+                    pass
+                if links_metric[(tmp_node_from, tmp_node_to)] is None:
+                    if links_metric[(tmp_node_to, tmp_node_from)] is None:
+                        # add the metric for the first time
+                        links_metric[(tmp_node_to, tmp_node_from)] = (
+                                1/rate, via)
+                    else:  # it already exists with the opposite direction
+                        prev_rate = links_metric[(tmp_node_to, tmp_node_from)][0]
+                        prev_via = links_metric[(tmp_node_to, tmp_node_from)][1]
+                        metric_ok = max(prev_rate, 1/rate)  # worst case
+                        if metric_ok == prev_rate:  # choose the worst one
+                            links_metric[(tmp_node_from, tmp_node_to)] = (
+                            metric_ok, prev_via)
+                        else:
+                            links_metric[(tmp_node_from, tmp_node_to)] = (
+                            metric_ok, via)
+                else:  # direct approach
+                    # choose the minimum of the rates
+                    prev_rate = links_metric[(tmp_node_from, tmp_node_to)][0]
+                    prev_via = links_metric[(tmp_node_from, tmp_node_to)][1]
+                    metric_ok = max(prev_rate, 1/rate)  # worst case
+                    if metric_ok == prev_rate:
+                        links_metric[(tmp_node_from, tmp_node_to)] = (
+                        metric_ok, prev_via)
+                    else:
+                        links_metric[(tmp_node_from, tmp_node_to)] = (
+                        metric_ok, via)
+        # done the metrics calculation. now I need to write the shortest path
+        #TODO
+
+    def find_next_hop(self, dst_ip):
+        if len(self.neighbour_succ[dst_ip]) == 1:
+            return self.neighbour_succ[dst_ip][self.NEIGH_NEXT_HOP]
+        elif len(self.neighbour_succ[dst_ip]) == 0:
+            return 0  # broadcast the message
+        else:
+            numEl = len(self.neighbour_succ[dst_ip])
+            rand = random()
+            for i in range(numEl):  # i look in which bucket the random fell
+                if rand < (i+1)/numEl:  # I chose the neighbour in this bucket
+                    return self.neighbour_succ[dst_ip][i][self.NEIGH_NEXT_HOP]
+
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
