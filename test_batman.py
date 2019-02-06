@@ -1,18 +1,21 @@
 import logging
+from math import exp, sqrt
 from random import randint, random, randrange, seed
 
 import matplotlib.pyplot as plt
 from scipy.constants import Boltzmann, pi
-from math import sqrt, exp
+
 from simulator import *
 
 seed(14)
+
 NODE_NUM = 100
-DIM = 10000
+DIM = 1000
 DISTANCE_LIM = 200
 LIGHT_SPEED = 299792458
 APP_CONN_RATE = 0.25
-logging.basicConfig(level=logging.DEBUG)
+
+logging.basicConfig(level=logging.ERROR)
 
 # 1) load queue for events created in simulator module
 event_queue.clean()
@@ -100,7 +103,12 @@ nx.draw(G, with_labels=True, pos=node_positions)
 plt.show()
 
 ## run the simulation, until we run out of events
+counter = 0
 while True:
+    if counter % 10000 == 0:
+        print(event_queue.now)
+    counter += 1
+
     # trigger events until we run out of them
     if event_queue.next() is None:
         break
