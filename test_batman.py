@@ -106,7 +106,22 @@ for ip1, ip2 in app_links:
 
     apps.append( (app1, app2) )
 
+## run the simulation, until we run out of events
 while True:
     # trigger events until we run out of them
     if event_queue.next() is None:
         break
+
+## judge application layer rates
+performances = { ip: 0 for ip in batmans.keys() }
+
+for app1, app2 in apps:
+    # node1 -> node2 communication
+    bitrate1 = app1.tx_packet_size - app2.rx_packet_size
+    performances[app1.local_ip] += bitrate1
+
+    # node2 -> node1 communication
+    bitrate2 = app2.tx_packet_size - app1.rx_packet_size
+    performances[app2.local_ip] += bitrate2
+
+print(performances)
