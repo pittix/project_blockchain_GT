@@ -160,14 +160,13 @@ class BatmanLayer(Layer):
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
-        if packet['path'][0] == self.local_ip: # handle packet for me
+        if packet['path'][-1] == self.local_ip: # handle packet for me
             assert packet['dst_port'] in self.app_table
 
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
         else:
-            old_path = packet['path']
-            new_path = old_path[1:]
+            new_path = packet['path'][1:]
             packet['path'] = new_path
             self.send_down(packet, packet['path'][0])
 
