@@ -16,18 +16,6 @@ batmans = {
     for ip in range(1, 11)
 }
 
-## schedule update of neighbour tables in batman nodes
-UPDATE_TIME = 10
-def update_neigh():
-    # collect tables
-    # exchange tables among batman nodes
-    tables = {ip: batman.neighbour_succ for ip, batman in batmans.items()}
-
-    # TODO use tables
-
-    event_queue.add(Event(action=update_neigh, when=event_queue.now + UPDATE_TIME))
-
-event_queue.add(Event(action=update_neigh, when=event_queue.now))
 
 ## connect each other using some channels, described using a success probability
 ## and round trip time
@@ -57,8 +45,24 @@ graph = [
     (7,  8, p_n, RTT_y),
 ]
 
+channels = {}
 for ip1, ip2, p_succ, rtt in graph:
-    batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
+    local_channels = batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
+    channels = {**channels, **local_channels}
+
+
+## schedule update of neighbour tables in batman nodes
+UPDATE_TIME = 10
+def update_neigh():
+    # collect tables
+    # exchange tables among batman nodes
+    tables = {ip: batman.neighbour_succ for ip, batman in batmans.items()}
+
+    # TODO use tables
+
+    event_queue.add(Event(action=update_neigh, when=event_queue.now + UPDATE_TIME))
+
+event_queue.add(Event(action=update_neigh, when=event_queue.now))
 
 ## create a couple of application for each end-to-end stream: for the simulation
 ## to be reasonable, each node has to have at least one application

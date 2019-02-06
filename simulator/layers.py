@@ -59,9 +59,14 @@ class Channel(Layer):
 
         self.queue = []
 
+        # record how much data have passed ~> bitrate
+        self.total_size = 0
+
     def recv_from_up(self, packet, upper_layer_id):
         # add packet to the queue
         self.queue.append(packet)
+
+        self.total_size += packet.size
 
         # if it is the first in the queue, schedule its reception at dest_id
         if len(self.queue) == 1:
@@ -132,6 +137,11 @@ class BatmanLayer(Layer):
 
         c2 = Channel(**kwargs, dest_id=self.id_)
         other.neighbour_table[self.local_ip] = c2.id_
+
+        return {
+            (self.local_ip, other.local_ip): c1,
+            (other.local_ip, self.local_ip): c2
+        }
 
     def connect_app(self, app_layer):
         # save information about upper layer
