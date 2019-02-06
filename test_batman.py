@@ -28,11 +28,6 @@ batmans = {
 
 ## connect each other using some channels, described using a success probability
 ## and round trip time
-RTT_n = 1
-RTT_y = 0.1
-
-p_y = 0.9
-p_n = 0.7
 node_positions = {}
 channels = {}
 for ip in batmans.keys():
@@ -51,8 +46,6 @@ for ip1 in node_positions:
             local_channels = batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
             channels = {**channels, **local_channels}
 
-## schedule update of neighbour tables in batman nodes
-UPDATE_TIME = 10
 ## create a couple of application for each end-to-end stream: for the simulation
 ## to be reasonable, each node has to have at least one application
 
