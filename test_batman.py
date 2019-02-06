@@ -53,9 +53,6 @@ for ip1, ip2, p_succ, rtt in graph:
 
 ## schedule update of neighbour tables in batman nodes
 UPDATE_TIME = 10
-def ask_path(src, dst):
-    pass
-
 ## create a couple of application for each end-to-end stream: for the simulation
 ## to be reasonable, each node has to have at least one application
 

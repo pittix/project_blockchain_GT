@@ -114,12 +114,6 @@ class BatmanLayer(Layer):
         assert local_ip > 0, "Invalid reserved address {}".format(local_ip)
         self.local_ip = local_ip
 
-        # TODO add BATMAN parameters
-        # probability of success of the transmission with ExOR algorithm
-        # the value associated to each key is a list  (size, time,
-        #  next_hop_ip)
-        self.neighbour_succ = {}
-
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
@@ -143,7 +137,7 @@ class BatmanLayer(Layer):
         app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
-        path = ask_path(self.local_ip, packet['dst_ip'])
+        path = G.shortest_path(self.local_ip, packet['dst_ip'])
         packet['path'] = path
         self.send_down(packet,
                        self.neighbour_table[packet['path'][0]])
