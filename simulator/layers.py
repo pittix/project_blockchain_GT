@@ -216,7 +216,7 @@ class ApplicationLayer(Layer):
 
         # end-to-end connection from src to dst ips
         # is handled here, for simplicity
-        self.local_ip = local_ip
+        self.ip = ip
 
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
@@ -225,8 +225,8 @@ class ApplicationLayer(Layer):
         # exchange local and remote ip address
 
         # note that IP is set when connecting to BATMAN layer
-        self.dst_ip = other.local_ip
-        other.dst_ip = self.local_ip
+        self.dst_ip = other.ip
+        other.dst_ip = self.ip
 
         self.dst_port = other.local_port
         other.dst_port = self.local_port
@@ -241,7 +241,7 @@ class ApplicationLayer(Layer):
             # send packet to lower layer
             p = Packet(size=size,
                        header = {
-                           'src_ip':   self.local_ip,
+                           'src_ip':   self.ip,
                            'src_port': self.local_port,
                            'dst_ip':   self.dst_ip,
                            'dst_port': self.dst_port
