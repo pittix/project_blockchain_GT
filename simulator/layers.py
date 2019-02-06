@@ -50,25 +50,33 @@ class Sink(Layer):
         pass
 
 class Channel(Layer):
-    def __init__(self, p_succ, rtt, dest_id=None):
+    def __init__(self, p_succ, rtt, src_ip, dst_ip, dst_id):
         super(self.__class__, self).__init__()
 
         self.p_succ = p_succ
         self.rtt = rtt
-        self.dest_id = dest_id
+
+        # record IP of source and destination, to identify the channel
+        self.src_ip = src_ip
+        self.dst_ip = dst_ip
+
+        # register channel as edge in graph
+        G.add_edge(src_ip, dst_ip)
+        G[src_ip][dst_ip]['weight'] = DEFAULT_WEIGHT
+
+        # id of destination
+        self.dst_id = dst_id
 
         self.queue = []
 
         # record how much data have passed ~> bitrate
-        self.total_size = 0
+        self.tx_size = 0
 
     def recv_from_up(self, packet, upper_layer_id):
         # add packet to the queue
         self.queue.append(packet)
 
-        self.total_size += packet.size
-
-        # if it is the first in the queue, schedule its reception at dest_id
+        # if it is the first in the queue, schedule its reception at dst_id
         if len(self.queue) == 1:
             self.schedule_tx()
 
@@ -82,22 +90,20 @@ class Channel(Layer):
         """ Transmit the next packet waiting """
         assert len(self.queue) > 0, 'Empty queue while tx in {}'.format(self)
 
-        if self.dest_id is None:
-            raise ValueError("Destination ID not set in {}".format(self))
+        pkt = self.queue.pop()
 
         # send the packet to destination
-        self.send_up(self.queue.pop(), upper_layer_id=self.dest_id)
+        self.send_up(pkt, upper_layer_id=self.dst_id)
+
+        # update weight in graph with inverse of bitrate
+        self.tx_size += pkt.size
+        G[self.src_ip][self.dst_ip]['weight'] = event_queue.now / self.tx_size
 
         # schedule the next transmission, if queue is not empty
         if len(self.queue) > 0:
             self.schedule_tx()
 
 class BatmanLayer(Layer):
-    # position in array of theparameters
-    NEIGH_PKT_SIZE = 0
-    NEIGH_TX_TIME = 1
-    NEIGH_NEXT_HOP = 2
-
     def __init__(self, local_ip):
         super(self.__class__, self).__init__()
 
@@ -114,14 +120,17 @@ class BatmanLayer(Layer):
         assert local_ip > 0, "Invalid reserved address {}".format(local_ip)
         self.local_ip = local_ip
 
+        # register in graph
+        G.add_node(local_ip)
+
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
         # create two symmetric channels for the two directions
-        c1 = Channel(**kwargs, dest_id=other.id_)
+        c1 = Channel(**kwargs, dst_id=other.id_)
         self.neighbour_table[other.local_ip] = c1.id_
 
-        c2 = Channel(**kwargs, dest_id=self.id_)
+        c2 = Channel(**kwargs, dst_id=self.id_)
         other.neighbour_table[self.local_ip] = c2.id_
 
         return {

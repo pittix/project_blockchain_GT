@@ -3,6 +3,8 @@ from functools import total_ordering
 from inspect import signature
 from types import FunctionType, GeneratorType
 
+import networkx as nx
+
 
 class Base:
     # create a nice representation of current object
@@ -88,15 +90,6 @@ class Packet(Base):
 
         return value
 
-# speed of light [m/s]
-c0 = 3e8
-
-# create a logger for all interesting events
-logger = logging.getLogger("")
-
-# create event queue
-event_queue = EventQueue()
-
 def logthis(level):
     def _decorator(fn):
         def _decorated(*arg, **kwargs):
@@ -118,3 +111,14 @@ def logthis(level):
             return ret
         return _decorated
     return _decorator
+
+# create a logger for all interesting events
+logger = logging.getLogger("")
+
+# create event queue
+event_queue = EventQueue()
+
+# graph containing the whole topology
+G = nx.DiGraph()
+
+DEFAULT_WEIGHT = 10
