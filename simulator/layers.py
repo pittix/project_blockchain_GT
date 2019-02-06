@@ -130,14 +130,14 @@ class BatmanLayer(Layer):
         c1 = Channel(**kwargs,
                      dst_id=other.id_,
                      src_ip=self.local_ip,
-                     dst_ip=other.dst_ip)
+                     dst_ip=other.local_ip)
 
         self.neighbour_table[other.local_ip] = c1.id_
 
         c2 = Channel(**kwargs,
                      dst_id=self.id_,
                      src_ip=other.local_ip,
-                     dst_ip=self.dst_ip)
+                     dst_ip=self.local_ip)
 
         other.neighbour_table[self.local_ip] = c2.id_
 
