@@ -16,6 +16,19 @@ batmans = {
     for ip in range(1, 11)
 }
 
+## schedule update of neighbour tables in batman nodes
+UPDATE_TIME = 10
+def update_neigh():
+    # collect tables
+    # exchange tables among batman nodes
+    tables = {ip: batman.neighbour_succ for ip, batman in batmans.items()}
+
+    # TODO use tables
+
+    event_queue.add(Event(action=update_neigh, when=event_queue.now + UPDATE_TIME))
+
+event_queue.add(Event(action=update_neigh, when=event_queue.now))
+
 ## connect each other using some channels, described using a success probability
 ## and round trip time
 RTT_n = 1
