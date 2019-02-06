@@ -92,7 +92,7 @@ for ip1, ip2 in app_links:
                             local_ip=ip1,
                             dst_port=port2,
                             dst_ip=ip2)
-    app1.connect_batman_layer(batmans[ip1])
+    batmans[ip1].connect_app(app1)
 
     app2 = ApplicationLayer(interarrival_gen(),
                             size_gen(),
@@ -102,7 +102,7 @@ for ip1, ip2 in app_links:
                             local_ip=ip2,
                             dst_port=port1,
                             dst_ip=ip1)
-    app2.connect_batman_layer(batmans[ip2])
+    batmans[ip2].connect_app(app2)
 
     apps.append( (app1, app2) )
 

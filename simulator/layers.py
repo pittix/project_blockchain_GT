@@ -91,9 +91,13 @@ class BatmanLayer(Layer):
     def __init__(self, ip, neigh_disc_interval):
         super(self.__class__, self).__init__()
 
-        ## single hop connection (via channels)
-        self.destination_table = {
-            # dest IP: ID of channel layer, populated via `connect_to`
+        ## single hop connection to neighbour layers
+
+        self.neighbour_table = {
+            # dest IP: ID of channel layer
+        }
+        self.app_table = {
+            # local port: ID of app_layer
         }
 
         ## routing address of node
@@ -121,10 +125,17 @@ class BatmanLayer(Layer):
 
         # create two symmetric channels for the two directions
         c1 = Channel(**kwargs, dest_id=other.id_)
-        self.destination_table[other.ip] = c1.id_
+        self.neighbour_table[other.ip] = c1.id_
 
         c2 = Channel(**kwargs, dest_id=self.id_)
-        other.destination_table[self.ip] = c2.id_
+        other.neighbour_table[self.ip] = c2.id_
+
+    def connect_app(self, app_layer):
+        # save information about upper layer
+        self.app_table[app_layer.local_port] = app_layer.id_
+
+        # register self in application layer
+        app_layer.lower_layer_id = b_layer.id_
 
     def recv_from_up(self, packet, upper_layer_id):
         ## perform discrovery, if it is time to do so
@@ -155,9 +166,9 @@ class BatmanLayer(Layer):
         ## set next_hop for packet correctly
         # TODO
 
-        assert packet['next_hop_ip'] in self.destination_table, "Invalid next hop"
+        assert packet['next_hop_ip'] in self.neighbour_table, "Invalid next hop"
         self.send_down(packet,
-                       lower_layer_id=self.destination_table[packet['next_hop_ip']])
+                       self.neighbour_table[packet['next_hop_ip']])
 
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
@@ -203,12 +214,11 @@ class BatmanLayer(Layer):
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
-        if packet['dst_ip'] == self.ip and packet['to_bat'] is True:
-            # set as a direct neighbour and this is a protocol specific packet
-            self.neighbour_succ[packet['src_ip']][2] = 0
-        else:
-            for layer_id in self.upper_layers_id:
-                self.send_up(packet, layer_id)
+        if packet['dst_ip'] == self.ip:
+            assert packet['dst_port'] in self.app_table
+
+            upper_layer_id = self.app_table[packet['dst_port']]
+            self.send_up(packet, upper_layer_id)
 
     def update_neigh():
         pass
@@ -241,9 +251,6 @@ class ApplicationLayer(Layer):
 
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
-
-    def connect_batman_layer(self, b_layer):
-        self.lower_layer_id = b_layer.id_
 
     @logthis(logging.INFO)
     def generate_pkts(self):
