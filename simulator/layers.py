@@ -138,36 +138,12 @@ class BatmanLayer(Layer):
         self.app_table[app_layer.local_port] = app_layer.id_
 
         # register self in application layer
-        app_layer.lower_layer_id = b_layer.id_
+        app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
         # TODO do BATMAN stuff
         # header modifications are kept in a dictionary inside packet class
         # ex. pkt['next_hop_ip'] = 10
-        if self.neigh_disc % 50 == 0:
-            # discovery of the neighbours. If Join=0, then it's in no nw
-            # Join != 0 is the nw ID to join
-            if bool(self.oth_neigh_succ):  # check if there are elements
-                pkt = Packet(size=1,
-                             header={
-                                 'src_ip': self.local_ip,
-                                 'dst_ip': 0,
-                                 'join': 1,
-                                 'oth_table': False
-                             })
-            else:
-                pkt = Packet(size=1,
-                             header={
-                                 'src_ip': self.local_ip,
-                                 'dst_ip': 0,
-                                 'join': 1,
-                                 'oth_table': dict(self.glob_neigh_succ)
-                             })
-            self.send_down(pkt)
-            self.update_neigh()
-        else:
-            self.neigh_disc+=1
-
         ## set next_hop for packet correctly
         # TODO
 
