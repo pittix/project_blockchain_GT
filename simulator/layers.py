@@ -152,7 +152,7 @@ class BatmanLayer(Layer):
         app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
-        path = G.shortest_path(self.local_ip, packet['dst_ip'])
+        path = nx.shortest_path(G, self.local_ip, packet['dst_ip'])
         packet['path'] = path[1:]
         self.send_down(packet,
                        self.neighbour_table[packet['path'][0]])
