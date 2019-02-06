@@ -120,10 +120,8 @@ class BatmanLayer(Layer):
         ## routing address of node
         assert local_ip > 0, "Invalid reserved address {}".format(local_ip)
         self.local_ip = local_ip
-
         # register in graph
         G.add_node(local_ip)
-
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
