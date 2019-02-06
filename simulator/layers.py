@@ -119,18 +119,18 @@ class BatmanLayer(Layer):
         ## routing address of node
         assert local_ip > 0, "Invalid reserved address {}".format(local_ip)
         self.local_ip = local_ip
-
         # register in graph
         G.add_node(local_ip)
-
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
         # create two symmetric channels for the two directions
-        c1 = Channel(**kwargs, dst_id=other.id_)
+        c1 = Channel(**kwargs, dst_id=other.id_,
+                    src=self.local_ip, dst=other.local_ip)
         self.neighbour_table[other.local_ip] = c1.id_
 
-        c2 = Channel(**kwargs, dst_id=self.id_)
+        c2 = Channel(**kwargs, dst_id=self.id_,
+                    dst=self.local_ip, src=other.local_ip)
         other.neighbour_table[self.local_ip] = c2.id_
 
         return {
