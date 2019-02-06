@@ -138,7 +138,7 @@ class BatmanLayer(Layer):
         self.app_table[app_layer.local_port] = app_layer.id_
 
         # register self in application layer
-        app_layer.lower_layer_id = b_layer.id_
+        app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
         # TODO do BATMAN stuff
