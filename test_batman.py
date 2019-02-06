@@ -1,9 +1,12 @@
 import logging
-from random import randint, random, randrange
+from random import randint, random, randrange, seed
 
+import matplotlib.pyplot as plt
 from scipy.constants import Boltzmann, pi
 
 from simulator import *
+
+seed(14)
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -83,6 +86,8 @@ def size_gen():
 # ensure unique port for each app (just to play safe)
 port_no = 1000
 for ip1, ip2 in app_links:
+    assert ip1 != ip2
+
     port1 = port_no
     port2 = port_no + 1
 
@@ -109,6 +114,9 @@ for ip1, ip2 in app_links:
     batmans[ip2].connect_app(app2)
 
     apps.append( (app1, app2) )
+
+# nx.draw(G, with_labels=True)
+# plt.show()
 
 ## run the simulation, until we run out of events
 while True:

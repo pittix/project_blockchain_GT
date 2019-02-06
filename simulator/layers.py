@@ -172,7 +172,8 @@ class BatmanLayer(Layer):
         else:
             packet['path'] = packet['path'][1:]
             assert len(packet['path']) > 0, "Packet path is empty: {}".format(packet)
-            self.send_down(packet, packet['path'][0])
+            self.send_down(packet,
+                           self.neighbour_table[packet['path'][0]])
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
