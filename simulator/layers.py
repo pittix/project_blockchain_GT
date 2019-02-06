@@ -50,10 +50,10 @@ class Sink(Layer):
         pass
 
 class Channel(Layer):
-    def __init__(self, p_retx, rtt, dest_id=None):
+    def __init__(self, p_succ, rtt, dest_id=None):
         super(self.__class__, self).__init__()
 
-        self.p_retx = p_retx
+        self.p_succ = p_succ
         self.rtt = rtt
         self.dest_id = dest_id
 
@@ -69,7 +69,7 @@ class Channel(Layer):
 
     def schedule_tx(self):
         """ Add the next transmission to the event queue """
-        tx_time = geometric(self.p_retx) * self.rtt
+        tx_time = geometric(self.p_succ) * self.rtt
         event_queue.add(Event(action=self.transmit,
                               when=event_queue.now + tx_time))
 
@@ -214,11 +214,17 @@ class BatmanLayer(Layer):
         pass
 
 class ApplicationLayer(Layer):
-    def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, local_ip=None):
+    def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
+                 local_port, local_ip, dst_port, dst_ip):
+
         super(self.__class__, self).__init__()
 
         # save address details
         self.local_port = local_port
+        self.local_ip = local_ip
+
+        self.dst_port = dst_port
+        self.dst_ip = dst_ip
 
         # define the arrival process
         self.interarrival_gen = interarrival_gen
@@ -233,22 +239,8 @@ class ApplicationLayer(Layer):
         self.tx_packet_count = 0
         self.tx_packet_size = 0
 
-        # end-to-end connection from src to dst ips
-        # is handled here, for simplicity
-        self.local_ip = local_ip
-
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
-
-    def connect_app(self, other):
-        # exchange local and remote ip addresses
-
-        # note that IP is set when connecting to BATMAN layer
-        self.dst_ip = other.ip
-        other.dst_ip = self.ip
-
-        self.dst_port = other.local_port
-        other.dst_port = self.local_port
 
     @logthis(logging.INFO)
     def generate_pkts(self):

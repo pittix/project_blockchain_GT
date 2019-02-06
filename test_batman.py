@@ -10,61 +10,99 @@ logging.basicConfig(level=logging.DEBUG)
 # 1) load queue for events created in simulator module
 event_queue.clean()
 
-# 2) create common channel
-freq = 2.5e9 # ~ wifi is supposed
-Temp = 293   # 20°C of noise temperature
+## create a number of batman layers, corresponding to nodes
+batmans = {
+    ip: BatmanLayer(ip, 49)
+    for ip in range(1, 11)
+}
 
-channel = Channel(
-    G=1.63,           # no dissipation is supposed in half-wave dipole, so gain = directivity
-    Pin=10e-3,        # 10mW
-    lambda_=c0/freq,
-    Ts=2/freq,        # use Nyquist limit
-    No=Boltzmann*Temp,
-)
+## connect each other using some channels, described using a success probability
+## and round trip time
+RTT_n = 1
+RTT_y = 0.1
 
-def create_node(ip, n_apps):
-    # define interarrival and packet size for the app layer
-    def interarrival_gen():
-        while True:
-            yield random() * 10
+p_y = 0.9
+p_n = 0.7
 
-    def size_gen():
-        while True:
-            yield randint(100, 200)
+graph = [
+    # node1, node2, p_succ, rtt
+    (4,  1, p_n, RTT_n),
+    (4,  2, p_y, RTT_y),
+    (4,  6, p_y, RTT_y),
+    (4,  7, p_y, RTT_y),
 
-    # create n app layers
-    apps = [ ApplicationLayer(interarrival_gen(),
-                              size_gen(),
-                              start_time=0,
-                              stop_time=5000,
-                              local_port=n + 1) for n in range(n_apps) ]
+    (5,  2, p_y, RTT_n),
+    (5,  3, p_y, RTT_y),
+    (5,  7, p_n, RTT_n),
+    (5,  8, p_y, RTT_y),
 
-    # create a single batman layer
-    b = BatmanLayer(ip)
+    (10, 7, p_n, RTT_y),
+    (10, 8, p_y, RTT_n),
+    (10, 9, p_n, RTT_n),
 
-    # connect apps to batman layer
-    for app in apps:
-        b.connect_upper_layer(app)
+    (7,  9, p_y, RTT_y),
+    (7,  8, p_n, RTT_y),
+]
 
-    # connect the batman layer to the channel
-    channel.connect_upper_layer(b, position=(random(), random()))
+for ip1, ip2, p_succ, rtt in graph:
+    batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
 
-    return {
-        'apps'  : apps,
-        'batman': b
-    }
+## create a couple of application for each end-to-end stream: for the simulation
+## to be reasonable, each node has to have at least one application
 
-# create n nodes with two apps each
-n = 2
-nodes = [create_node(i, 3) for i in range(n)]
+app_links = [
+    (1, 2),
+    (1, 10),
 
-for node in nodes:
-    # connect each app to the corresponding one in a random node
-    for i, app in enumerate(node['apps']):
-        remote_app = nodes[randrange(n)]['apps'][i]
-        app.connect_app(remote_app) # app now knows even remote IP
+    (2, 6),
+    (2, 7),
 
-## run the simulation ##
+    (3, 4),
+    (3, 8),
+
+    (5, 9),
+
+    (8, 10)
+]
+
+# store here the resulting couples
+apps = []
+
+def interarrival_gen():
+    while True:
+        yield random() * 10
+
+def size_gen():
+    while True:
+        yield randint(100, 200)
+
+# ensure unique port for each app (just to play safe)
+port_no = 1000
+for ip1, ip2 in app_links:
+    port1 = port_no
+    port2 = port_no + 1
+
+    port_no += 10
+
+    app1 = ApplicationLayer(interarrival_gen(),
+                            size_gen(),
+                            start_time=0,
+                            stop_time=100,
+                            local_port=port1,
+                            local_ip=ip1,
+                            dst_port=port2,
+                            dst_ip=ip2)
+
+    app2 = ApplicationLayer(interarrival_gen(),
+                            size_gen(),
+                            start_time=0,
+                            stop_time=100,
+                            local_port=port2,
+                            local_ip=ip2,
+                            dst_port=port1,
+                            dst_ip=ip1)
+
+    apps.append( (app1, app2) )
 
 while True:
     # trigger events until we run out of them
