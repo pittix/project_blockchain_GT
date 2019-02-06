@@ -12,7 +12,7 @@ event_queue.clean()
 
 ## create a number of batman layers, corresponding to nodes
 batmans = {
-    ip: BatmanLayer(ip, 49)
+    ip: BatmanLayer(ip)
     for ip in range(1, 11)
 }
 
