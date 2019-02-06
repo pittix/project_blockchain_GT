@@ -214,7 +214,7 @@ class BatmanLayer(Layer):
         pass
 
 class ApplicationLayer(Layer):
-    def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, ip=None):
+    def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, local_ip=None):
         super(self.__class__, self).__init__()
 
         # save address details
@@ -235,13 +235,13 @@ class ApplicationLayer(Layer):
 
         # end-to-end connection from src to dst ips
         # is handled here, for simplicity
-        self.ip = ip
+        self.local_ip = local_ip
 
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
 
     def connect_app(self, other):
-        # exchange local and remote ip address
+        # exchange local and remote ip addresses
 
         # note that IP is set when connecting to BATMAN layer
         self.dst_ip = other.ip
@@ -260,7 +260,7 @@ class ApplicationLayer(Layer):
             # send packet to lower layer
             p = Packet(size=size,
                        header = {
-                           'src_ip':   self.ip,
+                           'src_ip':   self.local_ip,
                            'src_port': self.local_port,
                            'dst_ip':   self.dst_ip,
                            'dst_port': self.dst_port
