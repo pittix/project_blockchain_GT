@@ -16,7 +16,6 @@ batmans = {
     for ip in range(1, 11)
 }
 
-
 ## connect each other using some channels, described using a success probability
 ## and round trip time
 RTT_n = 1
@@ -49,7 +48,6 @@ channels = {}
 for ip1, ip2, p_succ, rtt in graph:
     local_channels = batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
     channels = {**channels, **local_channels}
-
 
 ## schedule update of neighbour tables in batman nodes
 UPDATE_TIME = 10
