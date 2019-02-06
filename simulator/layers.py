@@ -117,11 +117,9 @@ class BatmanLayer(Layer):
         }
 
         ## routing address of node
-        assert local_ip > 0, "Invalid reserved address {}".format(local_ip)
         self.local_ip = local_ip
         # register in graph
         G.add_node(local_ip)
-
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
@@ -153,11 +151,8 @@ class BatmanLayer(Layer):
         app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
-        assert self.local_ip != packet['dst_ip'], "Self-sent packet"
-
         path = nx.shortest_path(G, self.local_ip, packet['dst_ip'])
         packet['path'] = path[1:]
-
         self.send_down(packet,
                        self.neighbour_table[packet['path'][0]])
 
@@ -170,10 +165,10 @@ class BatmanLayer(Layer):
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
         else:
-            packet['path'] = packet['path'][1:]
-            assert len(packet['path']) > 0, "Packet path is empty: {}".format(packet)
-            self.send_down(packet,
-                           self.neighbour_table[packet['path'][0]])
+            old_path = packet['path']
+            new_path = old_path[1:]
+            packet['path'] = new_path
+            self.send_down(packet, self.neighbour_table[packet['path'][0]])
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
