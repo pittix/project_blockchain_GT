@@ -163,11 +163,11 @@ class BatmanLayer(Layer):
                     if next_hop == packet['prev_hop_ip']:
                         updated = []
                         # add this transmission time
-                        updated[self.NEIGH_TX_TIME] = self.neighbour_succ[src][i][self.NEIGH_TX_TIME] + packet['rx_time'] -  packet['tx_time']
+                        updated[self.NEIGH_TX_TIME] = self.neighbour_succ[src][i][self.NEIGH_TX_TIME] + event_queue.now -  packet['tx_time']
                         # keep the previous hop
                         updated[self.NEIGH_NEXT_HOP] = packet['prev_hop_ip']
                         # update size
-                        updated[self.NEIGH_PKT_SIZE] = packet['size'] + \
+                        updated[self.NEIGH_PKT_SIZE] = packet.size + \
                             self.neighbour_succ[src][i][self.NEIGH_PKT_SIZE]
                         self.neighbour_succ[src][i] = updated
                         # I've done everything I need, so send up the packet
@@ -176,16 +176,16 @@ class BatmanLayer(Layer):
                         return
                 # If I got here, the block inside the if inside the for ways
                 # never executed. I add the entry as it's a new link and return
-                size = packet['size']
-                time = packet['rx_time'] - packet['tx_time']
+                size = packet.size
+                time = event_queue.now - packet['tx_time']
                 self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
                 updated = [size, time, packet['prev_hop_ip']]
                 self.neighbour_succ[src].append(updated)
                 self.send_up(packet)
                 return
             else:  # add first entry
-                size = packet['size']
-                time = packet['rx_time'] - packet['tx_time']
+                size = packet.size
+                time = event_queue.now - packet['tx_time']
                 self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
                 self.send_up(packet)
                 return
@@ -204,20 +204,20 @@ class BatmanLayer(Layer):
             # add source node to the list of surrounding nodes
             if not packet['src_ip'] in self.neighbour_succ:
                 self.neighbour_succ[packet['src_ip']] = [
-                    packet['size'],
-                    packet['rx_time'] - packet['rx_time'],
+                    packet.size,
+                    event_queue.now - packet['tx_time'],
                     packet['prev_hop_ip']
                 ]
             # add also the direct neighbour
             if not packet['prev_hop_ip'] in self.neighbour_succ:
                 self.neighbour_succ[packet['prev_hop_ip']] = [
-                    packet['size'],
-                    packet['rx_time'] - packet['rx_time'],
+                    packet.size,
+                    event_queue.now - packet['tx_time'],
                     0
                 ]
 
-            # self.neighbour_succ[prev_hop][self.NEIGH_PKT_SIZE] += packet['size']
-            # time = packet['rx_time'] - packet['tx_time']
+            # self.neighbour_succ[prev_hop][self.NEIGH_PKT_SIZE] += packet.size
+            # time = event_queue.now - packet['tx_time']
             # self.neighbour_succ[prev_hop][self.NEIGH_TX_TIME] += time
             # # update global table
             # self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
@@ -336,7 +336,8 @@ class ApplicationLayer(Layer):
                            'src_ip':   self.local_ip,
                            'src_port': self.local_port,
                            'dst_ip':   self.dst_ip,
-                           'dst_port': self.dst_port
+                           'dst_port': self.dst_port,
+                           'tx_time': event_queue.now
                        })
 
             self.tx_packet_count += 1
