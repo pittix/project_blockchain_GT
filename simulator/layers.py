@@ -270,8 +270,8 @@ class BatmanLayer(Layer):
         links_metric = []  # each node will have a metric
         # calculate link metrics
         for tmp_node_from in allNodes:
-            for tmp_node_to in self.glob_neigh_succ[tmp_node_from]
-                rate = tmp_node_to[self.NEIGH_PKT_SIZE] /  tmp_node_to[self.NEIGH_TX_TIME]
+            for tmp_node_to in self.glob_neigh_succ[tmp_node_from]:
+                rate = tmp_node_to[self.NEIGH_PKT_SIZE] / tmp_node_to[self.NEIGH_TX_TIME]
                 via = tmp_node_to[self.NEIGH_NEXT_HOP]
                 if via == 0:  # direct neighbour, so no calculation needed
                     pass
@@ -285,10 +285,10 @@ class BatmanLayer(Layer):
                         prev_via = links_metric[(tmp_node_to, tmp_node_from)][1]
                         metric_ok = max(prev_rate, 1/rate)  # worst case
                         if metric_ok == prev_rate:  # choose the worst one
-                            links_metric[(tmp_node_from, tmp_node_to)] = (
+                            links_metric[(tmp_node_to, tmp_node_from)] = (
                             metric_ok, prev_via)
                         else:
-                            links_metric[(tmp_node_from, tmp_node_to)] = (
+                            links_metric[(tmp_node_to, tmp_node_from)] = (
                             metric_ok, via)
                 else:  # direct approach
                     # choose the minimum of the rates
@@ -302,7 +302,7 @@ class BatmanLayer(Layer):
                         links_metric[(tmp_node_from, tmp_node_to)] = (
                         metric_ok, via)
         # done the metrics calculation. now I need to write the shortest path
-        #TODO
+        # TODO
 
     def find_next_hop(self, dst_ip):
         if len(self.neighbour_succ[dst_ip]) == 1:
