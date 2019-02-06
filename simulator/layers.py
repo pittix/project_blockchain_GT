@@ -116,13 +116,11 @@ class BatmanLayer(Layer):
 
         # TODO add BATMAN parameters
         # probability of success of the transmission with ExOR algorithm
-        # the value associated to each key is a list  (pkt ok, pkt received,
+        # the value associated to each key is a list  (size, time,
         #  next_hop_ip)
         self.neighbour_succ = {}
         # tables of all other neighbours
         self.glob_neigh_succ = {}
-        # node table about all other neighbour
-        self.oth_neigh_succ = {}
         # count of packet sent to ip, so that it will be balanced
         self.pkt_count = {}
         # send a neighbour discover
@@ -182,7 +180,7 @@ class BatmanLayer(Layer):
                         self.neighbour_succ[src][i] = updated
                         # I've done everything I need, so send up the packet
                         # and return
-                        self.send_up(packet)
+                        self.send_up(packet, self.app_table[packet['dst_port']])
                         return
                 # If I got here, the block inside the if inside the for ways
                 # never executed. I add the entry as it's a new link and return
@@ -191,25 +189,25 @@ class BatmanLayer(Layer):
                 self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
                 updated = [size, time, packet['prev_hop_ip']]
                 self.neighbour_succ[src].append(updated)
-                self.send_up(packet)
+                self.send_up(packet, self.app_table[packet['dst_port']])
                 return
             else:  # add first entry
                 size = packet.size
                 time = event_queue.now - packet['tx_time']
                 self.neighbour_succ[src] = [[size, time, packet['prev_hop_ip']]]
-                self.send_up(packet)
+                self.send_up(packet, self.app_table[packet['dst_port']])
                 return
 
-        elif packet['dst_ip'] == 0:       # node discovery
-            if self.neighbour_succ['src_ip'] is None:
-                # and packet['join'] == 1: ignored as we're not into groups
-                self.neighbour_succ['src_ip'] = [0, 0, 0]
-            if packet['oth_table'] is False:
-                pass
-            else:
-                self.oth_neigh_succ[packet['src_ip']] = packet['oth_table']
-                self.update_neigh()
-                return
+        # elif packet['dst_ip'] == 0:       # node discovery
+        #     if self.neighbour_succ['src_ip'] is None:
+        #         # and packet['join'] == 1: ignored as we're not into groups
+        #         self.neighbour_succ['src_ip'] = [0, 0, 0]
+        #     if packet['oth_table'] is False:
+        #         pass
+        #     else:
+        #         self.neigh_succ[packet['src_ip']] = packet['oth_table']
+        #         self.update_neigh()
+        #         return
             # TODO TO CHECK
             # add source node to the list of surrounding nodes
             if not packet['src_ip'] in self.neighbour_succ:
@@ -250,11 +248,11 @@ class BatmanLayer(Layer):
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
 
-    def update_neigh(self):
+    def update_neigh(self, all_batmans):
         # Start w/ one node in the neighbour and look for the other way around
-        allNodes = self.glob_neigh_succ.keys()
-        temp_links = {}  # dict with nodes that don't have any pkt sent
-        links_metric = []  # each node will have a metric
+        # allNodes = self.glob_neigh_succ.keys()
+        # temp_links = {}  # dict with nodes that don't have any pkt sent
+        # links_metric = []  # each node will have a metric
         # calculate link metrics
         for tmp_node_from in allNodes:
             for tmp_node_to in self.glob_neigh_succ[tmp_node_from]:
