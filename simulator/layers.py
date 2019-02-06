@@ -242,6 +242,9 @@ class ApplicationLayer(Layer):
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
 
+    def connect_batman_layer(self, b_layer):
+        self.lower_layer_id = b_layer.id_
+
     @logthis(logging.INFO)
     def generate_pkts(self):
         size = next(self.size_gen)
@@ -260,7 +263,7 @@ class ApplicationLayer(Layer):
 
             self.tx_packet_count += 1
             self.tx_packet_size += p.size
-            self.send_down(p)
+            self.send_down(p, lower_layer_id=self.lower_layer_id)
 
             # call function again after interarrival
             event_queue.add(Event(self.generate_pkts, when=next_gen_time))
