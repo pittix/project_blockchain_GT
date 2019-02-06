@@ -126,14 +126,12 @@ while True:
 
 ## judge application layer rates
 performances = { ip: 0 for ip in batmans.keys() }
-
+cur_time = event_queue.now
 for app1, app2 in apps:
     # node1 -> node2 communication
-    bitrate1 = app1.tx_packet_size - app2.rx_packet_size
-    performances[app1.local_ip] += bitrate1
-
-    # node2 -> node1 communication
-    bitrate2 = app2.tx_packet_size - app1.rx_packet_size
-    performances[app2.local_ip] += bitrate2
+    print('TX: ', app1.id_, ' -->', app2.id_, ' Rate ', app1.rx_packet_size/cur_time)
+    print('TX: ', app2.id_, ' -->', app1.id_, ' Rate ', app2.rx_packet_size/cur_time)
+    performances[app1.local_ip] += app1.rx_packet_size
+    performances[app2.local_ip] += app2.rx_packet_size
 
 print(performances)
