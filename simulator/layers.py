@@ -88,10 +88,18 @@ class Channel(Layer):
             self.schedule_tx()
 
 class BatmanLayer(Layer):
-    def __init__(self, local_ip, neigh_disc_interval):
+    def __init__(self, ip, neigh_disc_interval):
         super(self.__class__, self).__init__()
 
-        self.local_ip = local_ip
+        ## single hop connection (via channels)
+        self.destination_table = {
+            # dest IP: ID of channel layer, populated via `connect_to`
+        }
+
+        ## routing address of node
+        assert ip > 0, "Invalid reserved address {}".format(ip)
+        self.ip = ip
+
         self.neigh_disc_interval = neigh_disc_interval
 
         # TODO add BATMAN parameters probability of success of the transmission
@@ -108,14 +116,25 @@ class BatmanLayer(Layer):
         # send a neighbour discover
         self.neigh_disc = 0
 
+    def connect_to(self, other, **kwargs):
+        """ Connect self with other node through Channel objects """
+
+        # create two symmetric channels for the two directions
+        c1 = Channel(**kwargs, dest_id=other.id_)
+        self.destination_table[other.ip] = c1.id_
+
+        c2 = Channel(**kwargs, dest_id=self.id_)
+        other.destination_table[self.ip] = c2.id_
+
     def recv_from_up(self, packet, upper_layer_id):
+        ## perform discrovery, if it is time to do so
         if self.neigh_disc % self.neigh_disc_interval == 0:
             # discovery of the neighbours. If Join=0, then it's in no nw
             # Join != 0 is the nw ID to join
             if bool(self.oth_neigh_succ): #check if there are elements
                 pkt = Packet(size=1,
                              header={
-                                 'src_ip': local_ip,
+                                 'src_ip': self.ip,
                                  'dst_ip': 0,
                                  'join': 1,
                                  'oth_table': False
@@ -123,21 +142,27 @@ class BatmanLayer(Layer):
             else:
                 pkt = Packet(size=1,
                              header={
-                                 'src_ip': local_ip,
+                                 'src_ip': self.ip,
                                  'dst_ip': 0,
                                  'join': 1,
                                  'oth_table': dict(self.glob_neigh_succ)
                              })
             self.send_down(pkt)
             self.update_neigh()
+        else:
+            self.neigh_disc+=1
 
-        self.neigh_disc+=1
-        self.send_down(packet)
+        ## set next_hop for packet correctly
+        # TODO
+
+        assert packet['next_hop_ip'] in self.destination_table, "Invalid next hop"
+        self.send_down(packet,
+                       lower_layer_id=self.destination_table[packet['next_hop_ip']])
 
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
-        if packet['dst_ip'] != self.local_ip:
+        if packet['dst_ip'] != self.ip:
             # node discovery
             if packet['dst_ip'] == 0:
                 if neighbour_succ['src_ip'] is None and packet['join'] == 1:
@@ -162,7 +187,7 @@ class BatmanLayer(Layer):
                 self.neighbour_succ[prev_hop][1] += packet['size']
 
                 # update global table
-                self.glob_neigh_succ[self.local_ip] = self.neighbour_succ
+                self.glob_neigh_succ[self.ip] = self.neighbour_succ
             else:
                 self.neighbour_succ[prev_hop][1] += packet['size']
 
@@ -173,29 +198,23 @@ class BatmanLayer(Layer):
                 # select first for now
                 packet['next_hop_ip'] = self.neighbour_succ[dst_ip][2][0]
 
-            packet['prev_hop_ip'] = self.local_ip
+            packet['prev_hop_ip'] = self.ip
             self.send_down(packet)
 
         # if this node is destination, send to each one of the apps:
         # the application will take care of discarding packets not for it
-        if packet['dst_ip'] == self.local_ip and packet['to_bat'] is True:
+        if packet['dst_ip'] == self.ip and packet['to_bat'] is True:
             # set as a direct neighbour and this is a protocol specific packet
             self.neighbour_succ[packet['src_ip']][2] = 0
         else:
             for layer_id in self.upper_layers_id:
                 self.send_up(packet, layer_id)
 
-    def connect_upper_layer(self, upper_layer, **kwargs):
-        super(self.__class__, self).connect_upper_layer(upper_layer, **kwargs)
-
-        # set local ip in application layer
-        upper_layer.local_ip = self.local_ip
-
     def update_neigh():
         pass
 
 class ApplicationLayer(Layer):
-    def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, local_ip=None):
+    def __init__(self, interarrival_gen, size_gen, start_time, stop_time, local_port, ip=None):
         super(self.__class__, self).__init__()
 
         # save address details
