@@ -3,32 +3,6 @@ from functools import total_ordering
 from inspect import signature
 from types import FunctionType, GeneratorType
 
-# speed of light [m/s]
-c0 = 3e8
-
-# create a logger for all interesting events
-logger = logging.getLogger("")
-
-def logthis(level):
-    def _decorator(fn):
-        def _decorated(*arg, **kwargs):
-            logger.log(level,
-                       "  calling %s: args=%r, kwargs=%r",
-                       fn.__name__,
-                       arg,
-                       kwargs)
-
-            ret = fn(*arg, **kwargs)
-            if ret:
-                logger.log(level,
-                           "  called %s: args=%r, kwargs=%r got return value: %r",
-                           fn.__name__,
-                           arg,
-                           kwargs,
-                           ret)
-            return ret
-        return _decorated
-    return _decorator
 
 class Base:
     # create a nice representation of current object
@@ -113,3 +87,34 @@ class Packet(Base):
             raise ValueError("key = {} not in Packet {}".format(key, self))
 
         return value
+
+# speed of light [m/s]
+c0 = 3e8
+
+# create a logger for all interesting events
+logger = logging.getLogger("")
+
+# create event queue
+event_queue = EventQueue()
+
+def logthis(level):
+    def _decorator(fn):
+        def _decorated(*arg, **kwargs):
+            logger.log(level,
+                       "[%f] %s: args=%r, kwargs=%r",
+                       event_queue.now,
+                       fn.__name__,
+                       arg,
+                       kwargs)
+
+            ret = fn(*arg, **kwargs)
+            if ret:
+                logger.log(level,
+                           "  called %s: args=%r, kwargs=%r got return value: %r",
+                           fn.__name__,
+                           arg,
+                           kwargs,
+                           ret)
+            return ret
+        return _decorated
+    return _decorator
