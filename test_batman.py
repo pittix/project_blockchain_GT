@@ -1,6 +1,7 @@
 import logging
 from math import exp, sqrt
 from random import randint, random, seed
+
 from simulator import *
 
 # default values
@@ -116,8 +117,6 @@ def simulator_batman(s=1, node_num=NODE_NUM, dim=DIM, dist_lim=DISTANCE_LIM,
     # cur_time = event_queue.now
     for app1, app2 in apps:
         # node1 -> node2 communication
-        # print('TX: ', app1.id_, ' -->', app2.id_, ' Rate ', app1.rx_packet_size/cur_time)
-        # print('TX: ', app2.id_, ' -->', app1.id_, ' Rate ', app2.rx_packet_size/cur_time)
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
 
