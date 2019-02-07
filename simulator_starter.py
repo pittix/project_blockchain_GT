@@ -1,18 +1,23 @@
-from simulator import *
-from test_batman import *
 import argparse
 import sys
 import multiprocessing as mp
+from simulator import *
+from test_batman import *
 parser = argparse.ArgumentParser("Simulate batman")
+
 parser.add_argument('-n', help='number of nodes', action='append',
-                dest='node_num', type=int)
+                    dest='node_num', type=int)
+
 parser.add_argument('-s', help='seed', action='append', dest='s', type=int)
+
 parser.add_argument('-d-lim', help='distance limit', action='append',
-                dest='dist_lim', type=int)
+                    dest='dist_lim', type=int)
+
 parser.add_argument('-d', help='length of the square', action='append',
-                dest='dim', type=int)
+                    dest='dim', type=int)
+
 parser.add_argument('-a', help='rate of connection between apps', action='append',
-                dest='app_rate', type=float)
+                    dest='app_rate', type=float)
 
 available_threads = mp.cpu_count() - 1
 
