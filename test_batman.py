@@ -46,23 +46,21 @@ def simulator_batman(args):
 
     # connect each other using some channels, described using a success probability
     # and round trip time
-    node_positions = {}
     channels = {}
-    for ip in batmans.keys():
-        node_positions[ip] = (dim*random(), dim*random())
-    for ip1 in node_positions:
-        for ip2 in node_positions:
+
+    for ip1 in batmans:
+        for ip2 in batmans:
             if ip1 == ip2:
                 continue
-            dist = sqrt((node_positions[ip1][0] - node_positions[ip2][0])**2
-                        + (node_positions[ip1][1]
-                         - node_positions[ip2][1])**2)
+            dist = sqrt(
+                (batmans[ip1].positions[0] - batmans[ip2].positions[0])**2 +
+                (batmans[ip1].positions[1] - batmans[ip2].positions[1])**2
+            )
             if dist < dist_lim:
                 p_succ = exp(-dist/dist_lim)
                 rtt = PROC_TIME + dist/LIGHT_SPEED
                 local_channels = batmans[ip1].connect_to(batmans[ip2],
-                                p_succ=p_succ, rtt=rtt)
-                channels = {**channels, **local_channels}
+                                                         p_succ=p_succ, rtt=rtt)
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
@@ -70,8 +68,8 @@ def simulator_batman(args):
     port_no = 1000
     # ensure unique port for each app (just to play safe)
 
-    for ip1 in node_positions:
-        for ip2 in node_positions:
+    for ip1 in batmans:
+        for ip2 in batmans:
             if ip1 == ip2:
                 continue
             elif random() < app_rate:
@@ -100,8 +98,7 @@ def simulator_batman(args):
                 batmans[ip2].connect_app(app2)
 
                 apps.append( (app1, app2) )
-    nx.draw(G, with_labels=True, pos=node_positions)
-    # plt.show()
+
     try:
         # run the simulation, until we run out of events
         counter = 0
@@ -113,6 +110,7 @@ def simulator_batman(args):
             # trigger events until we run out of them
             if event_queue.next() is None:
                 break
+
     except Exception as e:
         return str(e)
 
@@ -122,6 +120,7 @@ def simulator_batman(args):
         # node1 -> node2 communication
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
+
     print(performances)
 
     # report everything to csv
