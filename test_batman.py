@@ -24,8 +24,17 @@ def size_gen():
         yield randint(100, 200)
 
 
-def simulator_batman(s=1, node_num=NODE_NUM, dim=DIM, dist_lim=DISTANCE_LIM,
-                app_rate=APP_CONN_RATE):
+def simulator_batman(args):
+    s = args["s"]
+    node_num = args["node_num"]
+    dim = args["dim"]
+    dist_lim = args["dist_lim"]
+    app_rate = args["app_rate"]
+    # print("seed type and value:", type(s), s)
+    # print("node_num type and value:", type(node_num), node_num)
+    # print("dim type and value:", type(dim), dim)
+    # print("dist_lim type and value:", type(dist_lim), dist_lim)
+    # print("app_rate type and value:", type(app_rate), app_rate)
     # 1) load queue for events created in simulator module
     seed(s)
 
