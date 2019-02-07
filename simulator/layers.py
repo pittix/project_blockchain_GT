@@ -22,13 +22,13 @@ class Layer(Base):
         # store in a dict all Layers created, in order to look them up by id
         Layer.all_layers[self.id_] = self
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def send_up(self, packet, upper_layer_id):
         # event is immediate, fire it now without passing through event queue
         upper_layer = Layer.all_layers[upper_layer_id]
         upper_layer.recv_from_down(packet, self.id_)
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def send_down(self, packet, lower_layer_id):
         # event is immediate, fire it now without passing through event queue
         lower_layer = Layer.all_layers[lower_layer_id]
@@ -41,11 +41,11 @@ class Layer(Base):
         raise NotImplemented
 
 class Sink(Layer):
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def recv_from_up(self, packet, upper_layer_id):
         pass
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def recv_from_down(self, packet, lower_layer_id):
         pass
 
@@ -199,7 +199,7 @@ class ApplicationLayer(Layer):
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def generate_pkts(self):
         size = next(self.size_gen)
         time_delta = next(self.interarrival_gen)
