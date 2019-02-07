@@ -104,10 +104,12 @@ class Channel(Layer):
             self.schedule_tx()
 
 class BatmanLayer(Layer):
-    def __init__(self, local_ip):
+    def __init__(self, local_ip, selfish):
         super(self.__class__, self).__init__()
 
-        ## single hop connection to neighbour layers
+        # flag to discriminate between normal and selfish node
+        # NOTE a selfish node does not forward packets from others
+        self.selfish = selfish
 
         self.neighbour_table = {
             # dest IP: ID of channel layer
@@ -120,6 +122,7 @@ class BatmanLayer(Layer):
         self.local_ip = local_ip
         # register in graph
         G.add_node(local_ip)
+
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
@@ -165,10 +168,12 @@ class BatmanLayer(Layer):
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
         else:
-            old_path = packet['path']
-            new_path = old_path[1:]
-            packet['path'] = new_path
-            self.send_down(packet, self.neighbour_table[packet['path'][0]])
+            if self.selfish == False:
+                packet['path'] = packet['path'][1:]
+                self.send_down(packet, self.neighbour_table[packet['path'][0]])
+            else:
+                # ignore packets to forward if in selfish mode
+                pass
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,

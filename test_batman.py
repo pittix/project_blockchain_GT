@@ -44,6 +44,13 @@ parser.add_argument('-a',
                     default=0.25,
                     type=float)
 
+
+parser.add_argument('-selfish',
+                    help='fraction of selfish users',
+                    dest='selfish_rate',
+                    default=0.1,
+                    type=float)
+
 parser.add_argument('-st',
                     help='Time packet generation has to stop',
                     dest='stop_time',
@@ -67,7 +74,7 @@ event_queue.clean()
 
 # create a number of batman layers, corresponding to nodes
 batmans = {
-    ip: BatmanLayer(ip)
+    ip: BatmanLayer(ip, selfish=(random() < var['selfish_rate']))
     for ip in range(var['node_num'])
 }
 
@@ -160,7 +167,7 @@ for app1, app2 in apps:
 string_var = "_".join(map(lambda x: "{}-{}".format(*x), var.items()))
 
 with open("results/{}.csv".format(string_var), 'w') as csvfile:
-    csvfile.write("ip,total_packet_size\n")
+    csvfile.write("ip,selfish,total_packet_size\n")
 
     for ip, size in performances.items():
-        csvfile.write("{},{}\n".format(ip, size))
+        csvfile.write("{},{},{}\n".format(ip, batmans[ip].selfish, size))
