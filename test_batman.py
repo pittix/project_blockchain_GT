@@ -1,17 +1,16 @@
 import logging
 from math import exp, sqrt
 from random import randint, random, seed
+
+import networkx as nx
+
 from simulator import *
 
 # default values
-NODE_NUM = 100
-DIM = 1000
-DISTANCE_LIM = 200
 LIGHT_SPEED = 299792458
-APP_CONN_RATE = 0.25
 PROC_TIME = 0.001
 
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.INFO)
 
 
 def interarrival_gen():
@@ -120,17 +119,24 @@ def simulator_batman(args):
         if event_queue.next() is None:
             break
 
-    # judge application layer rates
-    performances = {ip: 0 for ip in batmans.keys()}
-    # cur_time = event_queue.now
-    for app1, app2 in apps:
-        # node1 -> node2 communication
-        # print('TX: ', app1.id_, ' -->', app2.id_, ' Rate ', app1.rx_packet_size/cur_time)
-        # print('TX: ', app2.id_, ' -->', app1.id_, ' Rate ', app2.rx_packet_size/cur_time)
-        performances[app1.local_ip] += app1.rx_packet_size
-        performances[app2.local_ip] += app2.rx_packet_size
+# judge application layer rates
+performances = { ip: 0 for ip in batmans.keys() }
 
-    simulation_filename = "results/{}_{}.csv".format(s, node_num)
-    with open(simulation_filename, 'w') as csvfile:
-        for ip, size in performances.items():
-            csvfile.write("{},{}\n".format(ip, size))
+for app1, app2 in apps:
+    # node1 -> node2 communication
+    performances[app1.local_ip] += app1.rx_packet_size
+    performances[app2.local_ip] += app2.rx_packet_size
+
+# report everything to csv
+
+# convert parameters dictionary to a valid file name
+string_var = "_".join(map(lambda x: "{}-{}".format(*x), var.items()))
+
+# save graph to file
+nx.write_graphml(G, "results/{}.graphml".format(string_var))
+
+with open("results/{}.csv".format(string_var), 'w') as csvfile:
+    csvfile.write("ip,selfish,total_packet_size\n")
+
+    for ip, size in performances.items():
+        csvfile.write("{},{},{}\n".format(ip, int(batmans[ip].selfish), size))

@@ -22,13 +22,13 @@ class Layer(Base):
         # store in a dict all Layers created, in order to look them up by id
         Layer.all_layers[self.id_] = self
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def send_up(self, packet, upper_layer_id):
         # event is immediate, fire it now without passing through event queue
         upper_layer = Layer.all_layers[upper_layer_id]
         upper_layer.recv_from_down(packet, self.id_)
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def send_down(self, packet, lower_layer_id):
         # event is immediate, fire it now without passing through event queue
         lower_layer = Layer.all_layers[lower_layer_id]
@@ -41,11 +41,11 @@ class Layer(Base):
         raise NotImplemented
 
 class Sink(Layer):
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def recv_from_up(self, packet, upper_layer_id):
         pass
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def recv_from_down(self, packet, lower_layer_id):
         pass
 
@@ -104,10 +104,13 @@ class Channel(Layer):
             self.schedule_tx()
 
 class BatmanLayer(Layer):
-    def __init__(self, local_ip):
+    def __init__(self, local_ip, selfish, position):
         super(self.__class__, self).__init__()
 
-        ## single hop connection to neighbour layers
+        # flag to discriminate between normal and selfish node
+        # NOTE a selfish node does not forward packets from others
+        self.selfish = selfish
+        self.position = position
 
         self.neighbour_table = {
             # dest IP: ID of channel layer
@@ -118,8 +121,10 @@ class BatmanLayer(Layer):
 
         ## routing address of node
         self.local_ip = local_ip
+
         # register in graph
-        G.add_node(local_ip)
+        G.add_node(local_ip, selfish=selfish, x=position[0], y=position[1])
+
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
 
@@ -165,10 +170,12 @@ class BatmanLayer(Layer):
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
         else:
-            old_path = packet['path']
-            new_path = old_path[1:]
-            packet['path'] = new_path
-            self.send_down(packet, self.neighbour_table[packet['path'][0]])
+            if self.selfish == False:
+                packet['path'] = packet['path'][1:]
+                self.send_down(packet, self.neighbour_table[packet['path'][0]])
+            else:
+                # ignore packets to forward if in selfish mode
+                pass
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
@@ -199,7 +206,7 @@ class ApplicationLayer(Layer):
         # schedule start of transmissions
         event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
 
-    @logthis(logging.INFO)
+    @logthis(logging.DEBUG)
     def generate_pkts(self):
         size = next(self.size_gen)
         time_delta = next(self.interarrival_gen)
