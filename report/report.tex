@@ -5,10 +5,18 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{glossaries}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\newacronym{batman}{B.A.T.M.A.N.}{Better Approach To Mobile Adhoc Networking}
+\newacronym{rtt}{RTT}{Round Trip Time}
+\newacronym{arq}{ARQ}{Automatic Repeat-reQuest}
+\newacronym{ne}{NE}{Nash Equilibrium}
+
 \begin{document}
 
 \title{A game-theoretical analysis of BATMAN protocol}
@@ -40,15 +48,72 @@ BATMAN overview
 
 \section{Methodology}
 
-Analysis via simulation
-- event-driven simulator
-- hypothesis, simplifications introduced
-- diagrams and stuff with descriptions and assumptions
+\subsection{Network setup}
 
-Expected results given the setup
-(ex. worst network performance for unfair users)
+In order to assess and verify the expected properties of the \gls{batman}
+protocol, we decided to run an event-driven simulation.
 
-\section{Results}
+So, a certain number of entities were scattered uniformly across the simulation
+area, as shown in \autoref{fig:nodes}. This strategy allows to change topology
+simply switching the generator random seed and will be used for validating all our results.
+
+\begin{figure}[h]
+  \centering
+  % \includegraphics[]{TODO}
+  \caption{Nodes, labeled by their IP, are connected each other wirelessly.}
+  \label{fig:nodes}
+\end{figure}
+
+Once placed, each couple of nodes close enough were linked by means of a
+wireless fully reliable channel, characterized by a \gls{rtt} and a
+retransmission probability $p_r$, both function of the reciprocal distance.
+
+This assumption on the channel characteristics reduces the model complexity
+while keeping an high degree of realism, as \gls{arq} strategies are common
+practice at all protocol stack levels.
+
+\begin{equation}
+  \begin{split}
+    p_r & = e^{-\frac{d}{D}} \\
+    RTT &= 2 \frac{d}{c_0} + t_{proc}
+  \end{split}
+\end{equation}
+
+Given previous hypothesis, communication can be described by message exchange in
+a directed graph made of \gls{batman}, channels and application layers, as shown
+in \autoref{fig:graph}.
+
+\begin{figure}[h]
+  \centering
+  % \includegraphics[]{TODO}
+  \caption{Abstract graph spanning all logical components of the network.}
+  \label{fig:graph}
+\end{figure}
+
+\subsection{Expected results}
+
+In order to be as general as possible the consumers are memoryless sources of
+traffic communicating from a node to another in our network: the \gls{batman}
+layer has the goal to serve its users as best as it can.
+
+To do so, each node has to rely, to a certain extent, to its neighbours since
+not all destinations are reachable in a single hop.
+
+From a game theoretical point of view, the \gls{batman} has two different
+strategies in order to perform its duty.
+
+Either it can collaborate with its own kind, using part of its bandwidth to
+forward packets of other sources, or selfishly serve only its own packets.
+
+As we will show in the upcoming \autoref{sec:results}, the protocol is designed
+in such a way that the altruistic path is more convenient for the nodes to
+pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game
+played between all the connected entities.
+
+We will furthermore analyze in which terms the network can sustain itself when a
+growing fraction of its users are selfish or network conditions degrade.
+
+\section{Results} \label{sec:results}
 
 Network performances between fair and unfair users varying
 - percentage of unfair users
