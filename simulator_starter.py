@@ -15,6 +15,11 @@ parser.add_argument('-d', help='length of the square', action='append',
                 dest='dim', type=float, nargs='+')
 parser.add_argument('-a', help='rate of connection between apps', action='append',
                 dest='app_rate', type=float, nargs='+')
+parser.add_argument('-selfish', help='fraction of selfish users',
+                    dest='selfish_rate',  type=float, nargs='+',  action='append')
+
+parser.add_argument('-st', help='Time packet generation has to stop',
+                    dest='stop_time', type=float, nargs='+', action='append')
 
 available_threads = mp.cpu_count() - 1
 
@@ -25,7 +30,9 @@ var = {
     "node_num": var["node_num"][0],
     "dim": var["dim"][0],
     "dist_lim": var["dist_lim"][0],
-    "app_rate": var["app_rate"][0]
+    "app_rate": var["app_rate"][0],
+    "selfish_rate": var["selfish_rate"][0],
+    "stop_time": var["stop_time"][0]
     }
 if(len(var) > available_threads):
     p = mp.Pool(available_threads)
@@ -44,7 +51,9 @@ def start_new_thread():
             "node_num": var["node_num"][0],
             "dim": var["dim"][0],
             "dist_lim": var["dist_lim"][0],
-            "app_rate": var["app_rate"][0]
+            "app_rate": var["app_rate"][0],
+            "selfish_rate": var["selfish_rate"][0],
+            "stop_time": var["stop_time"][0]
             }
         # remove the item from the queue list
         var["s"] = var["s"][1:]
@@ -53,21 +62,19 @@ def start_new_thread():
         var["dist_lim"] = var["dist_lim"][1:]
         var["app_rate"] = var["app_rate"][1:]
         # start the thread and program a new start when the function ends
-        try:
-            res = p.apply_async(simulator_batman, (tmp_var,), callback=process_finished)
-            results.append(res)
-        except Exception as e:
-            print("Error:")
-            print(e)
-            failures += 1
+        res = p.apply_async(simulator_batman, (tmp_var,), callback=process_finished)
+        results.append(res)
         available_threads -= 1
     else:
         pass
 
 
 def process_finished(res):
-    global available_threads, results
-    available_threads += 1
+    global available_threads, results, failures
+    if res is not None:
+        available_threads += 1
+        print("failed. Error:", res)
+        failures += 1
     start_new_thread()
 
 
@@ -78,6 +85,7 @@ if (len(var["node_num"]) == len(var["s"])
         and len(var["s"]) == len(var["app_rate"])):
     while(available_threads > 0 and len(var["s"]) > 0):
         start_new_thread()
+
     # avoid program from finishing until all processes are done
     while(len(results) > 0):
         time.sleep(10)  # wait 10 seconds before re-checking

@@ -11,6 +11,11 @@ LIGHT_SPEED = 299792458
 PROC_TIME = 0.001
 
 logging.basicConfig(level=logging.INFO)
+batmans = {}
+apps = []
+var = {}
+node_positions = {}
+channels = {}
 
 
 def interarrival_gen():
@@ -24,34 +29,37 @@ def size_gen():
 
 
 def simulator_batman(args):
+    global var
+    var = args
     s = args["s"]
     node_num = args["node_num"]
     dim = args["dim"]
     dist_lim = args["dist_lim"]
     app_rate = args["app_rate"]
-    # print("seed type and value:", type(s), s)
-    # print("node_num type and value:", type(node_num), node_num)
-    # print("dim type and value:", type(dim), dim)
-    # print("dist_lim type and value:", type(dist_lim), dist_lim)
-    # print("app_rate type and value:", type(app_rate), app_rate)
+    selfish_rate = args["selfish_rate"]
+
     # 1) load queue for events created in simulator module
     seed(s)
 
     event_queue.clean()
 
     # create a number of batman layers, corresponding to nodes
+    global batmans
+
     batmans = {
-        ip: BatmanLayer(ip)
-        for ip in range(NODE_NUM)
-    }
+        ip: BatmanLayer(ip,
+            selfish=(random() < selfish_rate),
+            position=(dim * random(), dim * random()))
+            for ip in range(node_num)
+        }
 
     # connect each other using some channels, described using a success probability
     # and round trip time
+    global node_positions, channels
     node_positions = {}
     channels = {}
     for ip in batmans.keys():
         node_positions[ip] = (dim*random(), dim*random())
-
     for ip1 in node_positions:
         for ip2 in node_positions:
             if ip1 == ip2:
@@ -68,10 +76,9 @@ def simulator_batman(args):
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
-
+    global apps
     apps = []
     port_no = 1000
-
     # ensure unique port for each app (just to play safe)
 
     for ip1 in node_positions:
@@ -104,39 +111,40 @@ def simulator_batman(args):
                 batmans[ip2].connect_app(app2)
 
                 apps.append( (app1, app2) )
-
     nx.draw(G, with_labels=True, pos=node_positions)
     # plt.show()
+    try:
+        # run the simulation, until we run out of events
+        counter = 0
+        while True:
+            if counter % 10000 == 0:
+                print(event_queue.now)
+            counter += 1
 
-    # run the simulation, until we run out of events
-    counter = 0
-    while True:
-        if counter % 10000 == 0:
-            print(event_queue.now)
-        counter += 1
+            # trigger events until we run out of them
+            if event_queue.next() is None:
+                break
+        print(counter)
+    except Exception as e:
+        return e
 
-        # trigger events until we run out of them
-        if event_queue.next() is None:
-            break
+    # judge application layer rates
+    performances = {ip: 0 for ip in batmans.keys()}
+    for app1, app2 in apps:
+        # node1 -> node2 communication
+        performances[app1.local_ip] += app1.rx_packet_size
+        performances[app2.local_ip] += app2.rx_packet_size
+    print(performances)
 
-# judge application layer rates
-performances = { ip: 0 for ip in batmans.keys() }
+    # report everything to csv
+    # convert parameters dictionary to a valid file name
+    string_var = "_".join(map(lambda x: "{}-{}".format(*x), var.items()))
 
-for app1, app2 in apps:
-    # node1 -> node2 communication
-    performances[app1.local_ip] += app1.rx_packet_size
-    performances[app2.local_ip] += app2.rx_packet_size
+    # save graph to file
+    nx.write_graphml(G, "results/{}.graphml".format(string_var))
 
-# report everything to csv
+    with open("results/{}.csv".format(string_var), 'w') as csvfile:
+        csvfile.write("ip,selfish,total_packet_size\n")
 
-# convert parameters dictionary to a valid file name
-string_var = "_".join(map(lambda x: "{}-{}".format(*x), var.items()))
-
-# save graph to file
-nx.write_graphml(G, "results/{}.graphml".format(string_var))
-
-with open("results/{}.csv".format(string_var), 'w') as csvfile:
-    csvfile.write("ip,selfish,total_packet_size\n")
-
-    for ip, size in performances.items():
-        csvfile.write("{},{},{}\n".format(ip, int(batmans[ip].selfish), size))
+        for ip, size in performances.items():
+            csvfile.write("{},{},{}\n".format(ip, int(batmans[ip].selfish), size))
