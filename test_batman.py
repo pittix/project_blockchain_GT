@@ -13,7 +13,6 @@ PROC_TIME = 0.001
 logging.basicConfig(level=logging.INFO)
 batmans = {}
 apps = []
-var = {}
 node_positions = {}
 channels = {}
 
@@ -29,8 +28,6 @@ def size_gen():
 
 
 def simulator_batman(args):
-    global var
-    var = args
     s = args["s"]
     node_num = args["node_num"]
     dim = args["dim"]
@@ -138,7 +135,7 @@ def simulator_batman(args):
 
     # report everything to csv
     # convert parameters dictionary to a valid file name
-    string_var = "_".join(map(lambda x: "{}-{}".format(*x), var.items()))
+    string_var = "_".join(map(lambda x: "{}-{}".format(*x), args.items()))
 
     # save graph to file
     nx.write_graphml(G, "results/{}.graphml".format(string_var))
