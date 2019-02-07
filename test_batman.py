@@ -11,10 +11,6 @@ LIGHT_SPEED = 299792458
 PROC_TIME = 0.001
 
 logging.basicConfig(level=logging.INFO)
-batmans = {}
-apps = []
-node_positions = {}
-channels = {}
 
 
 def interarrival_gen():
@@ -41,8 +37,6 @@ def simulator_batman(args):
     event_queue.clean()
 
     # create a number of batman layers, corresponding to nodes
-    global batmans
-
     batmans = {
         ip: BatmanLayer(ip,
             selfish=(random() < selfish_rate),
@@ -52,7 +46,6 @@ def simulator_batman(args):
 
     # connect each other using some channels, described using a success probability
     # and round trip time
-    global node_positions, channels
     node_positions = {}
     channels = {}
     for ip in batmans.keys():
@@ -73,7 +66,6 @@ def simulator_batman(args):
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
-    global apps
     apps = []
     port_no = 1000
     # ensure unique port for each app (just to play safe)
@@ -121,9 +113,8 @@ def simulator_batman(args):
             # trigger events until we run out of them
             if event_queue.next() is None:
                 break
-        print(counter)
     except Exception as e:
-        return e
+        return str(e)
 
     # judge application layer rates
     performances = {ip: 0 for ip in batmans.keys()}
