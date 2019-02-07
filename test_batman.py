@@ -124,7 +124,6 @@ def simulator_batman(args):
             # trigger events until we run out of them
             if event_queue.next() is None:
                 break
-        print(counter)
     except Exception as e:
         return e
 
