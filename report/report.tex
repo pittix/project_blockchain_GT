@@ -92,18 +92,16 @@ in \autoref{fig:graph}.
 
 \subsection{Expected results}
 
-In order to be as general as possible the consumers are memoryless sources of
-traffic communicating from a node to another in our network: the \gls{batman}
-layer has the goal to serve its users as best as it can.
+In order to be as general as possible, our network connects memoryless sources
+of traffic communicating to each other: the \gls{batman} layer has the goal to
+serve its users as best as it can. To do so, node have to rely to a certain
+extent on their neighbours, since not all destinations are reachable in a single
+hop.
 
-To do so, each node has to rely, to a certain extent, to its neighbours since
-not all destinations are reachable in a single hop.
-
-From a game theoretical point of view, the \gls{batman} has two different
-strategies in order to perform its duty.
-
-Either it can collaborate with its own kind, using part of its bandwidth to
-forward packets of other sources, or selfishly serve only its own packets.
+From a game theoretical point of view, two different strategies can be chosen by
+each layer in order to maximize its objective: either it can collaborate with
+its own kind, using part of its bandwidth to forward packets of other sources,
+or selfishly transmit only its own packets.
 
 As we will show in the upcoming \autoref{sec:results}, the protocol is designed
 in such a way that the altruistic path is more convenient for the nodes to
@@ -112,6 +110,8 @@ played between all the connected entities.
 
 We will furthermore analyze in which terms the network can sustain itself when a
 growing fraction of its users are selfish or network conditions degrade.
+
+% TODO bit of spoilers for results section
 
 \section{Results} \label{sec:results}
 
