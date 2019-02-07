@@ -44,10 +44,8 @@ def simulator_batman(args):
             for ip in range(node_num)
         }
 
-    # connect each other using some channels, described using a success probability
-    # and round trip time
-    channels = {}
-
+    # connect each other using some channels, described using a success
+    # probability and round trip time
     for ip1 in batmans:
         for ip2 in batmans:
             if ip1 == ip2:
@@ -59,8 +57,7 @@ def simulator_batman(args):
             if dist < dist_lim:
                 p_succ = exp(-dist/dist_lim)
                 rtt = PROC_TIME + dist/LIGHT_SPEED
-                local_channels = batmans[ip1].connect_to(batmans[ip2],
-                                                         p_succ=p_succ, rtt=rtt)
+                batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
