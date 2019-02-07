@@ -120,7 +120,8 @@ def simulator_batman(s=1, node_num=NODE_NUM, dim=DIM, dist_lim=DISTANCE_LIM,
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
 
-    simulation_filename = "results/{}_{}.csv".format(s, node_num)
+    simulation_filename = "results/{}_{}_{}_{}.csv".format(s, node_num, dim,
+                        dist_lim)
     with open(simulation_filename, 'w') as csvfile:
         for ip, size in performances.items():
             csvfile.write("{},{}\n".format(ip, size))
