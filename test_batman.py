@@ -5,12 +5,10 @@ from math import exp, sqrt
 from random import randint, random, seed
 
 from simulator import *
-from test_batman import *
 
 # default values
 LIGHT_SPEED = 299792458
 PROC_TIME = 0.001
-
 
 logging.basicConfig(level=logging.INFO)
 
@@ -140,7 +138,7 @@ for ip1 in node_positions:
 counter = 0
 while True:
     if counter % 10000 == 0:
-        logger.info("Simulation {} has reached time {}"\
+        logger.info("{} has reached time {}"\
                     .format(var, event_queue.now))
     counter += 1
 
@@ -149,7 +147,7 @@ while True:
         break
 
 # judge application layer rates
-performances = {ip: 0 for ip in batmans.keys()}
+performances = { ip: 0 for ip in batmans.keys() }
 
 for app1, app2 in apps:
     # node1 -> node2 communication
