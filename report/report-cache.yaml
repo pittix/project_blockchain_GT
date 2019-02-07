@@ -1,0 +1,4279 @@
+version: 0.12.2
+filePath: report.tex
+options:
+  $BIBINPUTS:
+    - $ROOTDIR
+    - $ROOTDIR/$OUTDIR
+    - ''
+  $TEXINPUTS:
+    - $ROOTDIR
+    - $ROOTDIR/$OUTDIR
+    - ''
+  bibtexEngine: bibtex
+  cleanPatterns:
+    - '**/*.aux'
+    - '**/*.aux.bak'
+    - '**/*.bbl'
+    - '**/*.bcf'
+    - '**/*.blg'
+    - '**/*.dvi'
+    - '**/*.fdb_latexmk'
+    - '**/*.fls'
+    - '**/*.idx'
+    - '**/*.idx.bak'
+    - '**/*.ilg'
+    - '**/*.ind'
+    - '**/*.lof'
+    - '**/*.log'
+    - '**/*.lol'
+    - '**/*.lot'
+    - '**/*.nav'
+    - '**/*.out'
+    - '**/*.pdf'
+    - '**/*.ps'
+    - '**/*.snm'
+    - '**/*.synctex.gz'
+    - '**/*.toc'
+    - '/**/_minted-${JOB}'
+    - '/${OUTDIR}/sage-plots-for-${JOB}.tex'
+    - /missfont.log
+    - /texput.log
+    - /texput.aux
+  dviToPdfEngine: xdvipdfmx
+  engine: pdflatex
+  epstopdfBoundingBox: default
+  epstopdfOutputPath: $DIR_0/$NAME_0.pdf
+  indexAutomaticRanges: true
+  indexEngine: makeindex
+  indexOrdering: word
+  indexSorting: default
+  knitrConcordance: true
+  knitrOutputPath: $JOB.tex
+  lhs2texStyle: poly
+  literateAgdaEngine: agda
+  literateHaskellEngine: lhs2TeX
+  loadCache: true
+  loadUserOptions: true
+  outputFormat: pdf
+  phaseCycles: 20
+  pweaveCacheDirectory: pweave-cache-for-$JOB
+  pweaveFigureDirectory: pweave-figures-for-$JOB
+  pweaveKernel: python3
+  pweaveOutputFormat: tex
+  pweaveOutputPath: $JOB.tex
+  saveCache: true
+  severity: info
+  validateCache: true
+  synctex: true
+  copyTargetsToRoot: true
+  outputDirectory: ''
+  intermediatePostScript: false
+files:
+  dicy-instance.yaml-ParsedYAML:
+    timeStamp: 2019-02-07T19:14:23.269Z
+    jobNames: []
+    value:
+      severity: info
+    type: ParsedYAML
+  dicy.yaml-ParsedYAML:
+    jobNames: []
+    type: ParsedYAML
+  report.yaml-ParsedYAML:
+    jobNames: []
+    type: ParsedYAML
+  report.tex-ParsedLaTeXMagic:
+    timeStamp: 2019-02-07T19:14:23.362Z
+    jobNames: []
+    value: {}
+    type: ParsedLaTeXMagic
+  /home/pittix/.config/dicy/config.yaml-ParsedYAML:
+    timeStamp: 2019-02-07T19:14:23.358Z
+    jobNames: []
+    value:
+      synctex: true
+      engine: pdflatex
+      severity: warning
+      copyTargetsToRoot: true
+      outputDirectory: ''
+      outputFormat: pdf
+      cleanPatterns:
+        - '**/*.aux'
+        - '**/*.aux.bak'
+        - '**/*.bbl'
+        - '**/*.bcf'
+        - '**/*.blg'
+        - '**/*.dvi'
+        - '**/*.fdb_latexmk'
+        - '**/*.fls'
+        - '**/*.idx'
+        - '**/*.idx.bak'
+        - '**/*.ilg'
+        - '**/*.ind'
+        - '**/*.lof'
+        - '**/*.log'
+        - '**/*.lol'
+        - '**/*.lot'
+        - '**/*.nav'
+        - '**/*.out'
+        - '**/*.pdf'
+        - '**/*.ps'
+        - '**/*.snm'
+        - '**/*.synctex.gz'
+        - '**/*.toc'
+        - '/**/_minted-${JOB}'
+        - '/${OUTDIR}/sage-plots-for-${JOB}.tex'
+        - /missfont.log
+        - /texput.log
+        - /texput.aux
+      intermediatePostScript: false
+    type: ParsedYAML
+  report.tex:
+    timeStamp: 2019-02-07T19:14:20.617Z
+    jobNames: []
+    hash: +9uPZw9ArpOtvGzMbUD8wfobbhUlZQ5OHoBZAxzJlpI=
+    type: LaTeX
+    subType: IEEEtran
+  /home/pittix/.config/dicy/config.yaml:
+    timeStamp: 2019-02-07T19:14:23.310Z
+    jobNames: []
+    type: YAML
+  x.y-Nil:
+    jobNames: []
+    type: Nil
+  report.fls-ParsedFileListing:
+    timeStamp: 2019-02-07T19:14:24.775Z
+    jobNames: []
+    value:
+      messages: []
+      inputs:
+        - /usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc
+        - /usr/share/texmf-dist/fonts/map/fontname/texfonts.map
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmbi7t.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmbi8r.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmrc7t.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm
+        - /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
+        - /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+        - /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+        - /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
+        - /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
+        - /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+        - /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+        - /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+        - /usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
+        - /usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb
+        - /usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+        - /usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb
+        - /usr/share/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
+        - /usr/share/texmf-dist/fonts/vf/adobe/times/ptmbi7t.vf
+        - /usr/share/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
+        - /usr/share/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf
+        - /usr/share/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf
+        - /usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+        - /usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+        - /usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+        - /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+        - /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+        - /usr/share/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+        - /usr/share/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+        - /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+        - /usr/share/texmf-dist/tex/latex/algorithms/algorithmic.sty
+        - /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+        - /usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty
+        - /usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+        - /usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+        - /usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty
+        - /usr/share/texmf-dist/tex/latex/amsmath/amsgen.sty
+        - /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+        - /usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty
+        - /usr/share/texmf-dist/tex/latex/amsmath/amstext.sty
+        - /usr/share/texmf-dist/tex/latex/base/ifthen.sty
+        - /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+        - /usr/share/texmf-dist/tex/latex/base/ts1cmr.fd
+        - /usr/share/texmf-dist/tex/latex/base/ts1enc.def
+        - /usr/share/texmf-dist/tex/latex/base/ts1enc.dfu
+        - /usr/share/texmf-dist/tex/latex/cite/cite.sty
+        - /usr/share/texmf-dist/tex/latex/datatool/datatool-base.sty
+        - /usr/share/texmf-dist/tex/latex/datatool/datatool-fp.sty
+        - /usr/share/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+        - /usr/share/texmf-dist/tex/latex/fp/defpattern.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-addons.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-basic.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-eqn.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-eval.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-exp.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-pas.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-random.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-snap.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-trigo.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp-upn.sty
+        - /usr/share/texmf-dist/tex/latex/fp/fp.sty
+        - >-
+          /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries-compatible-307.sty
+        - /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries.sty
+        - >-
+          /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-hypernav.sty
+        - /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-list.sty
+        - /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-long.sty
+        - /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-super.sty
+        - /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty
+        - /usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
+        - /usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+        - /usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
+        - /usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+        - /usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+        - /usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+        - /usr/share/texmf-dist/tex/latex/graphics/trig.sty
+        - /usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
+        - /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+        - /usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+        - /usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
+        - /usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+        - /usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+        - /usr/share/texmf-dist/tex/latex/mfirstuc/mfirstuc.sty
+        - /usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
+        - /usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+        - /usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+        - /usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+        - /usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+        - /usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+        - /usr/share/texmf-dist/tex/latex/substr/substr.sty
+        - /usr/share/texmf-dist/tex/latex/supertabular/supertabular.sty
+        - /usr/share/texmf-dist/tex/latex/textcase/textcase.sty
+        - /usr/share/texmf-dist/tex/latex/tools/longtable.sty
+        - /usr/share/texmf-dist/tex/latex/url/url.sty
+        - /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+        - /usr/share/texmf-dist/tex/latex/xfor/xfor.sty
+        - /usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+        - /usr/share/texmf-dist/web2c/texmf.cnf
+        - /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+        - /var/lib/texmf/web2c/pdftex/pdflatex.fmt
+        - report.aux
+        - report.bbl
+        - report.out
+        - report.tex
+      outputs:
+        - report.aux
+        - report.log
+        - report.out
+        - report.pdf
+      calls: []
+    type: ParsedFileListing
+  report.log-ParsedLaTeXLog:
+    timeStamp: 2019-02-07T19:14:24.768Z
+    jobNames: []
+    value:
+      messages:
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Try loading font information for OT1+ptm
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 503
+              end: 503
+          log:
+            file: report.log
+            range:
+              start: 22
+              end: 22
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <5> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 34
+              end: 35
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <5> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 36
+              end: 37
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <7> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 39
+              end: 40
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <7> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 41
+              end: 42
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <8> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 44
+              end: 45
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <8> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 46
+              end: 47
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <9> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 49
+              end: 50
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <9> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 51
+              end: 52
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <10> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 54
+              end: 55
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <10> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 56
+              end: 57
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <11> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 59
+              end: 60
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <11> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 61
+              end: 62
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <12> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 64
+              end: 65
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <12> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 66
+              end: 67
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <17> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 69
+              end: 70
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <17> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 71
+              end: 72
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <20> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 74
+              end: 75
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <20> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 76
+              end: 77
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/n' in size <24> not available Font shape
+            `OT1/ptm/b/n' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 79
+              end: 80
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OT1/ptm/bx/it' in size <24> not available Font shape
+            `OT1/ptm/b/it' tried instead.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+            range:
+              start: 1090
+              end: 1090
+          log:
+            file: report.log
+            range:
+              start: 81
+              end: 82
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \cite
+          source:
+            file: /usr/share/texmf-dist/tex/latex/cite/cite.sty
+            range:
+              start: 302
+              end: 302
+          log:
+            file: report.log
+            range:
+              start: 121
+              end: 121
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \nocite
+          source:
+            file: /usr/share/texmf-dist/tex/latex/cite/cite.sty
+            range:
+              start: 332
+              end: 332
+          log:
+            file: report.log
+            range:
+              start: 122
+              end: 122
+        - name: pdfTeX
+          severity: info
+          text: cite 2015/02/27 v 5.5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/cite/cite.sty
+          log:
+            file: report.log
+            range:
+              start: 123
+              end: 123
+        - name: pdfTeX
+          severity: info
+          text: amsmath 2017/09/02 v2.17a AMS math features
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+          log:
+            file: report.log
+            range:
+              start: 125
+              end: 125
+        - name: pdfTeX
+          severity: info
+          text: amstext 2000/06/29 v2.01 AMS text
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amstext.sty
+          log:
+            file: report.log
+            range:
+              start: 129
+              end: 129
+        - name: pdfTeX
+          severity: info
+          text: amsbsy 1999/11/29 v1.2d Bold Symbols
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty
+          log:
+            file: report.log
+            range:
+              start: 135
+              end: 135
+        - name: pdfTeX
+          severity: info
+          text: amsopn 2016/03/08 v2.02 operator names
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty
+          log:
+            file: report.log
+            range:
+              start: 138
+              end: 138
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \frac
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 213
+              end: 213
+          log:
+            file: report.log
+            range:
+              start: 141
+              end: 141
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \overline
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 375
+              end: 375
+          log:
+            file: report.log
+            range:
+              start: 144
+              end: 144
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \ldots
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 472
+              end: 472
+          log:
+            file: report.log
+            range:
+              start: 147
+              end: 147
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \dots
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 475
+              end: 475
+          log:
+            file: report.log
+            range:
+              start: 148
+              end: 148
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \cdots
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 596
+              end: 596
+          log:
+            file: report.log
+            range:
+              start: 149
+              end: 149
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Redeclaring font encoding OML
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 712
+              end: 712
+          log:
+            file: report.log
+            range:
+              start: 153
+              end: 153
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Redeclaring font encoding OMS
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 713
+              end: 713
+          log:
+            file: report.log
+            range:
+              start: 154
+              end: 154
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: 'Redefining \['
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 2817
+              end: 2817
+          log:
+            file: report.log
+            range:
+              start: 175
+              end: 175
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: 'Redefining \]'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+            range:
+              start: 2818
+              end: 2818
+          log:
+            file: report.log
+            range:
+              start: 176
+              end: 176
+        - name: pdfTeX
+          severity: info
+          text: amssymb 2013/01/14 v3.01 AMS font symbols
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty
+          log:
+            file: report.log
+            range:
+              start: 178
+              end: 178
+        - name: pdfTeX
+          severity: info
+          text: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+          log:
+            file: report.log
+            range:
+              start: 180
+              end: 180
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Overwriting math alphabet `\mathfrak' in version `bold' U/euf/m/n
+            --> U/euf/b/n.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+            range:
+              start: 106
+              end: 106
+          log:
+            file: report.log
+            range:
+              start: 183
+              end: 184
+        - name: pdfTeX
+          severity: info
+          text: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/algorithms/algorithmic.sty
+          log:
+            file: report.log
+            range:
+              start: 186
+              end: 186
+        - name: pdfTeX
+          severity: info
+          text: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/ifthen.sty
+          log:
+            file: report.log
+            range:
+              start: 188
+              end: 188
+        - name: pdfTeX
+          severity: info
+          text: keyval 2014/10/28 v1.15 key=value parser (DPC)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+          log:
+            file: report.log
+            range:
+              start: 190
+              end: 190
+        - name: pdfTeX
+          severity: info
+          text: 'graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+          log:
+            file: report.log
+            range:
+              start: 200
+              end: 200
+        - name: pdfTeX
+          severity: info
+          text: 'graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+          log:
+            file: report.log
+            range:
+              start: 202
+              end: 202
+        - name: pdfTeX
+          severity: info
+          text: trig 2016/01/03 v1.10 sin cos tan (DPC)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/graphics/trig.sty
+          log:
+            file: report.log
+            range:
+              start: 204
+              end: 204
+        - severity: info
+          name: pdfTeX
+          category: Package graphics
+          text: 'Driver file: pdftex.def'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+            range:
+              start: 99
+              end: 99
+          log:
+            file: report.log
+            range:
+              start: 208
+              end: 208
+        - name: pdfTeX
+          severity: info
+          text: hyperref 2018/09/30 v6.88a Hypertext links for LaTeX
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 215
+              end: 215
+        - name: pdfTeX
+          severity: info
+          text: >-
+            hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref
+            (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 217
+              end: 218
+        - name: pdfTeX
+          severity: info
+          text: 'hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)'
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 220
+              end: 220
+        - name: pdfTeX
+          severity: info
+          text: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 221
+              end: 221
+        - name: pdfTeX
+          severity: info
+          text: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 222
+              end: 222
+        - name: pdfTeX
+          severity: info
+          text: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 223
+              end: 223
+        - name: pdfTeX
+          severity: info
+          text: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 224
+              end: 224
+        - severity: info
+          name: pdfTeX
+          category: Package ifluatex
+          text: LuaTeX not detected.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 225
+              end: 225
+        - name: pdfTeX
+          severity: info
+          text: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 226
+              end: 226
+        - severity: info
+          name: pdfTeX
+          category: Package ifvtex
+          text: VTeX not detected.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 227
+              end: 227
+        - name: pdfTeX
+          severity: info
+          text: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 228
+              end: 228
+        - name: pdfTeX
+          severity: info
+          text: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 229
+              end: 229
+        - name: pdfTeX
+          severity: info
+          text: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 230
+              end: 230
+        - severity: info
+          name: pdfTeX
+          category: Package etexcmds
+          text: >-
+            Could not find \expanded. That can mean that you are not using
+            pdfTeX 1.50 or that some package has redefined \expanded. In the
+            latter case, load this package earlier.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 231
+              end: 234
+        - name: pdfTeX
+          severity: info
+          text: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 235
+              end: 235
+        - name: pdfTeX
+          severity: info
+          text: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 236
+              end: 236
+        - name: pdfTeX
+          severity: info
+          text: >-
+            pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX
+            (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 237
+              end: 238
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: LuaTeX not detected.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 239
+              end: 239
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: \pdf@primitive is available.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 240
+              end: 240
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: \pdf@ifprimitive is available.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 241
+              end: 241
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: \pdfdraftmode found.
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 242
+              end: 242
+        - name: pdfTeX
+          severity: info
+          text: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 243
+              end: 243
+        - name: pdfTeX
+          severity: info
+          text: >-
+            bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers
+            (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 244
+              end: 245
+        - name: pdfTeX
+          severity: info
+          text: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 246
+              end: 246
+        - name: pdfTeX
+          severity: info
+          text: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+          log:
+            file: report.log
+            range:
+              start: 247
+              end: 247
+        - severity: info
+          name: pdfTeX
+          category: Package hobsub
+          text: Skipping package `hobsub' (already loaded).
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 249
+              end: 249
+        - name: pdfTeX
+          severity: info
+          text: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 250
+              end: 250
+        - name: pdfTeX
+          severity: info
+          text: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 251
+              end: 251
+        - name: pdfTeX
+          severity: info
+          text: xcolor-patch 2016/05/16 xcolor patch
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 252
+              end: 252
+        - name: pdfTeX
+          severity: info
+          text: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 253
+              end: 253
+        - severity: info
+          name: pdfTeX
+          category: Package atveryend
+          text: \enddocument detected (standard20110627).
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 254
+              end: 254
+        - name: pdfTeX
+          severity: info
+          text: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 255
+              end: 255
+        - name: pdfTeX
+          severity: info
+          text: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 256
+              end: 256
+        - name: pdfTeX
+          severity: info
+          text: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 257
+              end: 257
+        - name: pdfTeX
+          severity: info
+          text: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+          source:
+            file: /usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+          log:
+            file: report.log
+            range:
+              start: 259
+              end: 259
+        - name: pdfTeX
+          severity: info
+          text: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
+          log:
+            file: report.log
+            range:
+              start: 261
+              end: 261
+        - name: pdfTeX
+          severity: info
+          text: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+          log:
+            file: report.log
+            range:
+              start: 263
+              end: 263
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Hyper figures OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 4535
+              end: 4535
+          log:
+            file: report.log
+            range:
+              start: 277
+              end: 277
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Link nesting OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 4540
+              end: 4540
+          log:
+            file: report.log
+            range:
+              start: 278
+              end: 278
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Hyper index ON
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 4543
+              end: 4543
+          log:
+            file: report.log
+            range:
+              start: 279
+              end: 279
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Plain pages OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 4550
+              end: 4550
+          log:
+            file: report.log
+            range:
+              start: 280
+              end: 280
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Backreferencing OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 4555
+              end: 4555
+          log:
+            file: report.log
+            range:
+              start: 281
+              end: 281
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Implicit mode ON; LaTeX internals redefined.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+          log:
+            file: report.log
+            range:
+              start: 282
+              end: 282
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Bookmarks ON
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 4788
+              end: 4788
+          log:
+            file: report.log
+            range:
+              start: 283
+              end: 283
+        - name: pdfTeX
+          severity: info
+          text: 'url 2013/09/16 ver 3.4 Verb mode for urls, etc.'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/url/url.sty
+          log:
+            file: report.log
+            range:
+              start: 287
+              end: 287
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \url
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 5141
+              end: 5141
+          log:
+            file: report.log
+            range:
+              start: 289
+              end: 289
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Hyper figures OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6396
+              end: 6396
+          log:
+            file: report.log
+            range:
+              start: 294
+              end: 294
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Link nesting OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6401
+              end: 6401
+          log:
+            file: report.log
+            range:
+              start: 295
+              end: 295
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Hyper index ON
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6404
+              end: 6404
+          log:
+            file: report.log
+            range:
+              start: 296
+              end: 296
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: backreferencing OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6411
+              end: 6411
+          log:
+            file: report.log
+            range:
+              start: 297
+              end: 297
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Link coloring OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6416
+              end: 6416
+          log:
+            file: report.log
+            range:
+              start: 298
+              end: 298
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Link coloring with OCG OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6421
+              end: 6421
+          log:
+            file: report.log
+            range:
+              start: 299
+              end: 299
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: PDF/A mode OFF
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6426
+              end: 6426
+          log:
+            file: report.log
+            range:
+              start: 300
+              end: 300
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \ref
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6466
+              end: 6466
+          log:
+            file: report.log
+            range:
+              start: 301
+              end: 301
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \pageref
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+            range:
+              start: 6470
+              end: 6470
+          log:
+            file: report.log
+            range:
+              start: 302
+              end: 302
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: 'Driver (autodetected): hpdftex.'
+          source:
+            file: r
+          log:
+            file: report.log
+            range:
+              start: 307
+              end: 307
+        - name: pdfTeX
+          severity: info
+          text: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+          log:
+            file: report.log
+            range:
+              start: 313
+              end: 313
+        - severity: info
+          name: pdfTeX
+          category: Package uniquecounter
+          text: New unique counter `rerunfilecheck'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+            range:
+              start: 282
+              end: 282
+          log:
+            file: report.log
+            range:
+              start: 314
+              end: 315
+        - name: pdfTeX
+          severity: info
+          text: glossaries 2018/07/23 v4.41 (NLCT)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries.sty
+          log:
+            file: report.log
+            range:
+              start: 319
+              end: 319
+        - name: pdfTeX
+          severity: info
+          text: xkeyval 2014/12/03 v2.7a package option processing (HA)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+          log:
+            file: report.log
+            range:
+              start: 321
+              end: 321
+        - name: pdfTeX
+          severity: info
+          text: mfirstuc 2017/11/14 v2.06 (NLCT)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/mfirstuc/mfirstuc.sty
+          log:
+            file: report.log
+            range:
+              start: 330
+              end: 330
+        - name: pdfTeX
+          severity: info
+          text: etoolbox 2018/08/19 v2.5f e-TeX tools for LaTeX (JAW)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+          log:
+            file: report.log
+            range:
+              start: 332
+              end: 332
+        - name: pdfTeX
+          severity: info
+          text: textcase 2004/10/07 v0.07 Text only upper/lower case changing (DPC)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/textcase/textcase.sty
+          log:
+            file: report.log
+            range:
+              start: 338
+              end: 338
+        - name: pdfTeX
+          severity: info
+          text: xfor 2009/02/05 v1.05 (NLCT)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xfor/xfor.sty
+          log:
+            file: report.log
+            range:
+              start: 340
+              end: 340
+        - name: pdfTeX
+          severity: info
+          text: datatool-base 2018/04/16 v2.30 (NLCT)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/datatool/datatool-base.sty
+          log:
+            file: report.log
+            range:
+              start: 342
+              end: 342
+        - name: pdfTeX
+          severity: info
+          text: substr 2009/10/20 v1.2 Handle substrings
+          source:
+            file: /usr/share/texmf-dist/tex/latex/substr/substr.sty
+          log:
+            file: report.log
+            range:
+              start: 344
+              end: 344
+        - name: pdfTeX
+          severity: info
+          text: datatool-fp 2018/04/16 v2.30 (NLCT)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/datatool/datatool-fp.sty
+          log:
+            file: report.log
+            range:
+              start: 347
+              end: 347
+        - name: pdfTeX
+          severity: info
+          text: fp 1995/04/02
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp.sty
+          log:
+            file: report.log
+            range:
+              start: 349
+              end: 349
+        - name: pdfTeX
+          severity: info
+          text: defpattern 1994/10/12
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/defpattern.sty
+          log:
+            file: report.log
+            range:
+              start: 352
+              end: 352
+        - name: pdfTeX
+          severity: info
+          text: fp-basic 1996/05/13
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-basic.sty
+          log:
+            file: report.log
+            range:
+              start: 355
+              end: 355
+        - name: pdfTeX
+          severity: info
+          text: fp-addons 1995/03/15
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-addons.sty
+          log:
+            file: report.log
+            range:
+              start: 366
+              end: 366
+        - name: pdfTeX
+          severity: info
+          text: fp-snap 1995/04/05
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-snap.sty
+          log:
+            file: report.log
+            range:
+              start: 368
+              end: 368
+        - name: pdfTeX
+          severity: info
+          text: fp-exp 1995/04/03
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-exp.sty
+          log:
+            file: report.log
+            range:
+              start: 370
+              end: 370
+        - name: pdfTeX
+          severity: info
+          text: fp-trigo 1995/04/14
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-trigo.sty
+          log:
+            file: report.log
+            range:
+              start: 372
+              end: 372
+        - name: pdfTeX
+          severity: info
+          text: fp-pas 1994/08/29
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-pas.sty
+          log:
+            file: report.log
+            range:
+              start: 374
+              end: 374
+        - name: pdfTeX
+          severity: info
+          text: fp-random 1995/02/23
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-random.sty
+          log:
+            file: report.log
+            range:
+              start: 376
+              end: 376
+        - name: pdfTeX
+          severity: info
+          text: fp-eqn 1995/04/03
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-eqn.sty
+          log:
+            file: report.log
+            range:
+              start: 379
+              end: 379
+        - name: pdfTeX
+          severity: info
+          text: fp-upn 1996/10/21
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-upn.sty
+          log:
+            file: report.log
+            range:
+              start: 381
+              end: 381
+        - name: pdfTeX
+          severity: info
+          text: fp-eval 1995/04/03
+          source:
+            file: /usr/share/texmf-dist/tex/latex/fp/fp-eval.sty
+          log:
+            file: report.log
+            range:
+              start: 383
+              end: 383
+        - name: pdfTeX
+          severity: info
+          text: glossaries-compatible-307 2018/07/23 v4.41 (NLCT)
+          source:
+            file: >-
+              /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries-compatible-307.st
+          log:
+            file: report.log
+            range:
+              start: 396
+              end: 396
+        - name: pdfTeX
+          severity: info
+          text: glossary-hypernav 2018/07/23 v4.41 (NLCT)
+          source:
+            file: >-
+              /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-hypernav.sty
+          log:
+            file: report.log
+            range:
+              start: 406
+              end: 406
+        - name: pdfTeX
+          severity: info
+          text: glossary-list 2018/07/23 v4.41 (NLCT)
+          source:
+            file: >-
+              /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-list.sty
+          log:
+            file: report.log
+            range:
+              start: 408
+              end: 408
+        - name: pdfTeX
+          severity: info
+          text: glossary-long 2018/07/23 v4.41 (NLCT)
+          source:
+            file: >-
+              /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-long.sty
+          log:
+            file: report.log
+            range:
+              start: 411
+              end: 411
+        - name: pdfTeX
+          severity: info
+          text: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/tools/longtable.sty
+          log:
+            file: report.log
+            range:
+              start: 413
+              end: 413
+        - name: pdfTeX
+          severity: info
+          text: glossary-super 2018/07/23 v4.41 (NLCT)
+          source:
+            file: >-
+              /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-super.sty
+          log:
+            file: report.log
+            range:
+              start: 433
+              end: 433
+        - name: pdfTeX
+          severity: info
+          text: supertabular 2004/02/20 v4.1e the supertabular environment
+          source:
+            file: /usr/share/texmf-dist/tex/latex/supertabular/supertabular.sty
+          log:
+            file: report.log
+            range:
+              start: 435
+              end: 435
+        - name: pdfTeX
+          severity: info
+          text: glossary-tree 2018/07/23 v4.41 (NLCT)
+          source:
+            file: >-
+              /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty
+          log:
+            file: report.log
+            range:
+              start: 453
+              end: 453
+        - name: pdfTeX
+          severity: info
+          text: textcomp 2017/04/05 v2.0i Standard LaTeX package
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+          log:
+            file: report.log
+            range:
+              start: 456
+              end: 456
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: >-
+            Sub-encoding information: 5 = only ISO-Adobe without \textcurrency 4
+            = 5 + \texteuro 3 = 4 + \textohm 2 = 3 + \textestimated +
+            \textcurrency 1 = TS1 - \textcircled - \t 0 = TS1 (full) Font
+            families with sub-encoding setting implement only a restricted
+            character set as indicated. Family '?' is the default used for
+            unknown fonts. See the documentation for details.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+          log:
+            file: report.log
+            range:
+              start: 457
+              end: 467
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ? sub-encoding to TS1/1
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 79
+              end: 79
+          log:
+            file: report.log
+            range:
+              start: 468
+              end: 468
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \oldstylenums
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 334
+              end: 334
+          log:
+            file: report.log
+            range:
+              start: 546
+              end: 546
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting cmr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 349
+              end: 349
+          log:
+            file: report.log
+            range:
+              start: 547
+              end: 547
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting cmss sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 350
+              end: 350
+          log:
+            file: report.log
+            range:
+              start: 548
+              end: 548
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting cmtt sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 351
+              end: 351
+          log:
+            file: report.log
+            range:
+              start: 549
+              end: 549
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting cmvtt sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 352
+              end: 352
+          log:
+            file: report.log
+            range:
+              start: 550
+              end: 550
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting cmbr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 353
+              end: 353
+          log:
+            file: report.log
+            range:
+              start: 551
+              end: 551
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting cmtl sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 354
+              end: 354
+          log:
+            file: report.log
+            range:
+              start: 552
+              end: 552
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ccr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 355
+              end: 355
+          log:
+            file: report.log
+            range:
+              start: 553
+              end: 553
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ptm sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 356
+              end: 356
+          log:
+            file: report.log
+            range:
+              start: 554
+              end: 554
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pcr sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 357
+              end: 357
+          log:
+            file: report.log
+            range:
+              start: 555
+              end: 555
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting phv sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 358
+              end: 358
+          log:
+            file: report.log
+            range:
+              start: 556
+              end: 556
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ppl sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 359
+              end: 359
+          log:
+            file: report.log
+            range:
+              start: 557
+              end: 557
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pag sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 360
+              end: 360
+          log:
+            file: report.log
+            range:
+              start: 558
+              end: 558
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pbk sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 361
+              end: 361
+          log:
+            file: report.log
+            range:
+              start: 559
+              end: 559
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pnc sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 362
+              end: 362
+          log:
+            file: report.log
+            range:
+              start: 560
+              end: 560
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pzc sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 363
+              end: 363
+          log:
+            file: report.log
+            range:
+              start: 561
+              end: 561
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting bch sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 364
+              end: 364
+          log:
+            file: report.log
+            range:
+              start: 562
+              end: 562
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting put sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 365
+              end: 365
+          log:
+            file: report.log
+            range:
+              start: 563
+              end: 563
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting uag sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 366
+              end: 366
+          log:
+            file: report.log
+            range:
+              start: 564
+              end: 564
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ugq sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 367
+              end: 367
+          log:
+            file: report.log
+            range:
+              start: 565
+              end: 565
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ul8 sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 368
+              end: 368
+          log:
+            file: report.log
+            range:
+              start: 566
+              end: 566
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ul9 sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 369
+              end: 369
+          log:
+            file: report.log
+            range:
+              start: 567
+              end: 567
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting augie sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 370
+              end: 370
+          log:
+            file: report.log
+            range:
+              start: 568
+              end: 568
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting dayrom sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 371
+              end: 371
+          log:
+            file: report.log
+            range:
+              start: 569
+              end: 569
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting dayroms sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 372
+              end: 372
+          log:
+            file: report.log
+            range:
+              start: 570
+              end: 570
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pxr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 373
+              end: 373
+          log:
+            file: report.log
+            range:
+              start: 572
+              end: 572
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pxss sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 374
+              end: 374
+          log:
+            file: report.log
+            range:
+              start: 573
+              end: 573
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pxtt sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 375
+              end: 375
+          log:
+            file: report.log
+            range:
+              start: 574
+              end: 574
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting txr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 376
+              end: 376
+          log:
+            file: report.log
+            range:
+              start: 575
+              end: 575
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting txss sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 377
+              end: 377
+          log:
+            file: report.log
+            range:
+              start: 576
+              end: 576
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting txtt sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 378
+              end: 378
+          log:
+            file: report.log
+            range:
+              start: 577
+              end: 577
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting lmr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 379
+              end: 379
+          log:
+            file: report.log
+            range:
+              start: 578
+              end: 578
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting lmdh sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 380
+              end: 380
+          log:
+            file: report.log
+            range:
+              start: 579
+              end: 579
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting lmss sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 381
+              end: 381
+          log:
+            file: report.log
+            range:
+              start: 580
+              end: 580
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting lmssq sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 382
+              end: 382
+          log:
+            file: report.log
+            range:
+              start: 581
+              end: 581
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting lmvtt sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 383
+              end: 383
+          log:
+            file: report.log
+            range:
+              start: 582
+              end: 582
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting lmtt sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 384
+              end: 384
+          log:
+            file: report.log
+            range:
+              start: 583
+              end: 583
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qhv sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 385
+              end: 385
+          log:
+            file: report.log
+            range:
+              start: 584
+              end: 584
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qag sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 386
+              end: 386
+          log:
+            file: report.log
+            range:
+              start: 585
+              end: 585
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qbk sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 387
+              end: 387
+          log:
+            file: report.log
+            range:
+              start: 586
+              end: 586
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qcr sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 388
+              end: 388
+          log:
+            file: report.log
+            range:
+              start: 587
+              end: 587
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qcs sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 389
+              end: 389
+          log:
+            file: report.log
+            range:
+              start: 588
+              end: 588
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qpl sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 390
+              end: 390
+          log:
+            file: report.log
+            range:
+              start: 589
+              end: 589
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qtm sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 391
+              end: 391
+          log:
+            file: report.log
+            range:
+              start: 590
+              end: 590
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qzc sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 392
+              end: 392
+          log:
+            file: report.log
+            range:
+              start: 591
+              end: 591
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting qhvc sub-encoding to TS1/0
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 393
+              end: 393
+          log:
+            file: report.log
+            range:
+              start: 592
+              end: 592
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting futs sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 394
+              end: 394
+          log:
+            file: report.log
+            range:
+              start: 593
+              end: 593
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting futx sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 395
+              end: 395
+          log:
+            file: report.log
+            range:
+              start: 594
+              end: 594
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting futj sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 396
+              end: 396
+          log:
+            file: report.log
+            range:
+              start: 595
+              end: 595
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlh sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 397
+              end: 397
+          log:
+            file: report.log
+            range:
+              start: 596
+              end: 596
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hls sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 398
+              end: 398
+          log:
+            file: report.log
+            range:
+              start: 597
+              end: 597
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlst sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 399
+              end: 399
+          log:
+            file: report.log
+            range:
+              start: 598
+              end: 598
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlct sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 400
+              end: 400
+          log:
+            file: report.log
+            range:
+              start: 599
+              end: 599
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlx sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 401
+              end: 401
+          log:
+            file: report.log
+            range:
+              start: 600
+              end: 600
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlce sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 402
+              end: 402
+          log:
+            file: report.log
+            range:
+              start: 601
+              end: 601
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlcn sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 403
+              end: 403
+          log:
+            file: report.log
+            range:
+              start: 602
+              end: 602
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlcw sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 404
+              end: 404
+          log:
+            file: report.log
+            range:
+              start: 603
+              end: 603
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting hlcf sub-encoding to TS1/5
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 405
+              end: 405
+          log:
+            file: report.log
+            range:
+              start: 604
+              end: 604
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pplx sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 406
+              end: 406
+          log:
+            file: report.log
+            range:
+              start: 605
+              end: 605
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting pplj sub-encoding to TS1/3
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 407
+              end: 407
+          log:
+            file: report.log
+            range:
+              start: 606
+              end: 606
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ptmx sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 408
+              end: 408
+          log:
+            file: report.log
+            range:
+              start: 607
+              end: 607
+        - severity: info
+          name: pdfTeX
+          category: Package textcomp
+          text: Setting ptmj sub-encoding to TS1/4
+          source:
+            file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+            range:
+              start: 409
+              end: 409
+          log:
+            file: report.log
+            range:
+              start: 608
+              end: 608
+        - name: pdfTeX
+          severity: info
+          text: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+          log:
+            file: report.log
+            range:
+              start: 610
+              end: 610
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: 'Driver file: pdftex.def'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 225
+              end: 225
+          log:
+            file: report.log
+            range:
+              start: 614
+              end: 614
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `cmy' substituted by `cmy0'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1348
+              end: 1348
+          log:
+            file: report.log
+            range:
+              start: 615
+              end: 615
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `hsb' substituted by `rgb'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1352
+              end: 1352
+          log:
+            file: report.log
+            range:
+              start: 616
+              end: 616
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `RGB' extended
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1364
+              end: 1364
+          log:
+            file: report.log
+            range:
+              start: 617
+              end: 617
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `HTML' substituted by `rgb'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1366
+              end: 1366
+          log:
+            file: report.log
+            range:
+              start: 618
+              end: 618
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `Hsb' substituted by `hsb'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1367
+              end: 1367
+          log:
+            file: report.log
+            range:
+              start: 619
+              end: 619
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `tHsb' substituted by `hsb'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1368
+              end: 1368
+          log:
+            file: report.log
+            range:
+              start: 620
+              end: 620
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `HSB' substituted by `hsb'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1369
+              end: 1369
+          log:
+            file: report.log
+            range:
+              start: 621
+              end: 621
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `Gray' substituted by `gray'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1370
+              end: 1370
+          log:
+            file: report.log
+            range:
+              start: 622
+              end: 622
+        - severity: info
+          name: pdfTeX
+          category: Package xcolor
+          text: Model `wave' substituted by `hsb'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+            range:
+              start: 1371
+              end: 1371
+          log:
+            file: report.log
+            range:
+              start: 623
+              end: 623
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OML/cmm/m/it ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 629
+              end: 630
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for T1/cmr/m/n ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 631
+              end: 632
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OT1/cmr/m/n ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 633
+              end: 634
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OMS/cmsy/m/n ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 635
+              end: 636
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OMX/cmex/m/n ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 637
+              end: 638
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for U/cmr/m/n ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 639
+              end: 640
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for PD1/pdf/m/n ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 641
+              end: 642
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for TS1/cmr/m/n
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 643
+              end: 643
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Try loading font information for TS1+cmr ... okay
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 644
+              end: 648
+        - name: pdfTeX
+          severity: info
+          text: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+          log:
+            file: report.log
+            range:
+              start: 664
+              end: 664
+        - name: pdfTeX
+          severity: info
+          text: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+          log:
+            file: report.log
+            range:
+              start: 666
+              end: 666
+        - severity: info
+          name: pdfTeX
+          category: Package epstopdf-base
+          text: Redefining graphics rule for `.eps'
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+            range:
+              start: 438
+              end: 438
+          log:
+            file: report.log
+            range:
+              start: 668
+              end: 669
+        - severity: info
+          name: pdfTeX
+          category: Package grfext
+          text: >-
+            Graphics extension search list:
+            [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
+            \AppendGraphicsExtensions.
+          source:
+            file: /usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+            range:
+              start: 456
+              end: 456
+          log:
+            file: report.log
+            range:
+              start: 670
+              end: 673
+        - severity: info
+          name: pdfTeX
+          category: Package hyperref
+          text: Link coloring OFF
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 679
+              end: 679
+        - name: pdfTeX
+          severity: info
+          text: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+          source:
+            file: /usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+          log:
+            file: report.log
+            range:
+              start: 681
+              end: 681
+        - name: pdfTeX
+          severity: info
+          text: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+          source:
+            file: /usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+          log:
+            file: report.log
+            range:
+              start: 683
+              end: 683
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \ref
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 687
+              end: 687
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \pageref
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 688
+              end: 688
+        - severity: info
+          name: pdfTeX
+          category: LaTeX
+          text: Redefining \nameref
+          source:
+            file: r
+            range:
+              start: 20
+              end: 20
+          log:
+            file: report.log
+            range:
+              start: 689
+              end: 689
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Try loading font information for U+msa
+          source:
+            file: r
+            range:
+              start: 69
+              end: 69
+          log:
+            file: report.log
+            range:
+              start: 703
+              end: 703
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Try loading font information for U+msb
+          source:
+            file: r
+            range:
+              start: 69
+              end: 69
+          log:
+            file: report.log
+            range:
+              start: 707
+              end: 707
+        - severity: error
+          name: pdfTeX
+          text: Something's wrong--perhaps a missing \item
+          log:
+            file: report.log
+            range:
+              start: 715
+              end: 715
+          source:
+            file: port.bbl
+            range:
+              start: 24
+              end: 24
+          category: LaTeX
+        - severity: info
+          name: pdfTeX
+          category: Package atveryend
+          text: Empty hook `BeforeClearDocument'
+          source:
+            file: r
+            range:
+              start: 128
+              end: 128
+          log:
+            file: report.log
+            range:
+              start: 738
+              end: 738
+        - severity: info
+          name: pdfTeX
+          category: Package atveryend
+          text: Empty hook `AfterLastShipout'
+          source:
+            file: r
+            range:
+              start: 128
+              end: 128
+          log:
+            file: report.log
+            range:
+              start: 743
+              end: 743
+        - severity: info
+          name: pdfTeX
+          category: Package atveryend
+          text: Executing hook `AtVeryEndDocument'
+          source:
+            file: r
+            range:
+              start: 128
+              end: 128
+          log:
+            file: report.log
+            range:
+              start: 747
+              end: 747
+        - severity: info
+          name: pdfTeX
+          category: Package atveryend
+          text: Executing hook `AtEndAfterFileList'
+          source:
+            file: r
+            range:
+              start: 128
+              end: 128
+          log:
+            file: report.log
+            range:
+              start: 748
+              end: 748
+        - severity: warning
+          name: pdfTeX
+          category: Package rerunfilecheck
+          text: >-
+            File `report.out' has changed. Rerun to get outlines right or use
+            package `bookmark'.
+          source:
+            file: r
+          log:
+            file: report.log
+            range:
+              start: 750
+              end: 752
+        - severity: info
+          name: pdfTeX
+          category: Package rerunfilecheck
+          text: >-
+            Checksums for `report.out': Before:
+            AFE83927B2C976D1991D6C69A4D42E22;358 After:
+            B767C336861D58324583B53B365572CF;404.
+          source:
+            file: r
+          log:
+            file: report.log
+            range:
+              start: 754
+              end: 756
+        - severity: info
+          name: pdfTeX
+          category: Package atveryend
+          text: Empty hook `AtVeryVeryEnd'
+          source:
+            file: r
+            range:
+              start: 128
+              end: 128
+          log:
+            file: report.log
+            range:
+              start: 757
+              end: 757
+      inputs: []
+      outputs:
+        - report.pdf
+      calls: []
+    type: ParsedLaTeXLog
+  report.aux:
+    timeStamp: 2019-02-07T19:14:24.697Z
+    jobNames: []
+    hash: ZG6g4dYcLr7/rGN22sCVgz0mrqO6vUn4ltoaCc+5gFU=
+    type: LaTeXAuxilary
+  report.fls:
+    timeStamp: 2019-02-07T19:14:24.707Z
+    jobNames: []
+    hash: 4yCRLB9zEjN3lcXPiEGrNxWvNqAeW7wd4TfehXta8ME=
+    type: FileListing
+  report.log:
+    timeStamp: 2019-02-07T19:14:24.723Z
+    jobNames: []
+    hash: PQlodcE57oQjAQKZf3WvWKCyojMyaBYAIk1+IDgI+gM=
+    type: LaTeXLog
+    subType: pdfTeX
+  report.synctex.gz:
+    timeStamp: 2019-02-07T19:14:24.723Z
+    jobNames: []
+    hash: xNFyw3u226P8LFfeTkSnia88Q8jw0pcug01l9wa2vsI=
+    type: SyncTeX
+  report.pdf:
+    timeStamp: 2019-02-07T19:14:24.723Z
+    jobNames: []
+    hash: dP3vT7dGDdj11rx+GreyW40+ryANyrwY39VJuj8sD54=
+    type: PortableDocumentFormat
+  report.aux-ParsedLaTeXAuxilary:
+    timeStamp: 2019-02-07T19:14:24.749Z
+    jobNames: []
+    value:
+      commands:
+        - relax
+        - providecommand
+        - providecommand
+        - HyperFirstAtBeginDocument
+        - global
+        - gdef
+        - global
+        - gdef
+        - gdef
+        - AtEndDocument
+        - let
+        - let
+        - fi
+        - fi
+        - global
+        - gdef
+        - providecommand
+        - providecommand
+        - bibdata
+        - bibstyle
+        - providecommand
+        - '@newglossary'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - newlabel
+        - '@writefile'
+        - newlabel
+        - '@writefile'
+        - '@writefile'
+        - newlabel
+        - '@writefile'
+        - '@writefile'
+    type: ParsedLaTeXAuxilary
+  report.blg-ParsedBibTeXLog:
+    timeStamp: 2019-02-07T19:14:25.141Z
+    jobNames: []
+    value:
+      messages: []
+      inputs:
+        - report.aux
+        - /usr/share/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst
+        - report.bib
+      outputs: []
+      calls: []
+    type: ParsedBibTeXLog
+  /usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/map/fontname/texfonts.map:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmbi7t.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmbi8r.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmrc7t.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/vf/adobe/times/ptmbi7t.vf:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/generic/xkeyval/xkeyval.tex:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: TeX
+  /usr/share/texmf-dist/tex/generic/xkeyval/xkvutils.tex:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: TeX
+  /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls:
+    timeStamp: 2018-12-01T20:13:34.000Z
+    jobNames: []
+    type: LaTeXClass
+  /usr/share/texmf-dist/tex/latex/algorithms/algorithmic.sty:
+    timeStamp: 2018-12-01T14:44:33.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: FontDescription
+  /usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: FontDescription
+  /usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsmath/amsgen.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/amsmath/amstext.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/base/ifthen.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/base/textcomp.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/base/ts1cmr.fd:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: FontDescription
+  /usr/share/texmf-dist/tex/latex/base/ts1enc.def:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/base/ts1enc.dfu:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/cite/cite.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/datatool/datatool-base.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/datatool/datatool-fp.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/etoolbox/etoolbox.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/defpattern.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-addons.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-basic.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-eqn.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-eval.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-exp.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-pas.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-random.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-snap.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-trigo.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp-upn.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/fp/fp.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries-compatible-307.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-hypernav.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-list.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-long.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-super.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/graphics/graphics.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/graphics/graphicx.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/graphics/keyval.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/graphics/trig.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/hyperref/nameref.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /usr/share/texmf-dist/tex/latex/mfirstuc/mfirstuc.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: FontDescription
+  /usr/share/texmf-dist/tex/latex/substr/substr.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/supertabular/supertabular.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/textcase/textcase.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/tools/longtable.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/url/url.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/xfor/xfor.sty:
+    timeStamp: 2018-12-01T14:35:49.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/share/texmf-dist/web2c/texmf.cnf:
+    timeStamp: 2018-12-01T20:29:36.000Z
+    jobNames: []
+  /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map:
+    timeStamp: 2019-01-22T15:50:14.537Z
+    jobNames: []
+  /var/lib/texmf/web2c/pdftex/pdflatex.fmt:
+    timeStamp: 2019-01-22T15:50:02.020Z
+    jobNames: []
+  report.out:
+    timeStamp: 2019-02-07T19:14:24.697Z
+    jobNames: []
+    hash: H6ZtsDOyL9WF094rATzv32xlZL8Uymtja4EqrAaOXlg=
+    type: OUT
+  report.bbl:
+    timeStamp: 2019-02-07T19:14:24.333Z
+    jobNames: []
+    hash: lOG5xsKDae4d3L05RNiMHMJEYs5tQPh7CzqT+e0Ff4k=
+  report.blg:
+    timeStamp: 2019-02-07T19:14:24.860Z
+    jobNames: []
+    hash: 7IiOO3bu3jyrc7QWTbzkCI5i9Flp35fT1B1ZP6PyrVM=
+    type: BibTeXLog
+    subType: BibTeX
+rules:
+  - name: ApplyOptions
+    command: load
+    phase: initialize
+    parameters: []
+    inputs:
+      - file: dicy.yaml-ParsedYAML
+        type: default
+      - file: report.yaml-ParsedYAML
+        type: default
+      - file: report.tex-ParsedLaTeXMagic
+        type: default
+      - file: dicy-instance.yaml-ParsedYAML
+        type: default
+      - file: /home/pittix/.config/dicy/config.yaml-ParsedYAML
+        type: default
+    outputs: []
+  - name: LoadAndValidateCache
+    command: load
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: Migrate
+    command: load
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: ApplyOptions
+    command: load
+    phase: execute
+    parameters: []
+    inputs:
+      - file: dicy.yaml-ParsedYAML
+        type: default
+      - file: report.yaml-ParsedYAML
+        type: default
+      - file: report.tex-ParsedLaTeXMagic
+        type: default
+      - file: dicy-instance.yaml-ParsedYAML
+        type: default
+      - file: /home/pittix/.config/dicy/config.yaml-ParsedYAML
+        type: default
+    outputs: []
+  - name: ParseOptionsFile
+    command: load
+    phase: execute
+    parameters: []
+    inputs:
+      - file: /home/pittix/.config/dicy/config.yaml
+        type: default
+    outputs:
+      - file: /home/pittix/.config/dicy/config.yaml-ParsedYAML
+        type: default
+  - name: ParseLaTeXMagic
+    command: load
+    phase: execute
+    parameters:
+      - report.tex
+    inputs:
+      - file: report.tex
+        type: default
+    outputs:
+      - file: report.tex-ParsedLaTeXMagic
+        type: default
+  - name: AssignJobNames
+    command: load
+    phase: finalize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: FindLogFiles
+    command: build
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: LaTeX
+    command: build
+    phase: execute
+    parameters:
+      - report.tex
+    inputs:
+      - file: report.tex
+        type: default
+      - file: report.fls-ParsedFileListing
+        type: default
+      - file: report.log-ParsedLaTeXLog
+        type: default
+      - file: report.aux
+        type: default
+      - file: /usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc
+        type: default
+      - file: /usr/share/texmf-dist/fonts/map/fontname/texfonts.map
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmbi7t.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmbi8r.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmrc7t.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb
+        type: default
+      - file: /usr/share/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
+        type: default
+      - file: /usr/share/texmf-dist/fonts/vf/adobe/times/ptmbi7t.vf
+        type: default
+      - file: /usr/share/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
+        type: default
+      - file: /usr/share/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf
+        type: default
+      - file: /usr/share/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf
+        type: default
+      - file: /usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+        type: default
+      - file: /usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+        type: default
+      - file: /usr/share/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/IEEEtran/IEEEtran.cls
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/algorithms/algorithmic.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsmath/amsgen.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/amsmath/amstext.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/base/ifthen.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/base/textcomp.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/base/ts1cmr.fd
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/base/ts1enc.def
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/base/ts1enc.dfu
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/cite/cite.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/datatool/datatool-base.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/datatool/datatool-fp.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/defpattern.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-addons.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-basic.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-eqn.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-eval.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-exp.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-pas.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-random.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-snap.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-trigo.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp-upn.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/fp/fp.sty
+        type: default
+      - file: >-
+          /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries-compatible-307.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/glossaries/base/glossaries.sty
+        type: default
+      - file: >-
+          /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-hypernav.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-list.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-long.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-super.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/graphics/trig.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/mfirstuc/mfirstuc.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/substr/substr.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/supertabular/supertabular.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/textcase/textcase.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/tools/longtable.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/url/url.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/xfor/xfor.sty
+        type: default
+      - file: /usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+        type: default
+      - file: /usr/share/texmf-dist/web2c/texmf.cnf
+        type: default
+      - file: /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+        type: default
+      - file: /var/lib/texmf/web2c/pdftex/pdflatex.fmt
+        type: default
+      - file: report.out
+        type: default
+      - file: report.bbl
+        type: default
+    outputs:
+      - file: report.aux
+        type: default
+      - file: report.fls
+        type: default
+      - file: report.log
+        type: default
+      - file: report.synctex.gz
+        type: target
+      - file: report.pdf
+        type: target
+      - file: report.out
+        type: default
+  - name: ParseLaTeXAuxilary
+    command: build
+    phase: execute
+    parameters:
+      - report.aux
+    inputs:
+      - file: report.aux
+        type: default
+    outputs:
+      - file: report.aux-ParsedLaTeXAuxilary
+        type: default
+  - name: ParseFileListing
+    command: build
+    phase: execute
+    parameters:
+      - report.fls
+    inputs:
+      - file: report.fls
+        type: default
+    outputs:
+      - file: report.fls-ParsedFileListing
+        type: default
+  - name: ParseLaTeXLog
+    command: build
+    phase: execute
+    parameters:
+      - report.log
+    inputs:
+      - file: report.log
+        type: default
+    outputs:
+      - file: report.log-ParsedLaTeXLog
+        type: default
+  - name: BibTeX
+    command: build
+    phase: execute
+    parameters:
+      - report.aux
+      - report.aux-ParsedLaTeXAuxilary
+    inputs:
+      - file: report.aux
+        type: default
+      - file: report.aux-ParsedLaTeXAuxilary
+        type: default
+      - file: report.log-ParsedLaTeXLog
+        type: default
+      - file: report.blg-ParsedBibTeXLog
+        type: default
+    outputs: []
+  - name: LogProducedTargets
+    command: build
+    phase: finalize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: CheckForMissingBuildRule
+    command: build
+    phase: finalize
+    parameters:
+      - report.tex
+    inputs:
+      - file: report.tex
+        type: default
+    outputs: []
+  - name: FindLogFiles
+    command: log
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: ReportLogMessages
+    command: log
+    phase: execute
+    parameters:
+      - report.log-ParsedLaTeXLog
+    inputs:
+      - file: report.log-ParsedLaTeXLog
+        type: default
+    outputs: []
+  - name: ParseLaTeXLog
+    command: log
+    phase: execute
+    parameters:
+      - report.log
+    inputs:
+      - file: report.log
+        type: default
+    outputs:
+      - file: report.log-ParsedLaTeXLog
+        type: default
+  - name: ReportLogMessages
+    command: log
+    phase: execute
+    parameters:
+      - report.blg-ParsedBibTeXLog
+    inputs:
+      - file: report.blg-ParsedBibTeXLog
+        type: default
+    outputs: []
+  - name: ParseBibTeXLog
+    command: log
+    phase: execute
+    parameters:
+      - report.blg
+    inputs:
+      - file: report.blg
+        type: default
+    outputs:
+      - file: report.blg-ParsedBibTeXLog
+        type: default
+  - name: SaveCache
+    command: save
+    phase: execute
+    parameters: []
+    inputs: []
+    outputs: []
