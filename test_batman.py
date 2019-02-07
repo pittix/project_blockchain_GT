@@ -4,6 +4,8 @@ import sys
 from math import exp, sqrt
 from random import randint, random, seed
 
+import networkx as nx
+
 from simulator import *
 
 # default values
@@ -74,44 +76,36 @@ event_queue.clean()
 
 # create a number of batman layers, corresponding to nodes
 batmans = {
-    ip: BatmanLayer(ip, selfish=(random() < var['selfish_rate']))
+    ip: BatmanLayer(ip,
+                    selfish=(random() < var['selfish_rate']),
+                    position=(var['dim'] * random(), var['dim'] * random()))
     for ip in range(var['node_num'])
 }
 
 # connect each other using some channels, described using a success probability
 # and round trip time
-node_positions = {}
-channels = {}
-for ip in batmans.keys():
-    node_positions[ip] = (var['dim'] * random(), var['dim'] * random())
 
-for ip1 in node_positions:
-    for ip2 in node_positions:
+for ip1 in batmans:
+    for ip2 in batmans:
         if ip1 == ip2:
             continue
 
-        dist = sqrt( (node_positions[ip1][0] - node_positions[ip2][0])**2 +
-                     (node_positions[ip1][1] - node_positions[ip2][1])**2 )
+        dist = sqrt( (batmans[ip1].position[0] - batmans[ip2].position[0])**2 +
+                     (batmans[ip1].position[1] - batmans[ip2].position[1])**2 )
 
         if dist < var['dist_lim']:
             p_succ = exp(-dist/var['dist_lim'])
             rtt = PROC_TIME + dist/LIGHT_SPEED
 
-            local_channels = batmans[ip1].connect_to(batmans[ip2],
-                                                     p_succ=p_succ, rtt=rtt)
-
-            channels = {**channels, **local_channels}
+            batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
 
 # create the application for each end-to-end stream: for the simulation
 # to be reasonable, each node has to have at least one application
-
 apps = []
 port_no = 1000
 
-# ensure unique port for each app (just to play safe)
-
-for ip1 in node_positions:
-    for ip2 in node_positions:
+for ip1 in batmans:
+    for ip2 in batmans:
         if ip1 == ip2:
             continue
         elif random() < var['app_rate']:
@@ -165,6 +159,9 @@ for app1, app2 in apps:
 
 # convert parameters dictionary to a valid file name
 string_var = "_".join(map(lambda x: "{}-{}".format(*x), var.items()))
+
+# save graph to file
+nx.write_graphml(G, "results/{}.graphml".format(string_var))
 
 with open("results/{}.csv".format(string_var), 'w') as csvfile:
     csvfile.write("ip,selfish,total_packet_size\n")

@@ -104,12 +104,13 @@ class Channel(Layer):
             self.schedule_tx()
 
 class BatmanLayer(Layer):
-    def __init__(self, local_ip, selfish):
+    def __init__(self, local_ip, selfish, position):
         super(self.__class__, self).__init__()
 
         # flag to discriminate between normal and selfish node
         # NOTE a selfish node does not forward packets from others
         self.selfish = selfish
+        self.position = position
 
         self.neighbour_table = {
             # dest IP: ID of channel layer
@@ -120,8 +121,9 @@ class BatmanLayer(Layer):
 
         ## routing address of node
         self.local_ip = local_ip
+
         # register in graph
-        G.add_node(local_ip)
+        G.add_node(local_ip, selfish=selfish, x=position[0], y=position[1])
 
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
