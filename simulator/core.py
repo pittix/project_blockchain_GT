@@ -113,7 +113,7 @@ def logthis(level):
     return _decorator
 
 # create a logger for all interesting events
-logger = logging.getLogger("")
+logger = logging.getLogger("simulator")
 
 # create event queue
 event_queue = EventQueue()
