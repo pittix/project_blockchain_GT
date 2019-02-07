@@ -170,4 +170,4 @@ with open("results/{}.csv".format(string_var), 'w') as csvfile:
     csvfile.write("ip,selfish,total_packet_size\n")
 
     for ip, size in performances.items():
-        csvfile.write("{},{},{}\n".format(ip, batmans[ip].selfish, size))
+        csvfile.write("{},{},{}\n".format(ip, int(batmans[ip].selfish), size))
