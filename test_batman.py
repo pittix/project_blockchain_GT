@@ -51,8 +51,8 @@ def simulator_batman(args):
             if ip1 == ip2:
                 continue
             dist = sqrt(
-                (batmans[ip1].positions[0] - batmans[ip2].positions[0])**2 +
-                (batmans[ip1].positions[1] - batmans[ip2].positions[1])**2
+                (batmans[ip1].position[0] - batmans[ip2].position[0])**2 +
+                (batmans[ip1].position[1] - batmans[ip2].position[1])**2
             )
             if dist < dist_lim:
                 p_succ = exp(-dist/dist_lim)
@@ -96,20 +96,17 @@ def simulator_batman(args):
 
                 apps.append( (app1, app2) )
 
-    try:
-        # run the simulation, until we run out of events
-        counter = 0
-        while True:
-            if counter % 10000 == 0:
-                print(event_queue.now)
-            counter += 1
 
-            # trigger events until we run out of them
-            if event_queue.next() is None:
-                break
+    # run the simulation, until we run out of events
+    counter = 0
+    while True:
+        if counter % 10000 == 0:
+            print(event_queue.now)
+        counter += 1
 
-    except Exception as e:
-        return str(e)
+        # trigger events until we run out of them
+        if event_queue.next() is None:
+            break
 
     # judge application layer rates
     performances = {ip: 0 for ip in batmans.keys()}
@@ -118,7 +115,7 @@ def simulator_batman(args):
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
 
-    print(performances)
+    print("perf:", performances)
 
     # report everything to csv
     # convert parameters dictionary to a valid file name
