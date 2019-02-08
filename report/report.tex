@@ -6,8 +6,6 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage{epstopdf}
-\usepackage{epsfig}
 \usepackage{glossaries}
 \usepackage{textcomp}
 \usepackage{xcolor}
@@ -15,9 +13,11 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \newacronym{batman}{B.A.T.M.A.N.}{Better Approach To Mobile Adhoc Networking}
+
 \newacronym{rtt}{RTT}{Round Trip Time}
 \newacronym{arq}{ARQ}{Automatic Repeat-reQuest}
 \newacronym{ne}{NE}{Nash Equilibrium}
+
 
 \begin{document}
 
@@ -44,24 +44,14 @@ enrico.lovisotto@studenti.unipd.it}
 
 \section{State of the art}
 
-\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to
-create network using their devices as nodes that routes traffic and transmit
-data to the network.
+\textbf{BATMAN overview}\\
 
-In 2008 \gls{batman} Advanced specification was released: exploiting channel
-knowledge present at ISO/OSI layers 2 and 3, and so breaking the logical
-separation of entities in the stack, the module can route the incoming packets
-more efficiently.
-
-During these years the standard evolved, thanks to the testing campaign promoted
-by the Freifunk\footnote{See project website at \url{https://freifunk.net/en/}}
-initiative, whose goal is the creation of a decentralized WiFi network all
-across Germany.
-
-Finally, in 2011 \gls{batman} became officially supported by the Linux Kernel,
-allowing all PCs to become a node in the network.
+- history\\
+\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network. In 2008 \gls{batman} became \gls{batman}-adv breaking the ISO/OSI stack and exploiting the knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network. Since then, the protocol was widely tested, thanks to the Freifunk initiative, which aims to bring to everyone a decentralized WiFi network and it's spread to all Germany.
 
 - how does the protocol work: principles
+The protocol \gls{batman}-adv creates a network of Ad-Hoc connections where each node informs the neighbours about his presence using an announcement message, and, after it joins the network, it will need two tables: a local one and a global one. The local table is used to route each packet, generated or arriving from a node, to the best next hop, according to a metric. Each node will repeat the process of routing the packet to the best hop until it arrives to the destination node. The global table, instead, is used to store the table of all or part of the network, so that if a node fails, the other one can exploit it to find new paths. This allows the network to be resilient and more reliable to a node that can move geographically, leave the network or join. In the latter case, the node can initially fill the table with the neighbour to contact when it wants to send some packets. 
+
 
 \section{Methodology}
 
@@ -76,8 +66,7 @@ simply switching the generator random seed and will be used for validating all o
 
 \begin{figure}[h]
   \centering
-  \hspace{-0.7cm}%
-  \includegraphics[width=1.1\linewidth]{figures/example_graph}
+  % \includegraphics[]{TODO}
   \caption{Nodes, labeled by their IP, are connected each other wirelessly.}
   \label{fig:nodes}
 \end{figure}
@@ -103,7 +92,7 @@ in \autoref{fig:graph}.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{figures/layers_diagram}
+  % \includegraphics[]{TODO}
   \caption{Abstract graph spanning all logical components of the network.}
   \label{fig:graph}
 \end{figure}
