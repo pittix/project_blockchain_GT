@@ -120,7 +120,7 @@ def simulator_batman(args):
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
 
-    print("perf:", performances)
+    # print("perf:", performances)
 
     # report everything to csv
     # convert parameters dictionary to a valid file name
