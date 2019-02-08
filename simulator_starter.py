@@ -16,17 +16,20 @@ logging.basicConfig(level=logging.INFO)
 # fixed parameters, describing topology
 scenarios = [
     { 'dim': 100, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 100, 'dist_lim': 50, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 100, 'dist_lim': 25, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 500, 'dist_lim': 50, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 500, 'dist_lim': 75, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 200, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
+    { 'dim': 300, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
+    { 'dim': 100, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 200, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 300, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 400, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
     { 'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 500, 'dist_lim': 400, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 1000, 'dist_lim': 200, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 600, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 800, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 1000, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 }
 ]
 
 # repeat each combination n times
-seeds = list(range(100))
+seeds = list(range(1000, 1100))
 
 # tunable parameters
 selfish_rates = np.linspace(0.1, 0.7, num=20)
@@ -51,7 +54,7 @@ def combinations():
 
 ## setup pool of workers
 
-available_threads = mp.cpu_count() 
+available_threads = mp.cpu_count()
 p = mp.Pool(available_threads)
 
 p.map(simulator_batman, combinations())
