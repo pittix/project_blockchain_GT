@@ -59,11 +59,9 @@ parser.add_argument('-st',
 
 
 var = vars(parser.parse_args(sys.argv[1:]))
-var = {key: value[0] for key,value in var.items()}
-
-print()
-print("Variables: {}".format(var))
-print()
+var = {key: value[0] for key, value in var.items()}
+sim_num = len(var)
+print("Number of simulations: ", sim_num)
 
 available_threads = mp.cpu_count() - 1
 if(len(var) > available_threads):
@@ -128,4 +126,4 @@ if len(var["node_num"]) == len(var["s"]) and \
 else:
     print("Invalid params: arrays have different lengths")
 
-print("processes failed: ", failures)
+print("processes failed: ", failures, " out of ", sim_num, " simulations")
