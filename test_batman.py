@@ -101,21 +101,20 @@ def simulator_batman(args):
 
                 apps.append( (app1, app2) )
 
-
     # run the simulation, until we run out of events
     counter = 0
     try:
         while True:
             if counter % 10000 == 0:
-                print(event_queue.now)
+                logger.debug(event_queue.now)
             counter += 1
 
             # trigger events until we run out of them
             if event_queue.next() is None:
                 break
     except nx.exception.NetworkXNoPath as err:
-        print("Error: two nodes are not connected: ")
-        print("message: ", err)
+        logger.error("Error: two nodes are not connected: ")
+        logger.error("message: ", err)
         return
 
     # judge application layer rates
@@ -125,12 +124,10 @@ def simulator_batman(args):
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
 
-    # print("perf:", performances)
-
     # report everything to csv
     # convert parameters dictionary to a valid file name
     string_var = "-".join(map(lambda x: "{}={}".format(*x), args.items()))
-    print("saving ", string_var, ".csv")
+    logger.debug("saving {}.csv".format(string_var))
 
     # save graph to file
     nx.write_gml(G, "results/{}.gml".format(string_var))
