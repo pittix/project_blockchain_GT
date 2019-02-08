@@ -10,18 +10,13 @@ from simulator import *
 LIGHT_SPEED = 299792458
 PROC_TIME = 0.001
 
-logging.basicConfig(level=logging.INFO)
-
-
 def interarrival_gen():
     while True:
         yield random() * 10
 
-
 def size_gen():
     while True:
         yield randint(100, 200)
-
 
 def simulator_batman(args):
     s = args["s"]

@@ -1,4 +1,5 @@
 import argparse
+import logging
 import multiprocessing as mp
 import sys
 import time
@@ -7,6 +8,8 @@ import numpy as np
 
 from simulator import *
 from test_batman import *
+
+logging.basicConfig(level=logging.INFO)
 
 ## setup simulation parameters
 
