@@ -1,0 +1,106 @@
+#+PROPERTY: header-args :cache yes
+
+#+NAME: plantuml_skin
+#+BEGIN_SRC plantuml :exports none
+  skinparam shadowing false
+  skinparam padding 1
+  skinparam BoxPadding 1
+  skinparam DefaultFontName Fira Sans
+  skinparam defaultTextAlignment center
+
+  skinparam SequenceDelayFontSize 15
+
+  skinparam Rectangle {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam Note {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam Activity {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam activityDiamond {
+  BackgroundColor white
+  BorderColor black
+  FontColor       black
+  }
+
+  skinparam ArrowColor black
+
+  skinparam State {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam SequenceParticipant {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam Usecase {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam Queue {
+  BackgroundColor white
+  BorderColor     black
+  FontColor       black
+  }
+
+  skinparam SequenceLifeLine {
+  BorderColor black
+  BackgroundColor black
+  }
+#+END_SRC
+
+#+BEGIN_SRC plantuml :file figures/layers_diagram.eps :noweb yes
+  <<plantuml_skin>>
+  skinparam ranksep 30
+
+  top to bottom direction
+
+  usecase APP as APP1
+  usecase APP as APP2
+  usecase APP as APP3
+  rectangle BATMAN as BATMAN1
+
+  usecase APP as APP4
+  usecase APP as APP5
+  usecase APP as APP6
+  rectangle BATMAN as BATMAN2
+
+  queue CHANNEL as CHANNEL1
+  queue CHANNEL as CHANNEL2
+
+  APP1 -- BATMAN1
+  APP2 -- BATMAN1
+  APP3 -- BATMAN1
+
+  APP4 -- BATMAN2
+  APP5 -- BATMAN2
+  APP6 -- BATMAN2
+
+  BATMAN1 - CHANNEL1
+  CHANNEL1 -> BATMAN2
+
+  BATMAN2 -- CHANNEL2
+  CHANNEL2 -> BATMAN1
+#+END_SRC
+
+#+RESULTS[ea4225d25e257d024d9fc34d2433fc04f0384653]:
+[[file:figures/layers_diagram.eps]]
+
+[[file:figures/layers_diagram.png]]
