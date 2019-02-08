@@ -61,7 +61,9 @@ parser.add_argument('-st',
 var = vars(parser.parse_args(sys.argv[1:]))
 var = {key: value[0] for key,value in var.items()}
 
-logger.debug("Variables: {}".format(var))
+print()
+print("Variables: {}".format(var))
+print()
 
 available_threads = mp.cpu_count() - 1
 if(len(var) > available_threads):
@@ -123,5 +125,7 @@ if len(var["node_num"]) == len(var["s"]) and \
         # remove finished results
         results = [res for i, res in enumerate(results) if not finished[i]]
         print("checking how many processes are running: ", len(results))
+else:
+    print("Invalid params: arrays have different lengths")
 
 print("processes failed: ", failures)
