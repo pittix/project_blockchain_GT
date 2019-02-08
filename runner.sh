@@ -1,6 +1,10 @@
 #!/bin/bash
 
-python -O simulator_starter.py -n $(cat nodes.txt) -s $(cat seeds.txt) \
-      -d-lim $(cat dist-limits.txt) -d $(cat dimensions.txt) \
-      -a $(cat app_rate.txt) -st $(cat stop.txt) -selfish $(cat selfish.txt)
-# python -O test_batman.py -n 100 -s 18 -d-lim 500 -d 1000 -a 0.25 -st 100 -selfish 0.1 $
+python -O simulator_starter.py \
+       -n $(cat simulator_params/ nodes.txt) \
+       -s $(cat simulator_params/ seeds.txt) \
+       -d-lim $(cat simulator_params/ dist-limits.txt) \
+       -d $(cat simulator_params/ dimensions.txt) \
+       -a $(cat simulator_params/ app_rate.txt) \
+       -st $(cat simulator_params/ stop.txt) \
+       -selfish $(cat simulator_params/ selfish.txt)
