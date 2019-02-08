@@ -120,7 +120,7 @@ def simulator_batman(args):
 
     # report everything to csv
     # convert parameters dictionary to a valid file name
-    string_var = "_".join(map(lambda x: "{}-{}".format(*x), args.items()))
+    string_var = "-".join(map(lambda x: "{}={}".format(*x), args.items()))
     print("saving ", string_var, ".csv")
 
     # save graph to file
