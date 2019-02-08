@@ -60,7 +60,7 @@ def simulator_batman(args):
         max_idx = np.argpartition(distance[ip1, :], -N_CLOSEST)[-N_CLOSEST:]
 
         # ensure that they are close enough
-        neigh_nodes = max_idx[distance[i, max_idx] < dist_lim]
+        neigh_nodes = max_idx[distance[ip1, max_idx] < dist_lim]
 
         for ip2 in neigh_nodes:
             p_succ = exp(-distance[ip1, ip2]/dist_lim)

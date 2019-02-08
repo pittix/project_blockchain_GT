@@ -136,18 +136,6 @@ class BatmanLayer(Layer):
 
         self.neighbour_table[other.local_ip] = c1.id_
 
-        c2 = Channel(**kwargs,
-                     dst_id=self.id_,
-                     src_ip=other.local_ip,
-                     dst_ip=self.local_ip)
-
-        other.neighbour_table[self.local_ip] = c2.id_
-
-        return {
-            (self.local_ip, other.local_ip): c1,
-            (other.local_ip, self.local_ip): c2
-        }
-
     def connect_app(self, app_layer):
         # save information about upper layer
         self.app_table[app_layer.local_port] = app_layer.id_
