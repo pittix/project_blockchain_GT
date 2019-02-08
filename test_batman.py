@@ -1,10 +1,8 @@
 import logging
 from math import exp, sqrt
 from random import randint, random, seed
-
 import networkx as nx
 import numpy as np
-
 from simulator import *
 
 # default values
@@ -67,6 +65,7 @@ def simulator_batman(args):
             rtt = PROC_TIME + distance[ip1, ip2]/LIGHT_SPEED
 
             batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
+            batmans[ip2].connect_to(batmans[ip1], p_succ=p_succ, rtt=rtt)
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
