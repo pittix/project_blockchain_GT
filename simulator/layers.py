@@ -123,7 +123,7 @@ class BatmanLayer(Layer):
         self.local_ip = local_ip
 
         # register in graph
-        G.add_node(local_ip, selfish=selfish, x=position[0], y=position[1])
+        G.add_node(local_ip, selfish=int(selfish), x=position[0], y=position[1])
 
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
