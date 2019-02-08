@@ -30,7 +30,7 @@ def simulator_batman(args):
     dist_lim = args["dist_lim"]
     app_rate = args["app_rate"]
     selfish_rate = args["selfish_rate"]
-    st = args["stop_time"]
+    stop_time = args["stop_time"]
 
     # 1) load queue for events created in simulator module
     seed(s)
@@ -78,7 +78,7 @@ def simulator_batman(args):
                 app1 = ApplicationLayer(interarrival_gen(),
                                         size_gen(),
                                         start_time=0,
-                                        stop_time=st,
+                                        stop_time=stop_time,
                                         local_port=port1,
                                         local_ip=ip1,
                                         dst_port=port2,
@@ -88,7 +88,7 @@ def simulator_batman(args):
                 app2 = ApplicationLayer(interarrival_gen(),
                                         size_gen(),
                                         start_time=0,
-                                        stop_time=st,
+                                        stop_time=stop_time,
                                         local_port=port2,
                                         local_ip=ip2,
                                         dst_port=port1,
