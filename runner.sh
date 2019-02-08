@@ -1,10 +1,18 @@
 #!/bin/bash
 
+app_rate="  0.2 0.1 "
+dimensions="100 100 "
+dist_lims=" 40   50 "
+nodes="     101 200 "
+seeds="     1    22 "
+selfish="   0.2 0.3 "
+stop="      100 100 "
+
 python -O simulator_starter.py \
-       -n $(cat simulator_params/nodes.txt) \
-       -s $(cat simulator_params/seeds.txt) \
-       -d-lim $(cat simulator_params/dist-limits.txt) \
-       -d $(cat simulator_params/dimensions.txt) \
-       -a $(cat simulator_params/app_rate.txt) \
-       -st $(cat simulator_params/stop.txt) \
-       -selfish $(cat simulator_params/selfish.txt)
+       -n $nodes \
+       -s $seeds \
+       -d-lim $dist_lims \
+       -d $dimensions \
+       -a $app_rate \
+       -st $stop \
+       -selfish $selfish
