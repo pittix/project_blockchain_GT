@@ -3,6 +3,7 @@ from math import exp, sqrt
 from random import randint, random, seed
 
 import networkx as nx
+import numpy as np
 
 from simulator import *
 
@@ -38,26 +39,34 @@ def simulator_batman(args):
     # create a number of batman layers, corresponding to nodes
     batmans = {
         ip: BatmanLayer(ip,
-            selfish=(random() < selfish_rate),
-            position=(dim * random(), dim * random()))
-            for ip in range(node_num)
-        }
+                        selfish=(random() < selfish_rate),
+                        position=(dim * random(), dim * random()))
+        for ip in range(node_num)
+    }
 
     # connect each other using some channels, described using a success
     # probability and round trip time
+    distance = np.zeros((len(batmans), len(batmans)))
     for ip1 in batmans:
         for ip2 in batmans:
-            if ip1 == ip2:
-                continue
-
-            dist = sqrt(
+            distance[ip1][ip2] = sqrt(
                 (batmans[ip1].position[0] - batmans[ip2].position[0])**2 +
                 (batmans[ip1].position[1] - batmans[ip2].position[1])**2
             )
-            if dist < dist_lim:
-                p_succ = exp(-dist/dist_lim)
-                rtt = PROC_TIME + dist/LIGHT_SPEED
-                batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
+
+    for ip1 in batmans:
+        # pick the N-closest nodes
+        N_CLOSEST = 10
+        max_idx = np.argpartition(distance[ip1, :], -N_CLOSEST)[-N_CLOSEST:]
+
+        # ensure that they are close enough
+        neigh_nodes = max_idx[distance[i, max_idx] < dist_lim]
+
+        for ip2 in neigh_nodes:
+            p_succ = exp(-distance[ip1, ip2]/dist_lim)
+            rtt = PROC_TIME + distance[ip1, ip2]/LIGHT_SPEED
+
+            batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
@@ -100,9 +109,9 @@ def simulator_batman(args):
     counter = 0
     try:
         while True:
+            counter += 1
             if counter % 10000 == 0:
                 logger.debug(event_queue.now)
-            counter += 1
 
             # trigger events until we run out of them
             if event_queue.next() is None:
