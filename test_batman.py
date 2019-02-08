@@ -35,6 +35,8 @@ def simulator_batman(args):
     # 1) load queue for events created in simulator module
     seed(s)
 
+    # clear global variables
+    Layer.all_layers.clear()
     event_queue.clean()
     G.clear()
 
