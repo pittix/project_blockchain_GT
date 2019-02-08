@@ -11,24 +11,32 @@ from test_batman import *
 
 logging.basicConfig(level=logging.INFO)
 
-## setup simulation parameters
+# setup simulation parameters
 
 # fixed parameters, describing topology
 scenarios = [
     { 'dim': 100, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 500, 'dist_lim': 400, 'node_num': 100, 'stop_time': 100 }
+    { 'dim': 100, 'dist_lim': 50, 'node_num': 10, 'stop_time': 100 },
+    { 'dim': 100, 'dist_lim': 25, 'node_num': 10, 'stop_time': 100 },
+    { 'dim': 500, 'dist_lim': 50, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 500, 'dist_lim': 75, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 500, 'dist_lim': 400, 'node_num': 100, 'stop_time': 100 },
+    { 'dim': 1000, 'dist_lim': 200, 'node_num': 100, 'stop_time': 100 },
 ]
 
 # repeat each combination n times
 seeds = list(range(100))
 
 # tunable parameters
-selfish_rates = np.linspace(0.1, 0.6, num=10)
-app_rates = np.linspace(0.01, 0.02, num=10)
+selfish_rates = np.linspace(0.1, 0.7, num=20)
+app_rates = np.linspace(0.01, 0.05, num=10)
 
 print("Total number of combinations: {}".format(
     len(scenarios) * len(seeds) * len(selfish_rates) * len(app_rates)
 ))
+time.sleep(5)
+
 
 def combinations():
     for scenario in scenarios:
@@ -43,7 +51,7 @@ def combinations():
 
 ## setup pool of workers
 
-available_threads = mp.cpu_count() - 1
+available_threads = mp.cpu_count() 
 p = mp.Pool(available_threads)
 
 p.map(simulator_batman, combinations())
