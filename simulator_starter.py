@@ -34,6 +34,7 @@ var = {
     "selfish_rate": var["selfish_rate"][0],
     "stop_time": var["stop_time"][0]
     }
+print("\n",var,"\n\n")
 if(len(var) > available_threads):
     p = mp.Pool(available_threads)
 else:
@@ -62,7 +63,7 @@ def start_new_thread():
         var["dist_lim"] = var["dist_lim"][1:]
         var["app_rate"] = var["app_rate"][1:]
         # start the thread and program a new start when the function ends
-        res = p.apply_async(simulator_batman, (tmp_var,), callback=process_finished)
+        res = p.apply_async(simulator_batman, (tmp_var,), callback=process_finished, error_callback=process_error)
         results.append(res)
         available_threads -= 1
     else:
@@ -71,12 +72,13 @@ def start_new_thread():
 
 def process_finished(res):
     global available_threads, results, failures
-    if res is not None:
-        available_threads += 1
-        print("failed. Error:", res)
-        failures += 1
+    available_threads += 1
     start_new_thread()
 
+def process_error(err):
+    print("An error occoured: ")
+    print("class: ", err.__class__)
+    print("message: ", err)
 
 # check that I have the same number of simulations
 if (len(var["node_num"]) == len(var["s"])
@@ -85,12 +87,15 @@ if (len(var["node_num"]) == len(var["s"])
         and len(var["s"]) == len(var["app_rate"])):
     while(available_threads > 0 and len(var["s"]) > 0):
         start_new_thread()
-
+        print(len(results))
     # avoid program from finishing until all processes are done
     while(len(results) > 0):
+        print(len(results))
         time.sleep(10)  # wait 10 seconds before re-checking
         finished = [x.ready() for x in results]
+        print(finished)
         # remove finished results
         results = [res for i, res in enumerate(results) if not finished[i]]
+        print(results)
 
 print("processes failed: ", failures)
