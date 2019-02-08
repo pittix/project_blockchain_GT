@@ -71,14 +71,16 @@ def start_new_thread():
 
 
 def process_finished(res):
-    global available_threads, results, failures
+    global available_threads
     available_threads += 1
     start_new_thread()
 
 def process_error(err):
+    global failures
     print("An error occoured: ")
     print("class: ", err.__class__)
     print("message: ", err)
+    failures += 1
 
 # check that I have the same number of simulations
 if (len(var["node_num"]) == len(var["s"])
@@ -87,15 +89,12 @@ if (len(var["node_num"]) == len(var["s"])
         and len(var["s"]) == len(var["app_rate"])):
     while(available_threads > 0 and len(var["s"]) > 0):
         start_new_thread()
-        print(len(results))
     # avoid program from finishing until all processes are done
     while(len(results) > 0):
-        print(len(results))
         time.sleep(10)  # wait 10 seconds before re-checking
         finished = [x.ready() for x in results]
-        print(finished)
         # remove finished results
         results = [res for i, res in enumerate(results) if not finished[i]]
-        print(results)
+        print("checking how many processes are running: ", len(results))
 
 print("processes failed: ", failures)
