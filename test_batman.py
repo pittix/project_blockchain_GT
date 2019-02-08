@@ -104,14 +104,19 @@ def simulator_batman(args):
 
     # run the simulation, until we run out of events
     counter = 0
-    while True:
-        if counter % 10000 == 0:
-            print(event_queue.now)
-        counter += 1
+    try:
+        while True:
+            if counter % 10000 == 0:
+                print(event_queue.now)
+            counter += 1
 
-        # trigger events until we run out of them
-        if event_queue.next() is None:
-            break
+            # trigger events until we run out of them
+            if event_queue.next() is None:
+                break
+    except nx.exception.NetworkXNoPath as err:
+        print("Error: two nodes are not connected: ")
+        print("message: ", err)
+        return
 
     # judge application layer rates
     performances = {ip: 0 for ip in batmans.keys()}
