@@ -21,7 +21,7 @@
 
 \begin{document}
 
-\title{A game-theoretical analysis of BATMAN protocol}
+\title{A game-theoretical analysis of BATMAN-adv protocol}
 
 \author{\IEEEauthorblockN{Andrea Pittaro}
 \IEEEauthorblockA{\textit{Dipartimento di Ingegneria dell'Informazione} \\
@@ -44,9 +44,14 @@ enrico.lovisotto@studenti.unipd.it}
 
 \section{State of the art}
 
-BATMAN overview
-- history
+\textbf{BATMAN overview}\\
+
+- history\\
+\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network. In 2008 \gls{batman} became \gls{batman}-adv breaking the ISO/OSI stack and exploiting the knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network. Since then, the protocol was widely tested, thanks to the Freifunk initiative, which aims to bring to everyone a decentralized WiFi network and it's spread to all Germany.
+
 - how does the protocol work: principles
+
+
 
 \section{Methodology}
 
@@ -125,7 +130,7 @@ Network performances between fair and unfair users varying
 \section{Conclusion}
 
 \bibliography{report}
-\bibliographystyle{IEEEtran}
+% \bibliographystyle{IEEEtran}
 
 \end{document}
 
