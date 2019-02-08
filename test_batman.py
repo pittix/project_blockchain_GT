@@ -122,8 +122,9 @@ def simulator_batman(args):
     # convert parameters dictionary to a valid file name
     string_var = "_".join(map(lambda x: "{}-{}".format(*x), args.items()))
     print("saving ", string_var, ".csv")
+
     # save graph to file
-    nx.write_graphml(G, "results/{}.graphml".format(string_var))
+    nx.write_gml(G, "results/{}.gml".format(string_var))
 
     with open("results/{}.csv".format(string_var), 'w') as csvfile:
         csvfile.write("ip,selfish,total_packet_size\n")
