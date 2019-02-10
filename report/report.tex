@@ -42,17 +42,62 @@ enrico.lovisotto@studenti.unipd.it}
 
 \section{Introduction}
 
-\section{State of the art}
+\section{BATMAN protocol overview}
 
-\textbf{BATMAN overview}\\
+% - history\\
+\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to
+create network using their devices as nodes that routes traffic and transmit
+data to the network.
 
-- history\\
-\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network. In 2008 \gls{batman} became \gls{batman}-adv breaking the ISO/OSI stack and exploiting the knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network. Since then, the protocol was widely tested, thanks to the Freifunk initiative, which aims to bring to everyone a decentralized WiFi network and it's spread to all Germany.
+In 2008 \gls{batman} became \gls{batman}-adv breaking the ISO/OSI stack and
+exploiting the knowledge at layer 2 and 3 to efficiently find paths and route
+the packets arriving to each node. During these years the protocol evolved and
+in 2011 became officially supported by the Linux Kernel, allowing all PCs to
+become a node in the network.
 
-- how does the protocol work: principles
-The protocol \gls{batman}-adv creates a network of Ad-Hoc connections where each node informs the neighbours about his presence using an announcement message, and, after it joins the network, it will need two tables: a local one and a global one. The local table is used to route each packet, generated or arriving from a node, to the best next hop, according to a metric. Each node will repeat the process of routing the packet to the best hop until it arrives to the destination node. The global table, instead, is used to store the table of all or part of the network, so that if a node fails, the other one can exploit it to find new paths. This allows the network to be resilient and more reliable to a node that can move geographically, leave the network or join. In the latter case, the node can initially fill the table with the neighbour to contact when it wants to send some packets.
-The metric can be a combination of parameters, i.e. the success rate, the delay, the bitrate or the \gls{rtt}, that result to a weighting of the network connections graph. Periodically an alive message is sent around the network to inform the neighbour about the presence of an alive node. With another period, the local table of each node is shared around the network to allow the other nodes to determine the weight of the link and the best next hop if they want to send a packet through a node.
-If for smaller networks it's feasible for each node to have the informations on how to reach that node, for bigger networks the local table could be set so that the network has a fixed gateway to reach another part of the network. This allows \gls{batman}-adv to run in home routers.
+Since then, the protocol was widely tested, thanks to the Freifunk initiative,
+which aims to bring to everyone a decentralized WiFi network and it's spread to
+all Germany.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/logo.pdf}
+  \caption{Logo of \gls{batman} project.}
+  \label{fig:batman_logo}
+\end{figure}
+
+\smallskip
+
+% - how does the protocol work: principles
+The protocol \gls{batman}-adv creates a network of ad-hoc connections where each
+node periodically notifies the neighbours of its presence using discovery
+messages.
+
+Similarly to what is done in traditional distance-vector routing protocols this
+information will be used to build a local table that associates to each known
+remote destination to the next hop for the packet to cross.
+
+The peculiar feature of the \gls{batman} protocol is that together with this
+alive messages the nodes will periodically exchange their own local forwarding
+scheme. The emerging shared knowledge makes the connected entities aware of the
+global structure of the network and so the connections are more reliable and
+resilient to mobile and non-persistent nodes.
+
+In fact, a node fails, the other ones can immediately find new paths upon being
+notified the change of topology.
+
+While for smaller networks such global table can span the whole set of nodes,
+for bigger networks fixed gateways could be set in order to reach other parts of
+the network. This reduces the information required at each node and allows
+\gls{batman}-adv to run in home routers.
+
+\smallskip
+
+Like every de-centralized protocol, \gls{batman} relies on the contribution of
+all involved entities in order to sustain itself. Each node plays then a game,
+choosing between collaboration and egoism: this project aims to assess when the
+former is preferred to the latter and what kinds of rewards are needed for the
+players in order for the wanted behaviour to be the most convenient.
 
 \section{Methodology}
 
