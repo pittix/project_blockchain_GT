@@ -1,8 +1,11 @@
 import logging
 from math import exp, sqrt
 from random import randint, random, seed
+
 import networkx as nx
 import numpy as np
+import pandas as pd
+
 from simulator import *
 
 # default values
@@ -133,10 +136,28 @@ def simulator_batman(args):
     logger.debug("saving {}.csv".format(string_var))
 
     # save graph to file
-    nx.write_gml(G, "results/{}.gml".format(string_var))
+    # nx.write_gml(G, "results/{}.gml".format(string_var))
 
-    with open("results/{}.csv".format(string_var), 'w') as csvfile:
-        csvfile.write("ip,selfish,total_packet_size\n")
+    # create temporary result for current run
+    result = []
+    for ip, size in performances.items():
+        result.append({
+            **args,
+            'ip': ip,
+            'selfish': int(batmans[ip].selfish),
+            'size': size
+        })
 
-        for ip, size in performances.items():
-            csvfile.write("{},{},{}\n".format(ip, int(batmans[ip].selfish), size))
+    # aggregate its results based on selfish and altruistic nodes
+    data = pd.DataFrame(result)
+
+    selfish_obj = data[data['selfish'] == 1]['size']
+    altruistic_obj = data[data['selfish'] == 0]['size']
+
+    return {
+        **args,
+        'selfish_num': len(selfish_obj),
+        'altruistic_num': len(altruistic_obj),
+        'selfish': [sum(selfish_obj)],
+        'altruistic': sum(altruistic_obj),
+    }
