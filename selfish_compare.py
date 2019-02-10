@@ -23,4 +23,4 @@ summary.fillna(0, inplace=True)
 del summary['selfish_num']
 del summary['altruistic_num']
 
-summary.to_csv("results/averaged_simulations.csv")
+summary.to_csv("results/averaged_simulations.csv.gz")
