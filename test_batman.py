@@ -150,18 +150,10 @@ def simulator_batman(args):
     selfish_obj = data[data['selfish'] == 1]['size']
     altruistic_obj = data[data['selfish'] == 0]['size']
 
-    result = {
+    return {
         **args,
         'selfish_num': len(selfish_obj),
         'altruistic_num': len(altruistic_obj),
         'selfish': [sum(selfish_obj)],
         'altruistic': sum(altruistic_obj),
     }
-
-    store = pd.HDFStore("results/simulation_results.hdf5")
-    store.append('results',
-                         pd.DataFrame.from_dict(result),
-                         format='t',
-                         data_columns=True)
-
-    return
