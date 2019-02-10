@@ -5,7 +5,9 @@ import pandas as pd
 
 combined_results = []
 
-for result_path in Path('../results').glob('*.csv'):
+for i, result_path in enumerate(Path('../results/csvs').glob('*.csv')):
+    print("Done file {}".format(i), end='\r')
+
     serie = {}
 
     for unit in result_path.stem.split('-'):
@@ -25,3 +27,4 @@ for result_path in Path('../results').glob('*.csv'):
     combined_results.append(serie)
 
 results = pd.DataFrame(combined_results)
+results.to_csv('../results/aggreagate_results.csv', index=None)
