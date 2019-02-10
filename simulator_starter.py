@@ -59,5 +59,8 @@ available_threads = mp.cpu_count()
 p = mp.Pool(available_threads)
 
 store = pd.HDFStore("results/simulation_results.hdf5")
+
 for result in p.map(simulator_batman, combinations()):
     store.append('results', pd.DataFrame.from_dict(result), format='t', data_columns=True)
+
+store.close()
