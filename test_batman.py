@@ -130,15 +130,11 @@ def simulator_batman(args):
         performances[app1.local_ip] += app1.rx_packet_size
         performances[app2.local_ip] += app2.rx_packet_size
 
-    # report everything to csv
-    # convert parameters dictionary to a valid file name
-    string_var = "-".join(map(lambda x: "{}={}".format(*x), args.items()))
-    logger.debug("saving {}.csv".format(string_var))
-
     # save graph to file
     # nx.write_gml(G, "results/{}.gml".format(string_var))
 
     # create temporary result for current run
+
     result = []
     for ip, size in performances.items():
         result.append({
@@ -154,10 +150,18 @@ def simulator_batman(args):
     selfish_obj = data[data['selfish'] == 1]['size']
     altruistic_obj = data[data['selfish'] == 0]['size']
 
-    return {
+    result = {
         **args,
         'selfish_num': len(selfish_obj),
         'altruistic_num': len(altruistic_obj),
         'selfish': [sum(selfish_obj)],
         'altruistic': sum(altruistic_obj),
     }
+
+    store = pd.HDFStore("results/simulation_results.hdf5")
+    store.append('results',
+                         pd.DataFrame.from_dict(result),
+                         format='t',
+                         data_columns=True)
+
+    return
