@@ -167,7 +167,10 @@ The \gls{batman} protocol is for this reason designed in such a way that the alt
 A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth to others.
 Since this approach gives no substantial penalty to selfish nodes, they can still profit from the network while making the experience worse for everyone else.
 
-As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. For all the plots that we were able to obtain through the simulations, though, we can see that if the rate of the egoistic nodes is less than $0.167$, then a device is slightly encouraged to play his own game, dropping the other player's packets. Over this limit, the nodes are to some degree incentivized to play altruistically as their bitrate is, on a small scale, higher.
+As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. For all the plots that we were able to obtain through the simulations, though, we can see that if the rate of the egoistic nodes is less than $0.167$, then a device is slightly encouraged to play his own game, dropping the other player's packets.
+Over this limit, playing altruistically is a bit incentivized, but the overall gain is limited.
+
+This makes selfish behaviour a viable option, showing a big argument against this simple approach to distributed routing.
 
 \begin{figure}
   \includegraphics{figures/obj_func_vs_selfish_rate_no_punish.eps}
@@ -180,9 +183,6 @@ As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate},
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame-app-rate}
 \end{figure}
-
-This creates a weaker network, since no incentive is given to the altruistic members from the point of view of the objective function.
-
 
 \section{Conclusion}
 
