@@ -130,6 +130,16 @@ In order to be as general as possible, our network connects memoryless sources o
 
 From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with its own kind, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
 
+If the network doesn't apply any punishment, the selfish node is encouraged to act selfishly if the number of selfish node is small, otherwise its bitrate will drop as well. A plot of this case is shown in \ref{fig:no-blame}
+
+\begin{figure}
+
+  \includegraphics[width=\linewidth]{figures/app_rate_0_1-no-punish.png}
+
+  \caption{Average bitrate in case no punishment is applied to selfish nodes}
+  \label{fig:no-blame}
+\end{figure}
+
 As we will show in the upcoming \autoref{sec:results}, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
 We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of its users are selfish or network conditions degrade.
@@ -143,7 +153,7 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
     \toprule
     Parameter     & Values range & Description                            \\ \midrule
     L             & 100m ÷ 1000m & Network area dimension                 \\
-    D             & 100m ÷ 200m  & Distance parameter for $p_r$           \\
+    D             & 100m ÷ 200m  & Distance parameter for $p_r$ and $rtt$           \\
     N             & 10 ÷ 100     & Number of nodes                        \\
     selfish\_rate & 0.01 ÷ 0.1   & Fraction of selfish nodes              \\
     app\_rate     & 0.01 ÷ 0.05  & \thead{Fraction of connected \\couples of nodes} \\ \bottomrule
