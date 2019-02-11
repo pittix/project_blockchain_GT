@@ -1,4 +1,5 @@
 import logging
+import subprocess
 from math import exp, sqrt
 from random import randint, random, seed
 
@@ -153,6 +154,11 @@ def simulator_batman(args):
 
     selfish_obj = data[data['selfish'] == 1]['size']
     altruistic_obj = data[data['selfish'] == 0]['size']
+
+    string_var = "-".join(map(lambda x: "{}={}".format(*x), args.items()))
+
+    subprocess.call("mkdir -p /tmp/log_files/", shell=True)
+    subprocess.call("touch /tmp/log_files/{}".format(string_var), shell=True)
 
     return {
         **args,
