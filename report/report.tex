@@ -111,7 +111,7 @@ where $c$ is the speed of light, $t_{proc}$ the receiver processing time and $d$
 \smallskip
 
 Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
-Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, later called ``app rate''.
+Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, called ``app rate''.
 
 These will be the key to measure the quality of the strategy adopted at the \gls{batman} layer.
 Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with an high bitrate to the rest of the network.
@@ -128,15 +128,15 @@ Once all details have been defined, the overall communication scenario can be de
 
 \subsection{Expected results}
 
-In order to be as general as possible, our network connects memoryless sources of traffic communicating to each other: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, node have to rely to a certain extent on their neighbours, since not all destinations are reachable in a single hop.
+In order to be as general as possible, our sources of traffic are memoryless processes each one assigned to a specific node: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, it has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
 
-From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with its own kind, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
+From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with others, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
 
 As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly, expecially when others still respects the agreement.
 
 For this reason, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
-We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of its users are selfish or network conditions degrade.
+We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of users is selfish or network conditions degrade.
 All the relevant parameters that will be tuned are listed in \autoref{tab:params}.
 
 \renewcommand\theadalign{l}
@@ -157,8 +157,6 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 \caption{Relevant parameters for building the network}
 \label{tab:params}
 \end{table}
-
-% TODO bit of spoilers for results section
 
 \section{Results} \label{sec:results}
 
