@@ -119,11 +119,17 @@ class BatmanLayer(Layer):
             # local port: ID of app_layer
         }
 
+        self.drop_score = 0
+
         ## routing address of node
         self.local_ip = local_ip
 
         # register in graph
-        G.add_node(local_ip, selfish=int(selfish), x=position[0], y=position[1])
+        G.add_node(local_ip,
+                   selfish=int(selfish),
+                   x=position[0],
+                   y=position[1],
+                   weight=self.drop_score)
 
     def connect_to(self, other, **kwargs):
         """ Connect self with other node through Channel objects """
@@ -144,7 +150,17 @@ class BatmanLayer(Layer):
         app_layer.lower_layer_id = self.id_
 
     def recv_from_up(self, packet, upper_layer_id):
-        path = nx.shortest_path(G, self.local_ip, packet['dst_ip'])
+        def weight_edge(u, v, d):
+            # avoid double counting of node weight in the path
+            w_u = G.nodes[u]['weight'] / 2
+            w_v = G.nodes[v]['weight'] / 2
+            w_d = d.get('weight', 10)
+
+            return w_u + w_v + w_d
+
+        path = nx.dijkstra_path(G, self.local_ip, packet['dst_ip'],
+                                weight=weight_edge)
+
         packet['path'] = path[1:]
         self.send_down(packet,
                        self.neighbour_table[packet['path'][0]])
@@ -160,10 +176,19 @@ class BatmanLayer(Layer):
         else:
             if self.selfish == False:
                 packet['path'] = packet['path'][1:]
+
+                # give a prize to fair nodes
+                self.drop_score -= 1
+                if self.drop_score <= 0:
+                    self.drop_score = 0
+
                 self.send_down(packet, self.neighbour_table[packet['path'][0]])
             else:
-                # ignore packets to forward if in selfish mode
-                pass
+                # penalize node if packet is dropped
+                self.drop_score += 1
+
+        # keep graph in sync
+        G.nodes[self.local_ip]['weight'] = self.drop_score
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
