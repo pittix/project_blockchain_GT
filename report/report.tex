@@ -131,12 +131,12 @@ Once all details have been defined, the overall communication scenario can be de
 
 In order to be as general as possible, our sources of traffic are memoryless processes each one assigned to a specific node: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, it has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
 
-\begin{figure}
- \includegraphics[width=\linewidth]{figures/obj_func_vs_selfish_rate_no_punish.eps}
-
-  \caption{Average bitrate in case no punishment is applied to selfish nodes}
-  \label{fig:no-blame}
-\end{figure}
+% \begin{figure}
+%  \includegraphics[width=\linewidth]{figures/obj_func_vs_selfish_rate_no_punish.eps}
+%
+%   \caption{Average bitrate in case no punishment is applied to selfish nodes}
+%   \label{fig:no-blame}
+% \end{figure}
 
 From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with others, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
 
@@ -145,7 +145,7 @@ A plot of the bitrate in the case where the selfish nodes are not punished is sh
 
 
 
-For this reason, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
+The protocol, as it will be presented later, is designed in such a way that the altruistic path is more convenient for the nodes to pursue, pushing the rate of the selfish nodes close to zero. The collaboration will then turn out to be a \gls{ne} for the game played between all the connected entities.
 
 We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of users is selfish or network conditions degrade.
 
