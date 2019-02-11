@@ -199,10 +199,14 @@ This makes selfish behaviour a viable option, showing a big argument against thi
   \label{fig:no-blame-app-rate}
 \end{figure}
 
+The \gls{batman} protocol tackles this issue creating a reputation score for each one of the members of the network, that increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
+
+As shown in \autoref{fig:selfish-rate}, the altruistic way is always the preferred one, although it becomes less and less convenient when the ratio of selfish node grows. This has to be expected, as the overall performance drops when data are not being delivered to destination.
+
 \begin{figure}[h]
   \includegraphics{figures/obj_func_vs_selfish_rate.eps}
-  \caption{Average bitrate when selfish nodes are penalized.}
-  \label{fig:no-blame-app-rate}
+  \caption{Average bitrate when selfish nodes are penalized}
+  \label{fig:selfish-rate}
 \end{figure}
 
 \section{Conclusion}
