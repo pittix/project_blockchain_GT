@@ -174,6 +174,10 @@ class BatmanLayer(Layer):
             upper_layer_id = self.app_table[packet['dst_port']]
             self.send_up(packet, upper_layer_id)
         else:
+            # penalize selfish nodes, dropping their packets
+            if G.nodes[packet['src_ip']]['weight'] > 10:
+                return
+
             if self.selfish == False:
                 packet['path'] = packet['path'][1:]
 
