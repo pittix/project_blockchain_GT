@@ -97,14 +97,13 @@ Like every de-centralized protocol, \gls{batman} relies on the contribution of
 all involved entities in order to sustain itself. Each node plays then a game,
 choosing between collaboration and egoism: this project aims to assess when the
 former is preferred to the latter and what kinds of rewards are needed for the
-players in order for the wanted behaviour to be the most convenient.
+players for the wanted behaviour to be the most convenient.
 
 \section{Methodology}
 
 \subsection{Network setup}
 
-In order to assess and verify the expected properties of the \gls{batman}
-protocol, we decided to run an event-driven simulation.
+In order to study the protocol we decided to take an experimental approach, measuring objective functions of the nodes in a simulated setting.
 
 So, a certain number of entities were scattered uniformly across the simulation
 area, as shown in \autoref{fig:nodes}. This strategy allows to change topology
@@ -112,7 +111,8 @@ simply switching the generator random seed and will be used for validating all o
 
 \begin{figure}[h]
   \centering
-  % \includegraphics[]{TODO}
+  \hspace{-0.7cm}%
+  \includegraphics[width=1.1\linewidth]{figures/example_graph}
   \caption{Nodes, labeled by their IP, are connected each other wirelessly.}
   \label{fig:nodes}
 \end{figure}
@@ -138,7 +138,7 @@ in \autoref{fig:graph}.
 
 \begin{figure}[h]
   \centering
-  % \includegraphics[]{TODO}
+  \includegraphics[width=\linewidth]{figures/layers_diagram}
   \caption{Abstract graph spanning all logical components of the network.}
   \label{fig:graph}
 \end{figure}
