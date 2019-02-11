@@ -75,7 +75,7 @@ The peculiar feature of the \gls{batman} protocol is that together with the aliv
 
 In fact, when a node fails other ones can immediately find new paths upon being notified the change of topology.
 Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will ignore all the packets coming from it.
-This type of behaviour is pretty common to many decentralized networks, like MANETs \cite{MANETs} and protocols, like BitTorrent or ED2K, where a node that doesn't cooperate via the upload has a limited download capability.\cite{BitTorrent} \cite{ed2k}
+This type of behaviour is pretty common to many decentralized networks, like MANETs \cite{MANETs} and protocols, like BitTorrent or ED2K, where a node that doesn't cooperate via the upload has a limited download capability.\cite{BitTorrent,ed2k}
 
 While for smaller networks such global table can span the whole set of nodes, for bigger ones fixed gateways can be set in order to reach far destinations. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
@@ -129,7 +129,8 @@ To do so, it has to rely to a certain extent on its neighbours, since not all de
 
 \smallskip
 Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman}, channels and application layers, depicted in \autoref{fig:graph}.
-We used a directed graph, to ignore the simulation of collision events, as we include them in the $p_r$. Another advantage is that we can treat the channel as a M/M/1 queue which will deliver the packet to the following node. Then, the latter will process the packet and enqueue it  until the data is delivered to the destination.
+We do not model packet collisions explicitly, as they are already included in the $p_r$. Another advantage is that we can treat the channel as a M/M/1 queue whose service is the packet delivery to the following step in the path.
+Once the next hop has been reached, the node will properly handle the data, forwarding them until the destination.
 
 \begin{figure}[h]
   \centering
@@ -170,7 +171,7 @@ If a one reportedly drops packets, in fact, its reputation lowers down to a poin
 
 The collaboration will in fact turn out to be a \gls{ne} for the game played between all the connected entities.
 
-\clearpage
+% \clearpage
 \section{Results} \label{sec:results}
 
 % Network performances between fair and unfair users varying
@@ -195,6 +196,12 @@ This makes selfish behaviour a viable option, showing a big argument against thi
 \begin{figure}[h]
   \includegraphics{figures/obj_func_vs_app_rate_no_punish.eps}
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
+  \label{fig:no-blame-app-rate}
+\end{figure}
+
+\begin{figure}[h]
+  \includegraphics{figures/obj_func_vs_selfish_rate.eps}
+  \caption{Average bitrate when selfish nodes are penalized.}
   \label{fig:no-blame-app-rate}
 \end{figure}
 
