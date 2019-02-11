@@ -6,7 +6,6 @@ import time
 
 import h5py
 import numpy as np
-import pandas as pd
 
 from simulator import *
 from test_batman import *
@@ -31,17 +30,15 @@ scenarios = [
 ]
 
 # repeat each combination n times
-seeds = list(range(1000, 1010))
+seeds = list(range(1000, 1100))
 
 # tunable parameters
-selfish_rates = np.linspace(0.01, 0.11, num=10)
+selfish_rates = np.linspace(0.01, 0.1, num=10)
 app_rates = np.linspace(0.01, 0.05, num=10)
 
-num_sim =  len(scenarios) * len(seeds) * len(selfish_rates) * len(app_rates)
-
-print("Total number of combinations: {}".format(num_sim))
-time.sleep(5)
-
+print("Total number of combinations: {}".format(
+    len(scenarios) * len(seeds) * len(selfish_rates) * len(app_rates)
+))
 
 def combinations():
     for scenario in scenarios:
@@ -54,62 +51,14 @@ def combinations():
                             's': seed
                     }
 
-
-results = []
-# create generator
-simulations = combinations()
-available_threads = mp.cpu_count()-1
-
-
-
-
-def start_new_thread():
-    global available_threads, failures, results
-    try:
-        cur_param = dict(next(simulations))
-        # start the thread and program a new start when the function ends
-        res = p.apply_async(simulator_batman, cur_param, callback=process_finished)
-        results.append(res)
-        available_threads -= 1
-    except StopIteration as st:
-        pass
-
 ## setup pool of workers
 
+available_threads = mp.cpu_count()
 p = mp.Pool(available_threads)
 
-store = pd.HDFStore("results/simulation_results_new.hdf5")
+store = pd.HDFStore("results/simulation_results.hdf5")
 
+for result in p.map(simulator_batman, combinations()):
+    store.append('results', pd.DataFrame.from_dict(result), format='t', data_columns=True)
 
-def process_finished(res):
-    global available_threads
-    available_threads += 1
-    store.append(
-            'results',
-            pd.DataFrame.from_dict(res),
-            format='t',
-            data_columns=True
-            )
-    start_new_thread()
-
-
-# init starting new threads
-while available_threads > 0:
-    start_new_thread()
-
-i = 0  # counter num sim
-running = True
-while running:
-    time.sleep(10)
-    finished = [x.ready() for x in results]
-    i += finished.count(True)
-    print("Done {} simulations, or {} % of them".format(
-        i, 100*i/num_sim
-        ), end="\r")
-    # remove finished results
-    results = [res for i, res in enumerate(results) if not finished[i]]
-    if len(results) == 0:
-        try:  # be sure that there are no simulations that can run
-            next(simulations)
-        except StopIteration:
-            running = False
+store.close()
