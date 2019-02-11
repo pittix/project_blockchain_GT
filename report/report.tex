@@ -88,7 +88,7 @@ Like every de-centralized protocol, \gls{batman} relies on the contribution of a
 
 In order to study the protocol we decided to take an experimental approach, measuring objective functions of the players in a simulated setting.
 
-As customary in this kind of analysis, a certain number of nodes are scattered uniformly across a square simulation area, as shown in \autoref{fig:nodes}. This allows to change topology simply switching the generator random seed and will be used to validate all our results.
+As customary in this kind of analysis, a certain number $N$ of nodes is scattered uniformly across a square simulation area of side $L$, as shown in \autoref{fig:nodes}. This allows to change topology simply switching the generator random seed and will be used to validate all our results.
 
 \begin{figure}[h]
   \centering
@@ -97,7 +97,7 @@ As customary in this kind of analysis, a certain number of nodes are scattered u
   \label{fig:nodes}
 \end{figure}
 
-Once placed, each couple of close nodes are linked with wireless fully reliable channels, characterized by a \gls{rtt} and a retransmission probability $p_r$, both function of the reciprocal distance.
+Once placed, each couple of close nodes are linked with wireless fully reliable channels, characterized by a \gls{rtt} and a re-transmission probability $p_r$, both function of the reciprocal distance.
 
 This assumption on the channel characteristics reduces the model complexity while keeping an decent degree of realism, as \gls{arq} strategies are common practice at all protocol stack levels.
 
@@ -112,10 +112,11 @@ where $c$ is the speed of light, $t_{proc}$ the receiver processing time and $d$
 
 Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
 
-Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, called ``app rate''.
+Memoryless applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, called ``app rate''. A fraction of those, defined as ``selfish rate'', will act only for themselves, namely refusing to forward packets from other sources.
 
-These will be the key to measure the quality of the strategy adopted at the \gls{batman} layer.
+User satisfaction, measured in these layers, will be the key to judge the strategy adopted at the \gls{batman} layer.
 Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with an high bitrate to the rest of the network.
+To do so, it has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
 
 \smallskip
 Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman}, channels and application layers, depicted in \autoref{fig:graph}.
@@ -127,19 +128,7 @@ Once all details have been defined, the overall communication scenario can be de
   \label{fig:graph}
 \end{figure}
 
-\subsection{Expected results}
-
-In order to be as general as possible, our sources of traffic are memoryless processes each one assigned to a specific node: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, it has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
-
-From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with others, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
-
-As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly, expecially when others still respects the agreement.
-
-The protocol is in fact designed in such a way that the altruistic path is more convenient for the nodes to pursue, pushing the rate of the selfish nodes close to zero. The collaboration will then turn out to be a \gls{ne} for the game played between all the connected entities.
-
-We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of users is selfish or network conditions degrade.
-
-All the relevant parameters that will be tuned are listed in \autoref{tab:params}.
+All the parameters of the network relevant for the upcoming study of the objective function are listed in \autoref{tab:params}.
 
 \renewcommand\theadalign{l}
 
@@ -160,6 +149,14 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 \label{tab:params}
 \end{table}
 
+\subsection{Expertiment steps}
+
+As presented above, two different strategies can be chosen by each \gls{batman} layer in order to maximize its objective function: either it can collaborate with others, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
+
+As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly, expecially when others still respects the agreement.
+
+The \gls{batman} protocol is for this reason designed in such a way that the altruistic path is more convenient for the nodes to pursue, pushing the rate of the selfish nodes close to zero. The collaboration will then turn out to be a \gls{ne} for the game played between all the connected entities.
+
 \section{Results} \label{sec:results}
 
 % Network performances between fair and unfair users varying
@@ -168,7 +165,7 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 % - channel quality
 
 A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth to others.
-Since this approach gives no substantial penalty to selfish nodes, they can still profit from the network without contributing.
+Since this approach gives no substantial penalty to selfish nodes, they can still profit from the network while making the experience worse for everyone else.
 
 As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then preferable to each other in terms of profit for the players.
 
@@ -183,6 +180,9 @@ As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate},
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame-app-rate}
 \end{figure}
+
+This creates a weaker network, since no incentive is given to the altruistic members from the point of view of the objective function.
+
 
 \section{Conclusion}
 
