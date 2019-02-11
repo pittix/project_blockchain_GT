@@ -38,9 +38,13 @@ def simulator_batman(args):
     G.clear()
 
     # create a number of batman layers, corresponding to nodes
+
+    # set deterministic number of selfish nodes: improves reliability of
+    # results in small scenarios
+
     batmans = {
         ip: BatmanLayer(ip,
-                        selfish=(random() < selfish_rate),
+                        selfish=(ip / node_num < selfish_rate),
                         position=(dim * random(), dim * random()))
         for ip in range(node_num)
     }
