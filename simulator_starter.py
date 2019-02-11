@@ -33,7 +33,7 @@ scenarios = [
 seeds = list(range(1000, 1100))
 
 # tunable parameters
-selfish_rates = np.linspace(0.1, 0.7, num=20)
+selfish_rates = np.logspace(-2, -1, num=20)
 app_rates = np.linspace(0.01, 0.05, num=10)
 
 print("Total number of combinations: {}".format(
