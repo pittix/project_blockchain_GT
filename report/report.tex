@@ -130,24 +130,16 @@ In order to be as general as possible, our network connects memoryless sources o
 
 From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with its own kind, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
 
-If the network doesn't apply any punishment, the selfish node is encouraged to act selfishly if the number of selfish node is small, otherwise its bitrate will drop as well. A plot of this case is shown in \ref{fig:no-blame}
+As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly, expecially when others still respects the agreement.
 
-\begin{figure}
-
-  \includegraphics{figures/obj_func_vs_selfish_rate_no_punish.eps}
-
-  \caption{Average bitrate in case no punishment is applied to selfish nodes}
-  \label{fig:no-blame}
-\end{figure}
-
-As we will show in the upcoming \autoref{sec:results}, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
+For this reason, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
 We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of its users are selfish or network conditions degrade.
 All the relevant parameters that will be tuned are listed in \autoref{tab:params}.
 
 \renewcommand\theadalign{l}
 
-\begin{table}[]
+\begin{table}[h]
 \resizebox{\linewidth}{!}{%
   \begin{tabular}{@{}lcl@{}}
     \toprule
@@ -164,7 +156,6 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 \label{tab:params}
 \end{table}
 
-
 % TODO bit of spoilers for results section
 
 \section{Results} \label{sec:results}
@@ -173,6 +164,24 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 % - percentage of unfair users
 % - requested traffic (number and intensity of apps)
 % - channel quality
+
+A naive conception of a distributed routing algorithm could rely on the fairness of the nodes in order to sustain the communication.
+This though gives no substantial penalty to selfish nodes that do not collaborate to the others.
+
+As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then preferable to each other in terms of profit for the players.
+
+\begin{figure}
+  \includegraphics{figures/obj_func_vs_selfish_rate_no_punish.eps}
+  \caption{Average bitrate in case no punishment is applied to selfish nodes}
+  \label{fig:no-blame}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{figures/obj_func_vs_app_rate_no_punish.eps}
+  \caption{Average bitrate in case no punishment is applied to selfish nodes}
+  \label{fig:no-blame-app-rate}
+\end{figure}
+
 
 \section{Conclusion}
 
