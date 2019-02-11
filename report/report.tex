@@ -5,7 +5,9 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
+\usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage{makecell}
 \usepackage{glossaries}
 \usepackage{textcomp}
 \usepackage{xcolor}
@@ -69,7 +71,8 @@ Similarly to what is done in traditional distance-vector routing protocols this 
 
 The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so the connections are more reliable and resilient to mobile and non-persistent nodes.
 
-In fact, a node fails, the other ones can immediately find new paths upon being notified the change of topology.
+In fact, if a node fails other ones can immediately find new paths upon being notified the change of topology.
+Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will drop all the packets coming from such a non-collaborative source.
 
 While for smaller networks such global table can span the whole set of nodes, for bigger networks fixed gateways could be set in order to reach other parts of the network. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
@@ -81,21 +84,20 @@ Like every de-centralized protocol, \gls{batman} relies on the contribution of a
 
 \subsection{Network setup}
 
-In order to study the protocol we decided to take an experimental approach, measuring objective functions of the nodes in a simulated setting.
+In order to study the protocol we decided to take an experimental approach, measuring objective functions of the players in a simulated setting.
 
-So, a certain number of entities were scattered uniformly across the simulation area, as shown in \autoref{fig:nodes}. This strategy allows to change topology simply switching the generator random seed and will be used for validating all our results.
+As customary in this kind of analysis, a certain number of nodes are scattered uniformly across a square simulation area, as shown in \autoref{fig:nodes}. This allows to change topology simply switching the generator random seed and will be used to validate all our results.
 
 \begin{figure}[h]
   \centering
-  \hspace{-0.7cm}%
-  \includegraphics[width=1.1\linewidth]{figures/example_graph}
+  \includegraphics[width=\linewidth]{figures/example_graph}
   \caption{Nodes, labeled by their IP, are connected each other wirelessly.}
   \label{fig:nodes}
 \end{figure}
 
-Once placed, each couple of nodes close enough were linked by means of a wireless fully reliable channel, characterized by a \gls{rtt} and a retransmission probability $p_r$, both function of the reciprocal distance.
+Once placed, each couple of close nodes are linked with wireless fully reliable channels, characterized by a \gls{rtt} and a retransmission probability $p_r$, both function of the reciprocal distance.
 
-This assumption on the channel characteristics reduces the model complexity while keeping an high degree of realism, as \gls{arq} strategies are common practice at all protocol stack levels.
+This assumption on the channel characteristics reduces the model complexity while keeping an decent degree of realism, as \gls{arq} strategies are common practice at all protocol stack levels.
 
 \begin{equation}
   \begin{split}
@@ -104,7 +106,14 @@ This assumption on the channel characteristics reduces the model complexity whil
   \end{split}
 \end{equation}
 
-Given previous hypothesis, communication can be described by message exchange in a directed graph made of \gls{batman}, channels and application layers, as shown in \autoref{fig:graph}.
+Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
+Applications are then randomly setup between couples of nodes, according to a probability coefficient, later called ``app rate''.
+
+These will be the key to measure the quality of the strategy adopted at the \gls{batman} layer.
+Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with a good bitrate to the rest of the network.
+
+\smallskip
+Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman}, channels and application layers, depicted in \autoref{fig:graph}.
 
 \begin{figure}[h]
   \centering
@@ -121,7 +130,28 @@ From a game theoretical point of view, two different strategies can be chosen by
 
 As we will show in the upcoming \autoref{sec:results}, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
-We will furthermore analyze in which terms the network can sustain itself when a growing fraction of its users are selfish or network conditions degrade.
+We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of its users are selfish or network conditions degrade.
+All the relevant parameters that will be tuned are listed in \autoref{tab:params}.
+
+\renewcommand\theadalign{l}
+
+\begin{table}[]
+\resizebox{\linewidth}{!}{%
+  \begin{tabular}{@{}lcl@{}}
+    \toprule
+    Parameter     & Values range & Description                            \\ \midrule
+    L             & 100m ÷ 1000m & Network area dimension                 \\
+    D             & 100m ÷ 200m  & Distance parameter for $p_r$           \\
+    N             & 10 ÷ 100     & Number of nodes                        \\
+    selfish\_rate & 0.01 ÷ 0.1   & Fraction of selfish nodes              \\
+    app\_rate     & 0.01 ÷ 0.05  & \thead{Fraction of connected \\couples of nodes} \\ \bottomrule
+  \end{tabular}%
+}
+\vspace{0.1cm}
+\caption{Relevant parameters for building the network}
+\label{tab:params}
+\end{table}
+
 
 % TODO bit of spoilers for results section
 
@@ -139,4 +169,8 @@ We will furthermore analyze in which terms the network can sustain itself when a
 
 \end{document}
 
-%%% Local Variables: %%% mode: latex %%% TeX-master: t %%% End:
+%%% Local Variables:
+%%% mode: latex
+%%% fill-column: 90002000
+%%% TeX-master: t
+%%% End:
