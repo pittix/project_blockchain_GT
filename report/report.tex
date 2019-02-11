@@ -41,7 +41,7 @@ enrico.lovisotto@studenti.unipd.it}
 \begin{abstract}
   In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control.
 
-  The basic idea for this kind of systems is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
+  The key point to make this kind of systems feasible and reliable is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
 
   We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when collaboration is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}.
 \end{abstract}
@@ -50,7 +50,7 @@ enrico.lovisotto@studenti.unipd.it}
 
 % - history\\
 
-\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network.
+\gls{batman} was created in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network.
 
 In 2008 it became \gls{batman}-adv breaking the ISO/OSI stack and exploiting knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network.
 
@@ -69,14 +69,14 @@ Since then, the protocol was widely tested, thanks to the Freifunk initiative, w
 
 The protocol \gls{batman}-adv creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
 
-Similarly to what is done in traditional distance-vector routing protocols this information will be used to build a local table that associates to each known remote destination to the next hop for the packet to cross.
+Similarly to what is done in traditional distance-vector routing protocols this information is used to build a local table that associates to each known remote destination to the next hop for the packet to cross.
 
-The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so the connections are more reliable and resilient to mobile and non-persistent nodes.
+The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so connections are more reliable and resilient even with mobile and non-persistent users.
 
 In fact, when a node fails other ones can immediately find new paths upon being notified the change of topology.
-Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will drop all the packets coming from such a non-collaborative source.
+Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will ignore all the packets coming from it.
 
-While for smaller networks such global table can span the whole set of nodes, for bigger networks fixed gateways could be set in order to reach other parts of the network. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
+While for smaller networks such global table can span the whole set of nodes, for bigger ones fixed gateways can be set in order to reach far destinations. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
 \smallskip
 
@@ -111,7 +111,8 @@ where $c$ is the speed of light, $t_{proc}$ the receiver processing time and $d$
 \smallskip
 
 Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
-Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, later called ``app rate''.
+
+Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, called ``app rate''.
 
 These will be the key to measure the quality of the strategy adopted at the \gls{batman} layer.
 Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with an high bitrate to the rest of the network.
@@ -128,12 +129,7 @@ Once all details have been defined, the overall communication scenario can be de
 
 \subsection{Expected results}
 
-In order to be as general as possible, our network connects memoryless sources of traffic communicating to each other: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, node have to rely to a certain extent on their neighbours, since not all destinations are reachable in a single hop.
-
-From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with its own kind, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
-
-If the network doesn't apply any punishment, the selfish node is encouraged to act selfishly if the number of selfish node is small, otherwise its bitrate will drop as well. With 100 nodes, if th selfish rate is less than $0.167$ is slightly convenient to act selfishly, over that bound it's slightly convenient to act altruistically.
- A plot of this case is shown in \ref{fig:no-blame}
+In order to be as general as possible, our sources of traffic are memoryless processes each one assigned to a specific node: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, it has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
 
 \begin{figure}
  \includegraphics[width=\linewidth]{figures/obj_func_vs_selfish_rate_no_punish.eps}
@@ -141,6 +137,9 @@ If the network doesn't apply any punishment, the selfish node is encouraged to a
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame}
 \end{figure}
+
+From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with others, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
+
 As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly expecially when others still respects the agreement, which relates to a ``bound'' of $0.167$: if the selfish rate is higher, is more convenient to act altruistically.
 A plot of the bitrate in the case where the selfish nodes are not punished is shown in \ref{fig:no-blame}
 
@@ -148,7 +147,8 @@ A plot of the bitrate in the case where the selfish nodes are not punished is sh
 
 For this reason, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
-We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of its users are selfish or network conditions degrade.
+We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of users is selfish or network conditions degrade.
+
 All the relevant parameters that will be tuned are listed in \autoref{tab:params}.
 
 \renewcommand\theadalign{l}
@@ -169,8 +169,6 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 \caption{Relevant parameters for building the network}
 \label{tab:params}
 \end{table}
-
-% TODO bit of spoilers for results section
 
 \section{Results} \label{sec:results}
 
