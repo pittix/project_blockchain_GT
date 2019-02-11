@@ -104,15 +104,17 @@ This assumption on the channel characteristics reduces the model complexity whil
 \begin{equation}
   \begin{split}
     p_r & = e^{-\frac{d}{D}} \\
-    RTT &= 2 \frac{d}{c_0} + t_{proc}
+    RTT &= 2 \frac{d}{c} + t_{proc}
   \end{split}
 \end{equation}
+where $c$ is the speed of light, $t_{proc}$ the receiver processing time and $d$ the distance between the two nodes.
+\smallskip
 
 Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
-Applications are then randomly setup between couples of nodes, according to a probability coefficient, later called ``app rate''.
+Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, later called ``app rate''.
 
 These will be the key to measure the quality of the strategy adopted at the \gls{batman} layer.
-Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with a good bitrate to the rest of the network.
+Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with an high bitrate to the rest of the network.
 
 \smallskip
 Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman}, channels and application layers, depicted in \autoref{fig:graph}.
