@@ -1,15 +1,21 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-data = pd.read_csv("results/averaged_simulations.csv.gz")
+font = {'family' : 'normal',
+        'size'   : 10}
 
-data = data.groupby(['dim',
-                     'dist_lim',
-                     'node_num',
-                     'stop_time',
-                     'selfish_rate',
-                     'app_rate']).sum()
+matplotlib.rc('font', **font)
+
+FIXED_PARAM = 'selfish_rate'
+
+data = pd.read_csv("results/all_results_old.csv.gz")
+
+data = data[
+    (data['node_num'] == 100) &
+    (data['app_rate'] == data['app_rate'][0])
+].groupby([FIXED_PARAM]).sum()
 
 data['selfish'] /= data['selfish_num']
 data['altruistic'] /= data['altruistic_num']
@@ -21,9 +27,8 @@ del data['altruistic_num']
 data = data.reset_index()
 
 # plot obj_func vs one of the parameters
-FIXED_PARAM = 'selfish_rate'
 
-fig = plt.figure(figsize=(3, 3), frameon=False)
+fig = plt.figure(figsize=(3.5, 3), frameon=False)
 ax = fig.gca()
 
 data.plot(ax=ax,
@@ -37,5 +42,5 @@ ax.set(xlabel=FIXED_PARAM.replace('_', ' ').capitalize(),
        ylabel="Objective function")
 
 plt.tight_layout()
-plt.show()
-# plt.savefig('report/figures/obj_func_vs_{}.eps'.format(FIXED_PARAM))
+# plt.show()
+plt.savefig('report/figures/obj_func_vs_{}.eps'.format(FIXED_PARAM))
