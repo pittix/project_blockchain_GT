@@ -69,12 +69,13 @@ Since then, the protocol was widely tested, thanks to the Freifunk initiative, w
 
 The protocol \gls{batman}-adv creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
 
-Similarly to what is done in traditional distance-vector routing protocols this information is used to build a local table that associates to each known remote destination to the next hop for the packet to cross.
+Similarly to what is done in traditional distance-vector routing protocols, this information is used to build a local table that associates each known remote destination to the next hop for the packet to cross.
 
-The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so connections are more reliable and resilient even with mobile and non-persistent users.
+The peculiar feature of the \gls{batman} protocol is that together with the alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network, and so connections are more reliable and resilient even with mobile and non-persistent users.
 
 In fact, when a node fails other ones can immediately find new paths upon being notified the change of topology.
 Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will ignore all the packets coming from it.
+This type of behaviour is pretty common to many decentralized networks, like MANETs \cite{MANETs} and protocols, like BitTorrent or ED2K, where a node that doesn't cooperate via the upload has a limited download capability.\cite{BitTorrent} \cite{ed2k}
 
 While for smaller networks such global table can span the whole set of nodes, for bigger ones fixed gateways can be set in order to reach far destinations. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
@@ -204,7 +205,7 @@ As proved in our study case of a wireless network, collaboration among participa
 Once this incentive has been set up, the systems is feasible and reliable even when a fraction of the users does not comply to the proposed \gls{ne} strategy.
 
 \nocite{*}
-% \bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtran}
 \bibliography{report}
 
 \end{document}
