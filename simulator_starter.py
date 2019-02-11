@@ -1,6 +1,7 @@
 import argparse
 import logging
 import multiprocessing as mp
+import subprocess
 import sys
 import time
 
@@ -55,6 +56,10 @@ def combinations():
 
 available_threads = mp.cpu_count()
 p = mp.Pool(available_threads)
+
+# clean old results
+subprocess.call("mv results/simulation_results.hdf5 results/simulation_results.hdf5.bak", shell=True)
+subprocess.call("rm -rf /tmp/log_files/", shell=True)
 
 store = pd.HDFStore("results/simulation_results.hdf5")
 
