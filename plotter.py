@@ -10,11 +10,11 @@ matplotlib.rc('font', **font)
 
 FIXED_PARAM = 'selfish_rate'
 
-data = pd.read_csv("results/all_results_old.csv.gz")
+data = pd.read_hdf("results/simulation_results.hdf5")
 
 data = data[
     (data['node_num'] == 100) &
-    (data['app_rate'] == data['app_rate'][0])
+    (data['app_rate'] == data['app_rate'][1])
 ].groupby([FIXED_PARAM]).sum()
 
 data['selfish'] /= data['selfish_num']
@@ -43,4 +43,5 @@ ax.set(xlabel=FIXED_PARAM.replace('_', ' ').capitalize(),
 
 plt.tight_layout()
 # plt.show()
-plt.savefig('report/figures/obj_func_vs_{}.eps'.format(FIXED_PARAM))
+oth = input("suffix for file, no space allowed")
+plt.savefig('report/figures/PUNISHobj_func_vs_{}_oth.eps'.format(FIXED_PARAM, oth))
