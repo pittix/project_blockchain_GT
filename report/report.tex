@@ -157,6 +157,7 @@ As we will show in the upcoming \autoref{sec:results}, if there were no form of 
 
 The \gls{batman} protocol is for this reason designed in such a way that the altruistic path is more convenient for the nodes to pursue, pushing the rate of the selfish nodes close to zero. The collaboration will then turn out to be a \gls{ne} for the game played between all the connected entities.
 
+\clearpage
 \section{Results} \label{sec:results}
 
 % Network performances between fair and unfair users varying
@@ -172,13 +173,13 @@ Over this limit, playing altruistically is a bit incentivized, but the overall g
 
 This makes selfish behaviour a viable option, showing a big argument against this simple approach to distributed routing.
 
-\begin{figure}
+\begin{figure}[h]
   \includegraphics{figures/obj_func_vs_selfish_rate_no_punish.eps}
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
   \includegraphics{figures/obj_func_vs_app_rate_no_punish.eps}
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame-app-rate}
