@@ -33,5 +33,9 @@ data.plot(ax=ax,
           style='o-',
           title='Average node bitrate')
 
+ax.set(xlabel=FIXED_PARAM.replace('_', ' ').capitalize(),
+       ylabel="Objective function")
+
+plt.tight_layout()
 plt.show()
-# plt.savefig('report/figures/obj_func_vs_{}'.format(FIXED_PARAM))
+# plt.savefig('report/figures/obj_func_vs_{}.eps'.format(FIXED_PARAM))
