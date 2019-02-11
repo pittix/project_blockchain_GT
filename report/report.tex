@@ -104,15 +104,17 @@ This assumption on the channel characteristics reduces the model complexity whil
 \begin{equation}
   \begin{split}
     p_r & = e^{-\frac{d}{D}} \\
-    RTT &= 2 \frac{d}{c_0} + t_{proc}
+    RTT &= 2 \frac{d}{c} + t_{proc}
   \end{split}
 \end{equation}
+where $c$ is the speed of light, $t_{proc}$ the receiver processing time and $d$ the distance between the two nodes.
+\smallskip
 
 Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
-Applications are then randomly setup between couples of nodes, according to a probability coefficient, later called ``app rate''.
+Applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, later called ``app rate''.
 
 These will be the key to measure the quality of the strategy adopted at the \gls{batman} layer.
-Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with a good bitrate to the rest of the network.
+Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with an high bitrate to the rest of the network.
 
 \smallskip
 Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman}, channels and application layers, depicted in \autoref{fig:graph}.
@@ -134,21 +136,24 @@ If the network doesn't apply any punishment, the selfish node is encouraged to a
  A plot of this case is shown in \ref{fig:no-blame}
 
 \begin{figure}
-
-  \includegraphics[width=\linewidth]{figures/app_rate_0_1-no-punish.png}
+ \includegraphics[width=\linewidth]{figures/obj_func_vs_selfish_rate_no_punish.eps}
 
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame}
 \end{figure}
+As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly expecially when others still respects the agreement, which relates to a ``bound'' of $0.167$: if the selfish rate is higher, is more convenient to act altruistically.
+A plot of the bitrate in the case where the selfish nodes are not punished is shown in \ref{fig:no-blame}
 
-As we will show in the upcoming \autoref{sec:results}, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
+
+
+For this reason, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
 We will furthermore analyze in which terms the network can sustain itself when its conditions change, such as a growing fraction of its users are selfish or network conditions degrade.
 All the relevant parameters that will be tuned are listed in \autoref{tab:params}.
 
 \renewcommand\theadalign{l}
 
-\begin{table}[]
+\begin{table}[h]
 \resizebox{\linewidth}{!}{%
   \begin{tabular}{@{}lcl@{}}
     \toprule
@@ -165,7 +170,6 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 \label{tab:params}
 \end{table}
 
-
 % TODO bit of spoilers for results section
 
 \section{Results} \label{sec:results}
@@ -174,6 +178,24 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 % - percentage of unfair users
 % - requested traffic (number and intensity of apps)
 % - channel quality
+
+A naive conception of a distributed routing algorithm could rely on the fairness of the nodes in order to sustain the communication.
+This though gives no substantial penalty to selfish nodes that do not collaborate to the others.
+
+As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then preferable to each other in terms of profit for the players.
+
+\begin{figure}
+  \includegraphics{figures/obj_func_vs_selfish_rate_no_punish.eps}
+  \caption{Average bitrate in case no punishment is applied to selfish nodes}
+  \label{fig:no-blame}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{figures/obj_func_vs_app_rate_no_punish.eps}
+  \caption{Average bitrate in case no punishment is applied to selfish nodes}
+  \label{fig:no-blame-app-rate}
+\end{figure}
+
 
 \section{Conclusion}
 
