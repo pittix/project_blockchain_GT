@@ -41,7 +41,7 @@ enrico.lovisotto@studenti.unipd.it}
 \begin{abstract}
   In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control.
 
-  The basic idea for this kind of systems is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
+  The key point to make this kind of systems feasible and reliable is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
 
   We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when collaboration is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}.
 \end{abstract}
@@ -50,7 +50,7 @@ enrico.lovisotto@studenti.unipd.it}
 
 % - history\\
 
-\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network.
+\gls{batman} was created in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network.
 
 In 2008 it became \gls{batman}-adv breaking the ISO/OSI stack and exploiting knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network.
 
@@ -69,14 +69,14 @@ Since then, the protocol was widely tested, thanks to the Freifunk initiative, w
 
 The protocol \gls{batman}-adv creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
 
-Similarly to what is done in traditional distance-vector routing protocols this information will be used to build a local table that associates to each known remote destination to the next hop for the packet to cross.
+Similarly to what is done in traditional distance-vector routing protocols this information is used to build a local table that associates to each known remote destination to the next hop for the packet to cross.
 
-The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so the connections are more reliable and resilient to mobile and non-persistent nodes.
+The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so connections are more reliable and resilient even with mobile and non-persistent users.
 
 In fact, when a node fails other ones can immediately find new paths upon being notified the change of topology.
-Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will drop all the packets coming from such a non-collaborative source.
+Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will ignore all the packets coming from it.
 
-While for smaller networks such global table can span the whole set of nodes, for bigger networks fixed gateways could be set in order to reach other parts of the network. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
+While for smaller networks such global table can span the whole set of nodes, for bigger ones fixed gateways can be set in order to reach far destinations. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
 \smallskip
 
