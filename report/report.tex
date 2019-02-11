@@ -167,8 +167,8 @@ All the relevant parameters that will be tuned are listed in \autoref{tab:params
 % - requested traffic (number and intensity of apps)
 % - channel quality
 
-A naive conception of a distributed routing algorithm could rely on the fairness of the nodes in order to sustain the communication.
-This though gives no substantial penalty to selfish nodes that do not collaborate to the others.
+A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth to others.
+Since this approach gives no substantial penalty to selfish nodes, they can still profit from the network without contributing.
 
 As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then preferable to each other in terms of profit for the players.
 
@@ -183,7 +183,6 @@ As can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate},
   \caption{Average bitrate in case no punishment is applied to selfish nodes}
   \label{fig:no-blame-app-rate}
 \end{figure}
-
 
 \section{Conclusion}
 
