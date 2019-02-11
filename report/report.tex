@@ -45,59 +45,37 @@ enrico.lovisotto@studenti.unipd.it}
 \section{BATMAN protocol overview}
 
 % - history\\
-\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to
-create network using their devices as nodes that routes traffic and transmit
-data to the network.
 
-In 2008 \gls{batman} became \gls{batman}-adv breaking the ISO/OSI stack and
-exploiting the knowledge at layer 2 and 3 to efficiently find paths and route
-the packets arriving to each node. During these years the protocol evolved and
-in 2011 became officially supported by the Linux Kernel, allowing all PCs to
-become a node in the network.
+\gls{batman} was born in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network.
 
-Since then, the protocol was widely tested, thanks to the Freifunk initiative,
-which aims to bring to everyone a decentralized WiFi network and it's spread to
-all Germany.
+In 2008 \gls{batman} became \gls{batman}-adv breaking the ISO/OSI stack and exploiting the knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network.
+
+Since then, the protocol was widely tested, thanks to the Freifunk initiative, which aims to bring to everyone a decentralized WiFi network and it's spread to all Germany.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/logo.pdf}
-  \caption{Logo of \gls{batman} project.}
+  \caption{Logo of \gls{batman} project}
   \label{fig:batman_logo}
 \end{figure}
 
 \smallskip
 
 % - how does the protocol work: principles
-The protocol \gls{batman}-adv creates a network of ad-hoc connections where each
-node periodically notifies the neighbours of its presence using discovery
-messages.
 
-Similarly to what is done in traditional distance-vector routing protocols this
-information will be used to build a local table that associates to each known
-remote destination to the next hop for the packet to cross.
+The protocol \gls{batman}-adv creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
 
-The peculiar feature of the \gls{batman} protocol is that together with this
-alive messages the nodes will periodically exchange their own local forwarding
-scheme. The emerging shared knowledge makes the connected entities aware of the
-global structure of the network and so the connections are more reliable and
-resilient to mobile and non-persistent nodes.
+Similarly to what is done in traditional distance-vector routing protocols this information will be used to build a local table that associates to each known remote destination to the next hop for the packet to cross.
 
-In fact, a node fails, the other ones can immediately find new paths upon being
-notified the change of topology.
+The peculiar feature of the \gls{batman} protocol is that together with this alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network and so the connections are more reliable and resilient to mobile and non-persistent nodes.
 
-While for smaller networks such global table can span the whole set of nodes,
-for bigger networks fixed gateways could be set in order to reach other parts of
-the network. This reduces the information required at each node and allows
-\gls{batman}-adv to run in home routers.
+In fact, a node fails, the other ones can immediately find new paths upon being notified the change of topology.
+
+While for smaller networks such global table can span the whole set of nodes, for bigger networks fixed gateways could be set in order to reach other parts of the network. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
 \smallskip
 
-Like every de-centralized protocol, \gls{batman} relies on the contribution of
-all involved entities in order to sustain itself. Each node plays then a game,
-choosing between collaboration and egoism: this project aims to assess when the
-former is preferred to the latter and what kinds of rewards are needed for the
-players for the wanted behaviour to be the most convenient.
+Like every de-centralized protocol, \gls{batman} relies on the contribution of all involved entities in order to sustain itself. Each node plays then a game, choosing between collaboration and egoism: this project aims to assess when the former is preferred to the latter and what kinds of rewards are needed for the players for the wanted behaviour to be the most convenient.
 
 \section{Methodology}
 
@@ -105,9 +83,7 @@ players for the wanted behaviour to be the most convenient.
 
 In order to study the protocol we decided to take an experimental approach, measuring objective functions of the nodes in a simulated setting.
 
-So, a certain number of entities were scattered uniformly across the simulation
-area, as shown in \autoref{fig:nodes}. This strategy allows to change topology
-simply switching the generator random seed and will be used for validating all our results.
+So, a certain number of entities were scattered uniformly across the simulation area, as shown in \autoref{fig:nodes}. This strategy allows to change topology simply switching the generator random seed and will be used for validating all our results.
 
 \begin{figure}[h]
   \centering
@@ -117,13 +93,9 @@ simply switching the generator random seed and will be used for validating all o
   \label{fig:nodes}
 \end{figure}
 
-Once placed, each couple of nodes close enough were linked by means of a
-wireless fully reliable channel, characterized by a \gls{rtt} and a
-retransmission probability $p_r$, both function of the reciprocal distance.
+Once placed, each couple of nodes close enough were linked by means of a wireless fully reliable channel, characterized by a \gls{rtt} and a retransmission probability $p_r$, both function of the reciprocal distance.
 
-This assumption on the channel characteristics reduces the model complexity
-while keeping an high degree of realism, as \gls{arq} strategies are common
-practice at all protocol stack levels.
+This assumption on the channel characteristics reduces the model complexity while keeping an high degree of realism, as \gls{arq} strategies are common practice at all protocol stack levels.
 
 \begin{equation}
   \begin{split}
@@ -132,9 +104,7 @@ practice at all protocol stack levels.
   \end{split}
 \end{equation}
 
-Given previous hypothesis, communication can be described by message exchange in
-a directed graph made of \gls{batman}, channels and application layers, as shown
-in \autoref{fig:graph}.
+Given previous hypothesis, communication can be described by message exchange in a directed graph made of \gls{batman}, channels and application layers, as shown in \autoref{fig:graph}.
 
 \begin{figure}[h]
   \centering
@@ -145,33 +115,22 @@ in \autoref{fig:graph}.
 
 \subsection{Expected results}
 
-In order to be as general as possible, our network connects memoryless sources
-of traffic communicating to each other: the \gls{batman} layer has the goal to
-serve its users as best as it can. To do so, node have to rely to a certain
-extent on their neighbours, since not all destinations are reachable in a single
-hop.
+In order to be as general as possible, our network connects memoryless sources of traffic communicating to each other: the \gls{batman} layer has the goal to serve its users as best as it can. To do so, node have to rely to a certain extent on their neighbours, since not all destinations are reachable in a single hop.
 
-From a game theoretical point of view, two different strategies can be chosen by
-each layer in order to maximize its objective: either it can collaborate with
-its own kind, using part of its bandwidth to forward packets of other sources,
-or selfishly transmit only its own packets.
+From a game theoretical point of view, two different strategies can be chosen by each layer in order to maximize its objective: either it can collaborate with its own kind, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
 
-As we will show in the upcoming \autoref{sec:results}, the protocol is designed
-in such a way that the altruistic path is more convenient for the nodes to
-pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game
-played between all the connected entities.
+As we will show in the upcoming \autoref{sec:results}, the protocol is designed in such a way that the altruistic path is more convenient for the nodes to pursue. The collaboration will turn out to be, in fact, a \gls{ne} for the game played between all the connected entities.
 
-We will furthermore analyze in which terms the network can sustain itself when a
-growing fraction of its users are selfish or network conditions degrade.
+We will furthermore analyze in which terms the network can sustain itself when a growing fraction of its users are selfish or network conditions degrade.
 
 % TODO bit of spoilers for results section
 
 \section{Results} \label{sec:results}
 
-Network performances between fair and unfair users varying
-- percentage of unfair users
-- requested traffic (number and intensity of apps)
-- channel quality
+% Network performances between fair and unfair users varying
+% - percentage of unfair users
+% - requested traffic (number and intensity of apps)
+% - channel quality
 
 \section{Conclusion}
 
@@ -180,7 +139,4 @@ Network performances between fair and unfair users varying
 
 \end{document}
 
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
+%%% Local Variables: %%% mode: latex %%% TeX-master: t %%% End:
