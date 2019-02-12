@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[conference,10.5pt]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 \usepackage{cite}
@@ -39,11 +39,11 @@ enrico.lovisotto@studenti.unipd.it}
 \maketitle
 
 \begin{abstract}
-  In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control.
+  In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control and experiencing some free riding nodes.
 
   The key point to make this kind of systems feasible and reliable is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
 
-  We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when collaboration is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}.
+  We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when collaboration is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}, and when nodes are incouraged to act selfishly deceiving the altruistic nodes.
 \end{abstract}
 
 \section{Introduction}
@@ -83,14 +83,14 @@ While for smaller networks such global table can span the whole set of nodes, fo
   \centering
   \includegraphics[width=0.8\linewidth]{figures/batman_antenna}
   \caption{Antenna installed by Freifunk project}
-  \label{fig:batman_logo}
+  \label{fig:freifunk_img}
 \end{figure}
 
 \smallskip
 
 Like every de-centralized protocol, \gls{batman} relies on the contribution of all involved entities in order to sustain itself. Each node plays then a game, choosing between collaboration and egoism: this project aims to assess when the former is preferred to the latter and what kinds of rewards are needed for the players for the wanted behaviour to be the most convenient.
 
-\clearpage
+% \clearpage
 \section{Methodology}
 
 \subsection{Network setup}
@@ -129,7 +129,7 @@ To do so, it has to rely to a certain extent on its neighbours, since not all de
 
 \smallskip
 Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman}, channels and application layers, depicted in \autoref{fig:graph}.
-We do not model packet collisions explicitly, as they are already included in the $p_r$. Another advantage is that we can treat the channel as a M/M/1 queue whose service is the packet delivery to the following step in the path.
+We do not model packet collisions explicitly, as they are already included in the $p_r$. Another advantage is that we can treat the channel as a M/G/1 queue whose service is the packet delivery to the following step in the path.
 Once the next hop has been reached, the node will properly handle the data, forwarding them until the destination.
 
 \begin{figure}[h]
@@ -201,8 +201,24 @@ This makes selfish behaviour a viable option, showing a big argument against thi
 
 The \gls{batman} protocol tackles this issue creating a reputation score for each one of the members of the network, that increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
 
-As shown in \autoref{fig:selfish-rate}, the altruistic way is always the preferred one, although it becomes less and less convenient when the ratio of selfish node grows. This has to be expected, as the overall performance drops when data are not being delivered to destination.
+The altruistic way is always the preferred one, although it becomes less and less convenient when the ratio of selfish node grows. This has to be expected, as the overall performance drops when data are not being delivered to destination.
 
+
+Another possible critical situation for the network is the case shown in \autoref{fig:parabola} where as the packet generation rate, namely app rate, is low enough so that the network is not able to evaluate if there are some selfish nodes, until there are more than half nodes. In this case, the network collapses, and both selfish and altruistic nodes experience a drop on the bitrate. With higher app rate, the network can find before the selfish nodes and can isolate them easily, as shown in \autoref{fig:par02}.
+\begin{figure}
+  \includegraphics{figures/obj_func_vs_selfish_rate_parabola_02.eps}
+  % \vspace0.1
+  \includegraphics{figures/obj_func_vs_selfish_rate_parabola02_zoom.eps}
+  \caption{In this case the selfishness is punished.}
+  \label{fig:par02}
+\end{figure}
+
+
+\begin{figure}
+  \includegraphics{figures/obj_func_vs_selfish_rate_parabola.eps}
+  \caption{With an app rate low enough, the network can't exclude the selfish nodes.}
+  \label{fig:parabola}
+\end{figure}
 % \begin{figure}[h]
 %   \includegraphics{figures/obj_func_vs_selfish_rate.eps}
 %   \caption{Average bitrate when selfish nodes are penalized}
@@ -214,7 +230,10 @@ As shown in \autoref{fig:selfish-rate}, the altruistic way is always the preferr
 In this course project we showed how game theory can be the key to understand and design distributed routing protocols.
 
 As proved in our study case of a wireless network, collaboration among participants has to be promoted with some kind of punishment for selfish behaviour.
-Once this incentive has been set up, the systems is feasible and reliable even when a fraction of the users does not comply to the proposed \gls{ne} strategy.
+Once this incentive has been set up, the systems is feasible and reliable if a fraction of the users does not comply to the proposed \gls{ne} strategy and the number of packets transmitted over time is high enough. In this case, we showed that the network performs well with the altruistic nodes and the egoistic ones are isolated and excluded from the network routing system.
+
+So, we showed some critical scenarios, where the network is prone to collapse as the number of nodes acting selfishly is too high. The other critical scenario is when the network doesn't have a lot of traffic, and the selfishness is promoted as egoistic nodes can deceive the other altruistic ones on their behaviour.
+
 
 \nocite{*}
 \bibliographystyle{IEEEtran}
