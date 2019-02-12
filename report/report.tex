@@ -15,7 +15,7 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \newacronym{batman}{B.A.T.M.A.N.}{Better Approach To Mobile Adhoc Networking}
-\newacronym{batman2}{B.A.T.M.A.N.-adv}{B.A.T.M.A.N.- Advanced}
+\newacronym{batman2}{B.A.T.M.A.N.-adv}{B.A.T.M.A.N.-Advanced}
 \newacronym{rtt}{RTT}{Round Trip Time}
 \newacronym{arq}{ARQ}{Automatic Repeat-reQuest}
 \newacronym{ne}{NE}{Nash Equilibrium}
@@ -39,11 +39,11 @@ enrico.lovisotto@studenti.unipd.it}
 \maketitle
 
 \begin{abstract}
-  In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control and experiencing some free riding nodes.
+  In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control, even though it is experiencing free riding nodes.
 
   To make this kind of systems feasible and reliable, the key point is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
 
-  We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when collaboration is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}, and when nodes are incouraged to act selfishly deceiving the altruistic nodes.
+  We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when cooperation is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}, and when nodes are incouraged to act selfishly deceiving the altruistic nodes.
 \end{abstract}
 
 \section{Introduction}
@@ -66,7 +66,7 @@ Since then, the protocol was widely tested,  thanks to the Freifunk initiative, 
 \smallskip
 
 % - how does the protocol work: principles
-Before starting with the problem analysis, it is better to define how \gls{batman2} works to be able to run efficiently the simulations.
+Before starting with the problem analysis, it is better to introduce how \gls{batman2} works and how it will be modeled in our simulation.
 
 The protocol creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
 
@@ -75,8 +75,8 @@ Similarly to what is done in traditional distance-vector routing protocols, this
 The peculiar feature of the \gls{batman2} protocol is that, together with the alive messages, the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network, and so connections are more reliable and resilient even with mobile and non-persistent users.
 
 In fact, when a node fails other ones can immediately find new paths upon being notified the change of topology.
-Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will ignore all the packets coming from it.
-This type of behaviour is pretty common to many decentralized networks, like MANETs \cite{MANETs}, and protocols, like BitTorrent or ED2K, for which the policy of a non cooperating node, i.e. it does not upload, has the repercussion of a limited download capability.\cite{BitTorrent,ed2k}
+Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon find that its behaviour is unfair and will ignore all the packets coming from it.
+This type of behaviour is pretty common in many decentralized networks, like MANETs \cite{MANETs}, and protocols, like BitTorrent or ED2K, for which the policy of a non-cooperating node, i.e. it does not upload, has the repercussion of a limited download capability.\cite{BitTorrent,ed2k}
 
 While for smaller networks such global table can span the whole set of nodes, for bigger ones fixed gateways can be set in order to reach far destinations. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
@@ -89,7 +89,7 @@ While for smaller networks such global table can span the whole set of nodes, fo
 
 \smallskip
 
-Like every de-centralized protocol, \gls{batman2} relies on the contribution of all involved entities in order to sustain itself. Each node plays then a game, choosing between collaboration and egoism: this project aims to assess when the former is preferred to the latter and what kinds of rewards are needed for the players for the wanted behaviour to be the most convenient.
+Like every de-centralized protocol, \gls{batman2} relies on the contribution of all involved entities in order to sustain itself. Each node plays then a game choosing between collaboration and egoism: this project aims to assess when the former is preferred to the latter, and what kinds of rewards are needed by the players for the wanted behaviour to be the most convenient.
 
 % \clearpage
 \section{Methodology}
@@ -120,19 +120,19 @@ This assumption on the channel characteristics reduces the model complexity whil
 where $c$ is the speed of light, $t_{proc}$ the receiver processing time and $d$ the distance between the two nodes.
 \smallskip
 
-Up to this point of network building, nodes are able to communicate but there are still no users for our infrastructure.
+Up to this point of network building, nodes are able to communicate, but there are still no users of our infrastructure.
 
 Memoryless applications are then randomly and uniformly setup between pairs of points, according to a probability coefficient, called ``app rate''.
-A fraction of the \gls{batman2} layers was then set to let the node act selfishly according to a rate, defined as ``selfish rate''. The non cooperating nodes, then, will receive all the packets, and if they are not meant for them, the data will be discarded instead of being forwarded.
+A fraction of the \gls{batman2} layers was then set to let the node act selfishly according to a metric, defined as ``selfish rate''. The non cooperating nodes, then, will receive all the packets, and the data will be discarded if not meant for them.
 
-User satisfaction, measured in these layers, will be the key to judge the strategy adopted at the \gls{batman2} layer.
+User satisfaction, measured in these layers, will be the key to judge the strategy adopted at the \gls{batman2} level.
 Regardless of the cooperation or the selfishness of their routing units, which users in fact don't know nor care about, a good node can be easily recognized as the one whose applications are served with an high bitrate toward the rest of the network.
-To be able to fastly deliver data, each node  has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
-The reliability of each hop, then, can be measured with the forwarding: a selfish node that drops packets, will be soon identified as unreliable and its data will not be forwarded anymore.
+To fastly deliver data, each node has to rely to a certain extent on its neighbours, since not all destinations are reachable in a single hop.
+The reliability of each device, then, can be measured with its regularity in forwarding packets: a selfish node will be soon identified as unreliable and its data will not be forwarded anymore.
 
 \smallskip
-Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman2}, channels and application layers, depicted in \autoref{fig:graph}.
-We do not model packet collisions explicitly, as they are already included in the $p_r$. Another advantage is that we can treat the channel as a M/G/1 queue whose service is the packet delivery to the following step in the path.
+Once all details have been defined, the overall communication scenario can be described by messages exchanged in a directed graph made of \gls{batman2}, channels, and application layers, depicted in \autoref{fig:graph}.
+We do not model packet collisions explicitly, as they are already considered in the $p_r$ coefficient: another advantage of this assumption is that we can treat the channel as a M/G/1 queue whose service is the packet delivery to the following step in the path.
 Once the next hop has been reached, the node will properly handle the data, forwarding them until the destination.
 
 \begin{figure}[h]
@@ -147,6 +147,7 @@ All the parameters of the network, relevant for the upcoming study of the object
 \renewcommand\theadalign{l}
 
 \begin{table}[h]
+\vspace{0.3cm}
 \resizebox{\linewidth}{!}{%
   \begin{tabular}{@{}lcl@{}}
     \toprule
@@ -163,15 +164,16 @@ All the parameters of the network, relevant for the upcoming study of the object
 \label{tab:params}
 \end{table}
 
+\clearpage
 \subsection{Expertiment steps}
 
 As presented above, two different strategies can be chosen by each \gls{batman2} layer in order to maximize its objective function: either it can collaborate with others, using part of its bandwidth to forward packets of other sources, or selfishly transmit only its own packets.
 
-As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, nodes would be encouraged to act selfishly, expecially when others still respects the agreement.
+As we will show in the upcoming \autoref{sec:results}, if there were no form of punishment, devices would be encouraged to act selfishly, expecially when others still respect the agreement.
 
-The \gls{batman2} protocol is for this reason designed in such a way that the altruistic path is more convenient for the nodes to pursue, pushing the rate of the selfish nodes close to zero.
-If one reportedly drops packets, in fact, its reputation lowers down to a point when all packets generated by the device itself are immediately dropped by neighbours, and do not reach their destination. The right to communicate with others can be eventually gained back when the unfair behaviour stops and packet forwarding starts again.
-This strategy is, substantially, a tit-for-tat (TFT) one, with delayed reward and punishment.
+The \gls{batman2} protocol is for this reason designed such that the altruistic path is more convenient for the nodes to pursue, pushing the rate of the selfish players close to zero.
+If one reportedly drops packets, in fact, its reputation lowers down to a point when all packets generated by the device itself are immediately dropped by neighbours, and therefore do not reach their destination. The right to communicate with others can be eventually gained back when the unfair behaviour stops and packet forwarding starts again.
+This strategy is, substantially, a tit-for-tat (TFT) with delayed reward and punishment.
 With this expedient, the protocol can avoid the escalation problem, which is common when mimicing the behaviour of the adversary previous move.
 
 The collaboration will, in fact, turn out to be a \gls{ne} for the game played between all the connected entities.
@@ -184,13 +186,16 @@ The collaboration will, in fact, turn out to be a \gls{ne} for the game played b
 % - requested traffic (number and intensity of apps)
 % - channel quality
 
-A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth with others, in a always-cooperate strategy. The behaviour of always-defect, meaning each node is not cooperating, is dumb for the nature of the mesh network itself and won't be considered any further.
+A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth with others, in an \emph{always-cooperate} strategy. The behaviour of \emph{always-defect}, meaning each node is not cooperating, is dumb for the nature of the mesh network and won't be considered any further.
 Since the trivial altruistic approach gives no substantial penalty to selfish players, they can still profit from the network while making the experience worse for everyone else.
 
-As what can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. Moreover, we can see that if the rate of the egoistic nodes is less than $16.7\%$, devices are slightly encouraged to play for their own advantage, i.e. dropping the other player's packets.
-Over this limit playing altruistically is a bit incentivized, but the overall gain is limited.
+As what can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. Moreover, we can see that if the rate of the egoistic nodes is less than $16.7\%$, devices are slightly encouraged to play for their own advantage, i.e. dropping the others packets.
+Over this limit, playing altruistically is a bit incentivized, but the overall gain is limited.
 
 This makes selfish behaviour a viable option, highlighting a big argument against this simple approach to distributed routing.
+
+\smallbreak
+\smallbreak
 
 \begin{figure}[h]
   \includegraphics{figures/obj_func_vs_selfish_rate_no_punish.eps}
@@ -204,7 +209,7 @@ This makes selfish behaviour a viable option, highlighting a big argument agains
   \label{fig:no-blame-app-rate}
 \end{figure}
 
-The \gls{batman2} protocol tackles this issue creating a reputation score for each one of the members of the network: it increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
+The \gls{batman2} protocol tackles this issue creating a reputation score for each members of the network: this metric increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
 
 In normal situations, such as in \autoref{fig:selfish-rate}, the altruistic way is the preferred one, although it becomes less and less favourable when the ratio of selfish node grows. This is expected as the overall performance drops when data are not being delivered to destination.
 
@@ -216,7 +221,7 @@ In normal situations, such as in \autoref{fig:selfish-rate}, the altruistic way 
 
 A critical scenario for the network is studied in \autoref{fig:parabola}. Here packet generation rate, namely app rate, is low enough that the network is not able to detect selfish nodes until they are more than half of the total number.
 
-Either with a bigger number of egoistic nodes or higher offered traffic the unfair behaviour is spotted by the protocol and selfish nodes receive their punishment, as shown in \autoref{fig:par02}.
+Either with a bigger number of egoistic nodes or higher offered traffic, the unfair behaviour is spotted by the protocol and free rider nodes receive their punishment, as shown in \autoref{fig:par02}.
 
 \begin{figure}[h]
   \includegraphics{figures/obj_func_vs_selfish_rate_parabola.eps}
@@ -227,20 +232,21 @@ Either with a bigger number of egoistic nodes or higher offered traffic the unfa
 \begin{figure}[h]
   \includegraphics{figures/obj_func_vs_selfish_rate_parabola_02.eps}
   \includegraphics{figures/obj_func_vs_selfish_rate_parabola02_zoom.eps}
-  \caption{With higher offered traffic, selfishness is punished.}
-  \label{fig:par02}
+  \caption{With higher offered traffic, selfishness is punished. Plot below is a detail of the one above.}
+\label{fig:par02}
 \end{figure}
 \clearpage
 \section{Conclusion}
 
-In this course project we showed how game theory is the key to understand and design distributed and collaborative routing protocols such that the resulting network becomes fair for everyone involved. This way, nodes can use their resources with a win-win result.
+In this course project we showed how game theory is the key to understanding and designing distributed and collaborative routing protocols such that the resulting network becomes fair for everyone involved. This way, nodes can use their resources with a win-win result.
 
-As proved in our case study of a wireless network, cooperation among participants has to be promoted with some kind of punishment for selfish behaviour: once this incentive has been set up, the systems is reliable even if a fraction of the users does not comply to the proposed \gls{ne} strategy.
+As proved in our case study of a wireless network, cooperation among participants has to be promoted with some kind of punishment for selfish behaviour: once this incentive has been set up, the systems is reliable even if a fraction of the users does not comply with the proposed \gls{ne} strategy.
 
 This reliability requires though that the number of packets transmitted over time is high enough: in this case performances are enhanced for altruistic nodes and egoistic ones are excluded from the network.
 Conversely, when it does not hold the free rider strategy of selfish nodes is not punished and the system collapses.
 
 So, when one is designing a self-sustaining mesh network the possibility for nodes to act selfishly and the countermeasures to avoid that need to be taken into account.
+
 \nocite{*}
 \bibliographystyle{IEEEtran}
 \bibliography{report}
