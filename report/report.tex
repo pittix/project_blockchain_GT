@@ -41,7 +41,7 @@ enrico.lovisotto@studenti.unipd.it}
 \begin{abstract}
   In this course project we will show how a de-centralized telecommunication network using the popular \gls{batman} protocol can sustain itself without a central control and experiencing some free riding nodes.
 
-  The key point to make this kind of systems feasible and reliable is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
+  To make this kind of systems feasible and reliable, the key point is to reward collaboration and penalize unwanted selfish behaviour: in this case the former consists in forwarding each others packets and the latter in dropping them.
 
   We will study, simulate and measure performances of a distributed infrastructure in order to empirically evaluate when collaboration is indeed the best strategy for the nodes to pursue, meaning when it is the game \gls{ne}, and when nodes are incouraged to act selfishly deceiving the altruistic nodes.
 \end{abstract}
@@ -50,11 +50,11 @@ enrico.lovisotto@studenti.unipd.it}
 
 % - history\\
 
-\gls{batman} was created in 2007 as a mesh networks protocol that allowed users to create network using their devices as nodes that routes traffic and transmit data to the network.
+\gls{batman} was created in 2007 as a mesh networks protocol that allowed users to create or join a network using their devices as nodes that transmit and routes traffic arriving from other nodes.
 
-In 2008 it became \gls{batman}-adv breaking the ISO/OSI stack and exploiting knowledge at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network.
+In 2008 it became \gls{batman}-adv breaking the ISO/OSI stack and exploiting knowledge both at layer 2 and 3 to efficiently find paths and route the packets arriving to each node. During these years the protocol evolved and in 2011 became officially supported by the Linux Kernel, allowing all PCs to become a node in the network.
 
-Since then, the protocol was widely tested, thanks to the Freifunk initiative, which aims to create a decentralized WiFi network and reaching all Germany.
+Since then, the protocol was widely tested,  thanks to the Freifunk initiative, which aims to create a decentralized WiFi network that is reaching all Germany.
 
 \begin{figure}[h]
   \centering
@@ -66,16 +66,17 @@ Since then, the protocol was widely tested, thanks to the Freifunk initiative, w
 \smallskip
 
 % - how does the protocol work: principles
+Before starting with the problem analysis, it is better to define how \gls{batman}-adv works to be able to run efficiently the simulations.
 
-The protocol \gls{batman}-adv creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
+The protocol creates a network of ad-hoc connections where each node periodically notifies the neighbours of its presence using discovery messages.
 
 Similarly to what is done in traditional distance-vector routing protocols, this information is used to build a local table that associates each known remote destination to the next hop for the packet to cross.
 
-The peculiar feature of the \gls{batman} protocol is that together with the alive messages the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network, and so connections are more reliable and resilient even with mobile and non-persistent users.
+The peculiar feature of the \gls{batman} protocol is that, together with the alive messages, the nodes will periodically exchange their own local forwarding scheme. The emerging shared knowledge makes the connected entities aware of the global structure of the network, and so connections are more reliable and resilient even with mobile and non-persistent users.
 
 In fact, when a node fails other ones can immediately find new paths upon being notified the change of topology.
 Conversely, if a node starts acting selfishly, as it disregards forwarding other packets, the network will soon notice its unfair behaviour and will ignore all the packets coming from it.
-This type of behaviour is pretty common to many decentralized networks, like MANETs \cite{MANETs} and protocols, like BitTorrent or ED2K, where a node that doesn't cooperate via the upload has a limited download capability.\cite{BitTorrent,ed2k}
+This type of behaviour is pretty common to many decentralized networks, like MANETs \cite{MANETs}, and protocols, like BitTorrent or ED2K, for which the policy of a non cooperating node, i.e. it does not upload, has the repercussion of a limited download capability.\cite{BitTorrent,ed2k}
 
 While for smaller networks such global table can span the whole set of nodes, for bigger ones fixed gateways can be set in order to reach far destinations. This reduces the information required at each node and allows \gls{batman}-adv to run in home routers.
 
