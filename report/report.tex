@@ -184,11 +184,10 @@ The collaboration will, in fact, turn out to be a \gls{ne} for the game played b
 % - requested traffic (number and intensity of apps)
 % - channel quality
 
-A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth to others, in a always-cooperate strategy. The behaviour of always-defect, meaning each node is not cooperating, is dumb for the nature of the mesh network itself and won't be considered any further.
+A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth with others, in a always-cooperate strategy. The behaviour of always-defect, meaning each node is not cooperating, is dumb for the nature of the mesh network itself and won't be considered any further.
 Since the trivial altruistic approach gives no substantial penalty to selfish players, they can still profit from the network while making the experience worse for everyone else.
 
 As what can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. Moreover, we can see that if the rate of the egoistic nodes is less than $16.7\%$, devices are slightly encouraged to play for their own advantage, i.e. dropping the other player's packets.
-
 Over this limit playing altruistically is a bit incentivized, but the overall gain is limited.
 
 This makes selfish behaviour a viable option, highlighting a big argument against this simple approach to distributed routing.
@@ -205,7 +204,7 @@ This makes selfish behaviour a viable option, highlighting a big argument agains
   \label{fig:no-blame-app-rate}
 \end{figure}
 
-The \gls{batman} protocol tackles this issue creating a reputation score for each one of the members of the network: it increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
+The \gls{batman2} protocol tackles this issue creating a reputation score for each one of the members of the network: it increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
 
 In normal situations, such as in \autoref{fig:selfish-rate}, the altruistic way is the preferred one, although it becomes less and less favourable when the ratio of selfish node grows. This is expected as the overall performance drops when data are not being delivered to destination.
 
@@ -217,7 +216,7 @@ In normal situations, such as in \autoref{fig:selfish-rate}, the altruistic way 
 
 A critical scenario for the network is studied in \autoref{fig:parabola}. Here packet generation rate, namely app rate, is low enough that the network is not able to detect selfish nodes until they are more than half of the total number.
 
-Either with a bigger number of egoistic nodes or bigger offered traffic the unfair behaviour is spotted by the protocol and selfish nodes receive their punishment, as shown in \autoref{fig:par02}.
+Either with a bigger number of egoistic nodes or higher offered traffic the unfair behaviour is spotted by the protocol and selfish nodes receive their punishment, as shown in \autoref{fig:par02}.
 
 \begin{figure}[h]
   \includegraphics{figures/obj_func_vs_selfish_rate_parabola.eps}
@@ -231,16 +230,17 @@ Either with a bigger number of egoistic nodes or bigger offered traffic the unfa
   \caption{With higher offered traffic, selfishness is punished.}
   \label{fig:par02}
 \end{figure}
-
+\clearpage
 \section{Conclusion}
 
-In this course project we showed how game theory is the key to understand and design distributed and collaborative routing protocols.
+In this course project we showed how game theory is the key to understand and design distributed and collaborative routing protocols such that the resulting network becomes fair for everyone involved. This way, nodes can use their resources with a win-win result.
 
 As proved in our case study of a wireless network, cooperation among participants has to be promoted with some kind of punishment for selfish behaviour: once this incentive has been set up, the systems is reliable even if a fraction of the users does not comply to the proposed \gls{ne} strategy.
 
 This reliability requires though that the number of packets transmitted over time is high enough: in this case performances are enhanced for altruistic nodes and egoistic ones are excluded from the network.
-Conversely, when it does not hold the free rider strategy of selfish nodes is rewarded and the system collapses.
+Conversely, when it does not hold the free rider strategy of selfish nodes is not punished and the system collapses.
 
+So, when one is designing a self-sustaining mesh network the possibility for nodes to act selfishly and the countermeasures to avoid that need to be taken into account.
 \nocite{*}
 \bibliographystyle{IEEEtran}
 \bibliography{report}
