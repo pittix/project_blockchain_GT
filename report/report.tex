@@ -182,8 +182,8 @@ The collaboration will in fact turn out to be a \gls{ne} for the game played bet
 A naive conception of a distributed routing algorithm could simply rely on the generosity of the nodes, hoping they will share their bandwidth to others.
 Since this approach gives no substantial penalty to selfish players, they can still profit from the network while making the experience worse for everyone else.
 
-As what can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. For all the plots that we were able to obtain through the simulations, though, we can see that if the rate of the egoistic nodes is less than $0.167$, then a device is slightly encouraged to play his own game: dropping the other player's packets.
-Over this limit, instead, playing altruistically is a bit incentivized, but the overall gain is limited.
+As what can be seen in \autoref{fig:no-blame} and in \autoref{fig:no-blame-app-rate}, the two performance lines are very close to each other: no strategy is then  preferable to the other one in terms of profit for the players. Moreover, we can see that if the rate of the egoistic nodes is less than $0.167$, devices are slightly encouraged to play for their own advantage, i.e. dropping the other player's packets.
+Over this limit playing altruistically is a bit incentivized, but the overall gain is limited.
 
 This makes selfish behaviour a viable option, showing a big argument against this simple approach to distributed routing.
 
@@ -201,10 +201,14 @@ This makes selfish behaviour a viable option, showing a big argument against thi
 
 The \gls{batman} protocol tackles this issue creating a reputation score for each one of the members of the network, that increases when the node collaborates forwarding packets along their path and decreases when it ignores them to favour its own.
 
-The altruistic way is always the preferred one, although it becomes less and less convenient when the ratio of selfish node grows. This has to be expected, as the overall performance drops when data are not being delivered to destination.
+The altruistic way is always the preferred one, although it becomes less and less favourable when the ratio of selfish node grows. This has to be expected, as the overall performance drops when data are not being delivered to destination.
 
+% cite plot
 
-Another possible critical situation for the network is the case shown in \autoref{fig:parabola} where as the packet generation rate, namely app rate, is low enough so that the network is not able to evaluate if there are some selfish nodes, until there are more than half nodes. In this case, the network collapses, and both selfish and altruistic nodes experience a drop on the bitrate. With higher app rate, the network can find before the selfish nodes and can isolate them easily, as shown in \autoref{fig:par02}.
+Another possible critical situation for the network is the case shown in \autoref{fig:parabola}. Here packet generation rate, namely app rate, is low enough that the network is not able to detect selfish nodes until they are more than half of the total number.
+
+After this break point the network collapses and both selfish and altruistic nodes experience a drop on the bitrate. With higher app rate, the network can find before the selfish nodes and can isolate them easily, as shown in \autoref{fig:par02}.
+
 \begin{figure}
   \includegraphics{figures/obj_func_vs_selfish_rate_parabola_02.eps}
   % \vspace0.1
@@ -212,7 +216,6 @@ Another possible critical situation for the network is the case shown in \autore
   \caption{In this case the selfishness is punished.}
   \label{fig:par02}
 \end{figure}
-
 
 \begin{figure}
   \includegraphics{figures/obj_func_vs_selfish_rate_parabola.eps}
