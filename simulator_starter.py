@@ -17,25 +17,25 @@ logging.basicConfig(level=logging.INFO)
 
 # fixed parameters, describing topology
 scenarios = [
-    { 'dim': 100, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 200, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 300, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
-    { 'dim': 100, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 200, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    # { 'dim': 100, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
+    # { 'dim': 200, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
+    # { 'dim': 300, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100 },
+    # { 'dim': 100, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    # { 'dim': 200, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
     { 'dim': 300, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 400, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 600, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 800, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
-    { 'dim': 1000, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 }
+    # { 'dim': 400, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    # { 'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    # { 'dim': 600, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    # { 'dim': 800, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 },
+    # { 'dim': 1000, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100 }
 ]
 
 # repeat each combination n times
-seeds = list(range(1000, 1100))
+seeds = list(range(1000, 1010))
 
 # tunable parameters
-selfish_rates = np.linspace(0.01, 0.1, num=10)
-app_rates = np.linspace(0.01, 0.05, num=10)
+selfish_rates = np.linspace(0.1, 0.7, num=10)
+app_rates = [0.1]
 
 print("Total number of combinations: {}".format(
     len(scenarios) * len(seeds) * len(selfish_rates) * len(app_rates)
