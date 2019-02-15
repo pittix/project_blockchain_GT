@@ -1,25 +1,56 @@
-import logging
+# import logging
 import subprocess
 from math import exp, sqrt
 from random import randint, random, seed
 
-import networkx as nx
+# import networkx as nx
 import numpy as np
 import pandas as pd
 
-from simulator import *
+# from simulator.core import Event, EventQueue, Base, Packet, logthis
+from simulator.core import G, event_queue, logger
+from simulator.layers import BatmanLayer, ApplicationLayer, Layer
 
 # default values
 LIGHT_SPEED = 299792458
 PROC_TIME = 0.001
 
+
 def interarrival_gen():
     while True:
         yield random() * 10
 
+
 def size_gen():
     while True:
         yield randint(100, 200)
+
+
+def connect_batmans(batmans, dist_lim):
+    distance = np.zeros((len(batmans), len(batmans)))
+    for ip1 in batmans:
+        for ip2 in batmans:
+            distance[ip1][ip2] = sqrt(
+                (batmans[ip1].position[0] - batmans[ip2].position[0])**2
+                + (batmans[ip1].position[1] - batmans[ip2].position[1])**2
+            )
+
+    for ip1 in batmans:
+        # pick the N-closest nodes
+        N_CLOSEST = 10
+        max_idx = np.argpartition(distance[ip1, :], -N_CLOSEST)[-N_CLOSEST:]
+
+        # ensure that they are close enough
+        neigh_nodes = max_idx[(distance[ip1, max_idx] > 0)]
+
+        for ip2 in neigh_nodes:
+            p_succ = exp(-distance[ip1, ip2]/dist_lim)
+            rtt = PROC_TIME + distance[ip1, ip2]/LIGHT_SPEED
+
+            batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
+            batmans[ip2].connect_to(batmans[ip1], p_succ=p_succ, rtt=rtt)
+    return batmans
+
 
 def simulator_batman(args):
     s = args["s"]
@@ -29,6 +60,8 @@ def simulator_batman(args):
     app_rate = args["app_rate"]
     selfish_rate = args["selfish_rate"]
     stop_time = args["stop_time"]
+    upd_time = args["update_time"]
+    snapshot_interval = args["snapshot_interval"]
 
     # 1) load queue for events created in simulator module
     seed(s)
@@ -52,28 +85,7 @@ def simulator_batman(args):
 
     # connect each other using some channels, described using a success
     # probability and round trip time
-    distance = np.zeros((len(batmans), len(batmans)))
-    for ip1 in batmans:
-        for ip2 in batmans:
-            distance[ip1][ip2] = sqrt(
-                (batmans[ip1].position[0] - batmans[ip2].position[0])**2 +
-                (batmans[ip1].position[1] - batmans[ip2].position[1])**2
-            )
-
-    for ip1 in batmans:
-        # pick the N-closest nodes
-        N_CLOSEST = 10
-        max_idx = np.argpartition(distance[ip1, :], -N_CLOSEST)[-N_CLOSEST:]
-
-        # ensure that they are close enough
-        neigh_nodes = max_idx[ (distance[ip1, max_idx] > 0) ]
-
-        for ip2 in neigh_nodes:
-            p_succ = exp(-distance[ip1, ip2]/dist_lim)
-            rtt = PROC_TIME + distance[ip1, ip2]/LIGHT_SPEED
-
-            batmans[ip1].connect_to(batmans[ip2], p_succ=p_succ, rtt=rtt)
-            batmans[ip2].connect_to(batmans[ip1], p_succ=p_succ, rtt=rtt)
+    batmans = connect_batmans(batmans, dist_lim)
 
     # create the application for each end-to-end stream: for the simulation
     # to be reasonable, each node has to have at least one application
@@ -110,10 +122,11 @@ def simulator_batman(args):
                                         dst_ip=ip1)
                 batmans[ip2].connect_app(app2)
 
-                apps.append( (app1, app2) )
+                apps.append((app1, app2))
 
     # run the simulation, until we run out of events
     counter = 0
+    snapshot_counter = 0
     # try:
     while True:
         counter += 1
@@ -123,11 +136,13 @@ def simulator_batman(args):
         # trigger events until we run out of them
         if event_queue.next() is None:
             break
-    # except nx.exception.NetworkXNoPath as err:
-    #     logger.error("Error: two nodes are not connected: ")
-    #     logger.error("message: ", err)
-    #     return
-
+        if event_queue.now % snapshot_interval == 0:
+            for ip in batmans:
+                # TODO
+                snapshot_counter += 1
+        # update selfish rates
+        if event_queue.now % upd_time == 0:
+            pass  # TODO
     # judge application layer rates
     performances = {ip: 0 for ip in batmans.keys()}
     for app1, app2 in apps:

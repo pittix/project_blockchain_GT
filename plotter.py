@@ -1,10 +1,10 @@
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
+# import numpy as np
 import pandas as pd
 
-font = {'family' : 'normal',
-        'size'   : 10}
+font = {'family': 'normal',
+        'size': 10}
 
 matplotlib.rc('font', **font)
 
@@ -21,8 +21,8 @@ for node_num in node_nums:
     for app_rate in app_rates:
         print(node_num, app_rate)
         data = data_original[
-            (data_original['node_num'] == node_num) &
-            (data_original['app_rate'] == app_rate)
+            (data_original['node_num'] == node_num)
+            & (data_original['app_rate'] == app_rate)
         ].groupby([FIXED_PARAM]).sum()
 
         data['selfish'] /= data['selfish_num']
@@ -51,4 +51,6 @@ for node_num in node_nums:
 
         plt.tight_layout()
         # plt.show()
-        plt.savefig('report/figures/obj_funcs/lovi-obj_func_vs_{}_N_{}_app_{}.eps'.format(FIXED_PARAM, node_num, app_rate))
+        plt.savefig("""report/figures/
+                    obj_funcs/lovi-obj_func_vs_{}_N_{}_app_{}
+                    .eps""".format(FIXED_PARAM, node_num, app_rate))

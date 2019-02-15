@@ -1,6 +1,6 @@
 import logging
 from functools import total_ordering
-from inspect import signature
+# from inspect import signature
 from types import FunctionType, GeneratorType
 
 import networkx as nx
@@ -20,18 +20,10 @@ class Base:
 
         return "<{}({})>".format(self.__class__.__name__, ", ".join(arguments))
 
+
 @total_ordering
 class Event(Base):
     def __init__(self, action, when):
-        # check that action doesn't take any arguments
-        # this means all needed variables have been
-        # captured at its creation
-        # if len(signature(action).parameters) != 0:
-            # print("----------------------> {}".format(signature(action)))
-            # raise ValueError(
-                # 'Event: action should not take any parameters to be called'
-            # )
-
         self.action = action
         self.when = when
 
@@ -43,6 +35,7 @@ class Event(Base):
 
     def __eq__(self, other):
         return self.when == other.when
+
 
 class EventQueue(Base):
     def __init__(self):
@@ -69,6 +62,7 @@ class EventQueue(Base):
     def clean(self):
         self.__init__()
 
+
 class Packet(Base):
     last_packet_id = 0
 
@@ -90,6 +84,7 @@ class Packet(Base):
 
         return value
 
+
 def logthis(level):
     def _decorator(fn):
         def _decorated(*arg, **kwargs):
@@ -103,7 +98,8 @@ def logthis(level):
             ret = fn(*arg, **kwargs)
             if ret:
                 logger.log(level,
-                           "  called %s: args=%r, kwargs=%r got return value: %r",
+                           """\t called %s: args=%r,
+                            kwargs=%r got return value: %r""",
                            fn.__name__,
                            arg,
                            kwargs,
@@ -111,6 +107,7 @@ def logthis(level):
             return ret
         return _decorated
     return _decorator
+
 
 # create a logger for all interesting events
 logger = logging.getLogger("simulator")

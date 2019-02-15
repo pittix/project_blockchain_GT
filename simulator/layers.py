@@ -1,12 +1,12 @@
 import logging
-from math import sqrt
-from random import random
+# from math import sqrt
+# from random import random
 
 from numpy.random import geometric
-from scipy.constants import Boltzmann, pi
-from scipy.special import erfc
-
-from .core import *
+# from scipy.constants import Boltzmann, pi
+# from scipy.special import erfc
+import networkx as nx
+from .core import G, event_queue, Base, logthis, DEFAULT_WEIGHT, Event, Packet
 
 
 class Layer(Base):
@@ -35,19 +35,11 @@ class Layer(Base):
         lower_layer.recv_from_up(packet, self.id_)
 
     def recv_from_up(self, packet, upper_layer_id):
-        raise NotImplemented
+        raise NotImplementedError
 
     def recv_from_down(self, packet, lower_layer_id):
-        raise NotImplemented
+        raise NotImplementedError
 
-class Sink(Layer):
-    @logthis(logging.DEBUG)
-    def recv_from_up(self, packet, upper_layer_id):
-        pass
-
-    @logthis(logging.DEBUG)
-    def recv_from_down(self, packet, lower_layer_id):
-        pass
 
 class Channel(Layer):
     def __init__(self, p_succ, rtt, src_ip, dst_ip, dst_id):
@@ -103,6 +95,7 @@ class Channel(Layer):
         if len(self.queue) > 0:
             self.schedule_tx()
 
+
 class BatmanLayer(Layer):
     def __init__(self, local_ip, selfish, position):
         super(self.__class__, self).__init__()
@@ -121,7 +114,7 @@ class BatmanLayer(Layer):
 
         self.drop_score = 0
 
-        ## routing address of node
+        # routing address of node
         self.local_ip = local_ip
 
         # register in graph
@@ -168,7 +161,7 @@ class BatmanLayer(Layer):
     def recv_from_down(self, packet, lower_layer_id):
         # TODO use packet['next_hop_ip'] to perform routing
         # (and distinguish between next hop and destination ip)
-        if packet['path'][-1] == self.local_ip: # handle packet for me
+        if packet['path'][-1] == self.local_ip:  # handle packet for me
             assert packet['dst_port'] in self.app_table
 
             upper_layer_id = self.app_table[packet['dst_port']]
@@ -178,7 +171,7 @@ class BatmanLayer(Layer):
             if G.nodes[packet['src_ip']]['weight'] > 10:
                 return
 
-            if self.selfish == False:
+            if self.selfish is False:
                 packet['path'] = packet['path'][1:]
 
                 # give a prize to fair nodes
@@ -193,6 +186,7 @@ class BatmanLayer(Layer):
 
         # keep graph in sync
         G.nodes[self.local_ip]['weight'] = self.drop_score
+
 
 class ApplicationLayer(Layer):
     def __init__(self, interarrival_gen, size_gen, start_time, stop_time,
@@ -221,7 +215,9 @@ class ApplicationLayer(Layer):
         self.tx_packet_size = 0
 
         # schedule start of transmissions
-        event_queue.add(Event(action=lambda: self.generate_pkts(), when=start_time))
+        event_queue.add(
+            Event(action=lambda: self.generate_pkts(), when=start_time)
+            )
 
     @logthis(logging.DEBUG)
     def generate_pkts(self):
@@ -232,7 +228,7 @@ class ApplicationLayer(Layer):
         if next_gen_time < self.stop_time:
             # send packet to lower layer
             p = Packet(size=size,
-                       header = {
+                       header={
                            'src_ip':   self.local_ip,
                            'src_port': self.local_port,
                            'dst_ip':   self.dst_ip,
