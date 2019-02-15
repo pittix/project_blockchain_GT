@@ -51,16 +51,18 @@ def combinations():
                 for seed in seeds:
                     for snapshot_interval in snapshots:
                         for update_time in updates:
-                            if update_time > snapshot_interval:
-                                continue
-                            yield {
-                                **scenario,
-                                'selfish_rate': selfish_rate,
-                                'app_rate': app_rate,
-                                's': seed,
-                                'update_time': update_time,
-                                'snapshot_interval': snapshot_interval
-                                }
+                            if update_time < snapshot_interval:
+                                while True:
+                                    yield None
+                                else:
+                                    yield {
+                                        **scenario,
+                                        'selfish_rate': selfish_rate,
+                                        'app_rate': app_rate,
+                                        's': seed,
+                                        'update_time': update_time,
+                                        'snapshot_interval': snapshot_interval
+                                        }
 
 
 # init parameter generator
@@ -83,32 +85,27 @@ failures = 0
 def start_new_thread():
     global available_threads, combos, results, p
     print("entered start_new_thread")
-    a = True
     try:
-        while a:
+        tmp_var = next(combos)
+        # avoid the cases where the update time is lower than the snapshot time
+        while tmp_var is None:
             tmp_var = next(combos)
-            a = False
-            print("tmp var : ", tmp_var)
-    except StopIteration as e:
-        print("error:", e)
-        time.sleep(3)
-        return
-    if tmp_var is None:
-        print("reached stop iteration")
-        # finished processes
-        available_threads -= 1  # case num_sim < available_threads
-        return
+        print("tmp var : ", tmp_var)
         # start the thread and program a new start when the function ends
-    print("starting process")
-    res = p.apply_async(
-                        simulator_batman,
-                        (tmp_var,),
-                        callback=process_finished,
-                        error_callback=process_error
-                        )
-    print("started ", res)
-    results.append(res)
-    available_threads -= 1
+        print("starting process")
+        res = p.apply_async(
+                            simulator_batman,
+                            (tmp_var,),
+                            callback=process_finished,
+                            error_callback=process_error
+                            )
+        print("started ", res)
+        results.append(res)
+        available_threads -= 1
+    except StopIteration:
+        print("Finished simulation queue")
+        available_threads -= 1
+        return
 
 
 def process_finished(res):
