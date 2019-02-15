@@ -52,6 +52,22 @@ def connect_batmans(batmans, dist_lim):
     return batmans
 
 
+# TODO calculate the number of tx and rx bytes of all apps of a node
+def calc_app(batman, apps):
+    tx_bytes = 0
+    rx_bytes = 0
+    # for each app connected to this batman sum the number of tx/rx bytes
+    for app_id in batman.app_table.values():
+        this_app = Layer.all_layers[app_id]
+        tx_bytes += this_app.tx_packet_size
+        rx_bytes += this_app.rx_packet_size
+    return (tx_bytes, rx_bytes)
+
+
+def update_selfishness(batmans):
+    pass
+
+
 def simulator_batman(args):
     s = args["s"]
     node_num = args["node_num"]
@@ -127,6 +143,9 @@ def simulator_batman(args):
     # run the simulation, until we run out of events
     counter = 0
     snapshot_counter = 0
+    snapshot_next = 0
+    upd_next = 0
+    snapshots = []
     # try:
     while True:
         counter += 1
@@ -136,13 +155,25 @@ def simulator_batman(args):
         # trigger events until we run out of them
         if event_queue.next() is None:
             break
-        if event_queue.now % snapshot_interval == 0:
+        if event_queue.now > snapshot_next:
+            snapshot_next += snapshot_interval
             for ip in batmans:
                 # TODO
+                this_snap = {'time': event_queue.now}
+                tx, rx = calc_app(batmans[ip], apps)
+                this_snap[ip] = [
+                            batmans[ip].selfish,
+                            batmans[ip].drop_score,
+                            batmans[ip].tx,
+                            batmans[ip].rx
+                            ]
+                snapshots.append(this_snap)
                 snapshot_counter += 1
         # update selfish rates
-        if event_queue.now % upd_time == 0:
-            pass  # TODO
+        if event_queue.now > upd_next:
+            upd_next += upd_time
+            update_selfishness(batmans)
+
     # judge application layer rates
     performances = {ip: 0 for ip in batmans.keys()}
     for app1, app2 in apps:
