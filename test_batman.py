@@ -1,5 +1,5 @@
 # import logging
-import subprocess
+# import subprocess
 from math import exp, sqrt
 from random import randint, random, seed
 
@@ -52,7 +52,6 @@ def connect_batmans(batmans, dist_lim):
     return batmans
 
 
-# TODO calculate the number of tx and rx bytes of all apps of a node
 def calc_app(batman, apps):
     tx_bytes = 0
     rx_bytes = 0
@@ -65,7 +64,17 @@ def calc_app(batman, apps):
 
 
 def update_selfishness(batmans):
-    pass
+    # approach 1: if neighbours are almost all altruistic, then become selfish
+    # if I have a bad reputation, try gaining it
+    drop_lim = BatmanLayer.drop_lim
+    for bat in batmans:
+        if bat.drop_score > drop_lim:
+            bat.selfish = False
+        else:
+            neighbours = bat.neighbour_table.keys()
+            self_neigh = [neigh.selfish for neigh in neighbours]
+            if self_neigh.count(True) < 2:
+                bat.selfish = True
 
 
 def simulator_batman(args):
@@ -78,6 +87,7 @@ def simulator_batman(args):
     stop_time = args["stop_time"]
     upd_time = args["update_time"]
     snapshot_interval = args["snapshot_interval"]
+    BatmanLayer.drop_lim = args["drop_lim"]
 
     # 1) load queue for events created in simulator module
     seed(s)
@@ -95,7 +105,8 @@ def simulator_batman(args):
     batmans = {
         ip: BatmanLayer(ip,
                         selfish=(ip / node_num < selfish_rate),
-                        position=(dim * random(), dim * random()))
+                        position=(dim * random(), dim * random()),
+                        )
         for ip in range(node_num)
     }
 
@@ -142,7 +153,6 @@ def simulator_batman(args):
 
     # run the simulation, until we run out of events
     counter = 0
-    snapshot_counter = 0
     snapshot_next = 0
     upd_next = 0
     snapshots = []
@@ -158,7 +168,6 @@ def simulator_batman(args):
         if event_queue.now > snapshot_next:
             snapshot_next += snapshot_interval
             for ip in batmans:
-                # TODO
                 this_snap = {'time': event_queue.now}
                 tx_bytes, rx_bytes = calc_app(batmans[ip], apps)
                 this_snap[ip] = [
@@ -167,8 +176,7 @@ def simulator_batman(args):
                             tx_bytes,
                             rx_bytes
                             ]
-                snapshots.append(this_snap)
-                snapshot_counter += 1
+            snapshots.append(this_snap)
         # update selfish rates
         if event_queue.now > upd_next:
             upd_next += upd_time
@@ -212,4 +220,5 @@ def simulator_batman(args):
         'altruistic_num': len(altruistic_obj),
         'selfish': [sum(selfish_obj)],
         'altruistic': sum(altruistic_obj),
+        'snapshots': snapshots
     }

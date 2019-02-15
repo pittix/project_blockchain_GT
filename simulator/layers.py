@@ -97,6 +97,8 @@ class Channel(Layer):
 
 
 class BatmanLayer(Layer):
+    drop_lim = 10
+
     def __init__(self, local_ip, selfish, position):
         super(self.__class__, self).__init__()
 
@@ -104,7 +106,6 @@ class BatmanLayer(Layer):
         # NOTE a selfish node does not forward packets from others
         self.selfish = selfish
         self.position = position
-
         self.neighbour_table = {
             # dest IP: ID of channel layer
         }
@@ -168,7 +169,7 @@ class BatmanLayer(Layer):
             self.send_up(packet, upper_layer_id)
         else:
             # penalize selfish nodes, dropping their packets
-            if G.nodes[packet['src_ip']]['weight'] > 10:
+            if G.nodes[packet['src_ip']]['weight'] > BatmanLayer.drop_lim:
                 return
 
             if self.selfish is False:
