@@ -160,12 +160,12 @@ def simulator_batman(args):
             for ip in batmans:
                 # TODO
                 this_snap = {'time': event_queue.now}
-                tx, rx = calc_app(batmans[ip], apps)
+                tx_bytes, rx_bytes = calc_app(batmans[ip], apps)
                 this_snap[ip] = [
                             batmans[ip].selfish,
                             batmans[ip].drop_score,
-                            batmans[ip].tx,
-                            batmans[ip].rx
+                            tx_bytes,
+                            rx_bytes
                             ]
                 snapshots.append(this_snap)
                 snapshot_counter += 1
