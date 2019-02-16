@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# Imposta il valore 'name' di qstat
+#$ -N B.A.T.M.A.N.
+#
+# Tutti i percorsi sono relativi alla cartella corrente (-cwd)
+# Genera output ed errori nella cartella corrente.
+#$ -cwd
+#
+# chiedi il parallelismo con 32 cpu
+#$ -pe parallel 32
+#
+# Non redirigo l'output: ogni esecuzione generera' un file diverso.
+# Il file di output sara' test.job.oJOBID
+# Il file degli errori sara' test.job.eJOBID
+#
+# Voglio ricevere una mail quando il job termina
+# o in caso venga abortito
+#
+#$ -m beas
+
+# cd /home/pittaroa/project_blockchain_GT/
+# ../.local/bin/virtualenv -p python3.5 venv-cluster/
+source venv-cluster/bin/activate
+# I'm inside the virtual env
+# pip install -r requirements.txt
+#pip install tables
+
+
+python --version
+python -O /home/pittaroa/project_blockchain_GT/simulator_starter.py
