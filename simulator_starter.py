@@ -11,24 +11,28 @@ import numpy as np
 import pandas as pd
 # from simulator import
 from test_batman import simulator_batman
-
+import sys
 logging.basicConfig(level=logging.INFO)
 
 # setup simulation parameters
 
 # fixed parameters, describing topology
 scenarios = [
-    {'dim': 100, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100},
-    {'dim': 200, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100},
-    {'dim': 300, 'dist_lim': 100, 'node_num': 10, 'stop_time': 100},
+    {'dim': 100, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
+    {'dim': 200, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
+    {'dim': 300, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
     {'dim': 100, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 200, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 300, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 400, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 600, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 800, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 1000, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100}
+    {'dim': 100, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
+    {'dim': 200, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
+    {'dim': 300, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
+    {'dim': 400, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100}
+    # {'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
+    # {'dim': 600, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
+    # {'dim': 800, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
+    # {'dim': 1000, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100}
 ]
 
 # repeat each combination n times
@@ -69,11 +73,9 @@ def combinations():
 
 # init parameter generator
 combos = combinations()
-print(combos)
 # setup pool of workers
 available_threads = mp.cpu_count()  # 32  # se in coda dentro 'Blade'
 p = mp.Pool(available_threads)
-print(p)
 # prepare backup
 time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
 # clean old results
@@ -83,7 +85,7 @@ subprocess.call(mv_str, shell=True)
 store = pd.HDFStore("results/simulation_results.hdf5")
 results = []
 failures = 0
-
+count_ended = 0
 
 def start_new_thread():
     global available_threads, combos, results, p
@@ -92,7 +94,6 @@ def start_new_thread():
         # avoid the cases where the update time is lower than the snapshot time
         while tmp_var["snapshot_interval"] > tmp_var["update_time"]:
             tmp_var = next(combos)
-        print("tmp var : ", tmp_var)
         # start the thread and program a new start when the function ends
         res = p.apply_async(
                             simulator_batman,
@@ -100,7 +101,6 @@ def start_new_thread():
                             callback=process_finished,
                             error_callback=process_error
                             )
-        print("started ", res)
         results.append(res)
         available_threads -= 1
     except StopIteration:
@@ -109,23 +109,26 @@ def start_new_thread():
 
 
 def process_finished(res):
-    global available_threads
+    global available_threads, count_ended
     store.append(
                 'results',
-                pd.DataFrame.from_dict(res),
+                pd.DataFrame.from_records(res),
                 format='t',
                 data_columns=True
                 )
     available_threads += 1
+    count_ended += 1
     start_new_thread()
 
 
 def process_error(err):
-    global failures
+    global failures, count_ended
     print("An error occoured: ")
     print("class: ", err.__class__)
     print("message: ", err)
+    print("Traceback:", err.__traceback__)
     failures += 1
+    count_ended += 1
     start_new_thread()
 
 
@@ -133,13 +136,17 @@ def process_error(err):
 while(available_threads > 0):
     start_new_thread()
     # avoid program from finishing until all processes are done
-time.sleep(1)  # wait 10 seconds before re-checking
+time.sleep(1)  # wait 1 second before re-checking
 while(len(results) > 0):
-    time.sleep(1)  # wait 10 seconds before re-checking
-    finished = [x.ready() for x in results]
-    print(finished)
+    time.sleep(10)  # wait 10 seconds before re-checking
+    finish = [x.ready() for x in results]
     # remove finished results
-    results = [res for i, res in enumerate(results) if not finished[i]]
-    print("checking how many processes are running: ", len(results))
-
+    # update results list, minding that the list can increase in size
+    new_res = [r for i, r in enumerate(results[:len(finish)]) if not finish[i]]
+    results = new_res + results[len(finish):]
+    # print("checking how many processes are running: ", len(results))
+    if count_ended % 500 == 0:
+        with open("../Public-Htdocs/progress.txt", "w") as file:
+            file.write("Done {} sim out of {} \n".format(count_ended, tot_sim))
+            file.write("Progress done: {:.3%}".format(count_ended/tot_sim))
 store.close()
