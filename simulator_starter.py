@@ -1,7 +1,7 @@
 # import argparse
 import logging
 import multiprocessing as mp
-import subprocess
+# import subprocess
 # import sys
 import time
 import datetime
@@ -17,9 +17,9 @@ logging.basicConfig(level=logging.INFO)
 
 # fixed parameters, describing topology
 scenarios = [
-    {'dim': 100, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
-    {'dim': 200, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
-    {'dim': 300, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
+    # {'dim': 100, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
+    # {'dim': 200, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
+    # {'dim': 300, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
     {'dim': 100, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 200, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 300, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
@@ -110,7 +110,7 @@ def start_new_thread():
 
 
 def process_finished(res):
-    global available_threads, count_ended
+    global available_threads, count_ended, store, num_stores, time_str
     store.append(
                 'results',
                 pd.DataFrame.from_records(res),
@@ -123,9 +123,9 @@ def process_finished(res):
     # failure happens meanwhile
     if count_ended % 10000 == 0:
         store.close()
-        time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
-        store = pd.HDFStore("results/simulation_results_{}_{}.hdf5"
-                        .format(num_stores, time_str))
+        store = pd.HDFStore(
+                "results/simulation_results\
+                _{}_{}.hdf5".format(num_stores, time_str))
         num_stores += 1
     start_new_thread()
 
@@ -161,4 +161,5 @@ while(len(results) > 0):
 store.close()
 with open("../Public-Htdocs/progress.txt", "w") as file:
     time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
-    file.write("Simulation ended with {} failures at {}".format(failures,time_str))
+    file.write("Simulation ended with {} \
+                failures at {}".format(failures, time_str))
