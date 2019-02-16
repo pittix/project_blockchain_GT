@@ -11,7 +11,6 @@ import numpy as np
 import pandas as pd
 # from simulator import
 from test_batman import simulator_batman
-import sys
 logging.basicConfig(level=logging.INFO)
 
 # setup simulation parameters
@@ -79,13 +78,15 @@ p = mp.Pool(available_threads)
 # prepare backup
 time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
 # clean old results
-mv_str = "mv results/simulation_results.hdf5 \
-            results/simulation_results.hdf5.bak_{}".format(time_str)
-subprocess.call(mv_str, shell=True)
-store = pd.HDFStore("results/simulation_results.hdf5")
+# mv_str = "mv results/simulation_results.hdf5 \
+#             results/simulation_results.hdf5.bak_{}".format(time_str)
+# subprocess.call(mv_str, shell=True)
+store = pd.HDFStore("results/simulation_results_0_{}.hdf5".format(time_str))
 results = []
 failures = 0
 count_ended = 0
+num_stores = 1
+
 
 def start_new_thread():
     global available_threads, combos, results, p
@@ -118,6 +119,14 @@ def process_finished(res):
                 )
     available_threads += 1
     count_ended += 1
+    # save into smaller files to avoid huge RAM consumption and storing data if
+    # failure happens meanwhile
+    if count_ended % 10000 == 0:
+        store.close()
+        time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
+        store = pd.HDFStore("results/simulation_results_{}_{}.hdf5"
+                        .format(num_stores, time_str))
+        num_stores += 1
     start_new_thread()
 
 
@@ -150,3 +159,6 @@ while(len(results) > 0):
             file.write("Done {} sim out of {} \n".format(count_ended, tot_sim))
             file.write("Progress done: {:.3%}".format(count_ended/tot_sim))
 store.close()
+with open("../Public-Htdocs/progress.txt", "w") as file:
+    time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
+    file.write("Simulation ended with {} failures at {}".format(failures,time_str))
