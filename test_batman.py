@@ -89,12 +89,14 @@ def connect_apps(batmans, app_rate, stop_time):
 def calc_app(batman):
     tx_bytes = 0
     rx_bytes = 0
+    num_app = 0
     # for each app connected to this batman sum the number of tx/rx bytes
     for app_id in batman.app_table.values():
         this_app = Layer.all_layers[app_id]
         tx_bytes += this_app.tx_packet_size
         rx_bytes += this_app.rx_packet_size
-    return (tx_bytes, rx_bytes)
+        num_app += 1
+    return (tx_bytes, rx_bytes, num_app)
 
 
 def new_snapshot(batmans, args):
@@ -105,13 +107,13 @@ def new_snapshot(batmans, args):
     tot_tx_altr = 0
     tot_rx_altr = 0
     for ip in batmans:
-        tx_bytes, rx_bytes = calc_app(batmans[ip])
+        tx_bytes, rx_bytes, num_app = calc_app(batmans[ip])
         if batmans[ip].selfish is True:
-            selfish_count += 1
+            selfish_count += num_app
             tot_tx_self += tx_bytes
             tot_rx_self += rx_bytes
         else:
-            altruistic_count += 1
+            altruistic_count += num_app
             tot_tx_altr += tx_bytes
             tot_rx_altr += rx_bytes
 
