@@ -18,20 +18,13 @@ logging.basicConfig(level=logging.INFO)
 # fixed parameters, describing topology
 scenarios = [
     {'dim': 100, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
-    {'dim': 200, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
     {'dim': 300, 'dist_lim': 100, 'node_num': 20, 'stop_time': 100},
     {'dim': 100, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 200, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 300, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 400, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
     {'dim': 100, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
-    {'dim': 200, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
     {'dim': 300, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
-    {'dim': 400, 'dist_lim': 100, 'node_num': 50, 'stop_time': 100},
-    {'dim': 500, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 600, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 800, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100},
-    {'dim': 1000, 'dist_lim': 100, 'node_num': 100, 'stop_time': 100}
+    {'dim': 100, 'dist_lim': 100, 'node_num': 200, 'stop_time': 100},
+    {'dim': 300, 'dist_lim': 100, 'node_num': 200, 'stop_time': 100},
 ]
 
 # repeat each combination n times
@@ -40,7 +33,7 @@ seeds = list(range(1000, 1100))
 # tunable parameters
 selfish_rates = np.arange(0.01, 0.1, 0.01)
 np.append(selfish_rates, np.arange(0.1, 0.7, 0.1))
-app_rates = np.arange(0.01, 0.1, 0.02)
+app_rates = np.arange(0.01, 0.11, 0.02)
 np.append(app_rates, np.arange(0.1, 0.6, 0.1))
 updates = np.arange(0.5, 5.1, 0.5)
 drop_scores = range(5, 15)

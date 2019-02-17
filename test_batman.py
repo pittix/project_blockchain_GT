@@ -146,7 +146,8 @@ def new_snapshot():
         event_queue.clean()  # stop simulation if parameters are stable
 
 
-def update_selfishness(batmans):
+def update_selfishness():
+    global batmans, args_copy
     # approach 1: if neighbours are almost all altruistic, then become selfish
     # if I have a bad reputation, try gaining it
     drop_lim = BatmanLayer.drop_lim
@@ -158,6 +159,8 @@ def update_selfishness(batmans):
             self_neigh = [batmans[neigh].selfish for neigh in neighbours]
             if self_neigh.count(True) < 5:
                 bat.selfish = True
+    next = event_queue.now + args_copy["update_time"]
+    event_queue.add(Event(update_selfishness, when=next))
 
 
 def simulator_batman(args):
@@ -170,7 +173,6 @@ def simulator_batman(args):
     app_rate = args["app_rate"]
     selfish_rate = args["selfish_rate"]
     stop_time = args["stop_time"]
-    upd_time = args["update_time"]
     BatmanLayer.drop_lim = args["drop_lim"]
 
     # 1) load queue for events created in simulator module
@@ -184,6 +186,7 @@ def simulator_batman(args):
     snapshots = []
     # add the snapshot event
     event_queue.add(Event(new_snapshot, when=SNAPSHOT_TIME))
+    event_queue.add(Event(update_selfishness, when=args["update_time"]))
     # create a number of batman layers, corresponding to nodes
 
     # set deterministic number of selfish nodes: improves reliability of
@@ -206,26 +209,11 @@ def simulator_batman(args):
     # apps var never used. In fact I always use Layers.all_layers id_ param
     # to identify the app
     connect_apps(batmans, app_rate=app_rate, stop_time=stop_time)
-    # run the simulation, until we run out of events
-    # counter = 0
-    snapshot_next = 0
-    upd_next = 0
-    while True:
-        # counter += 1
-        # if counter % 10000 == 0:
-        #     logger.debug(event_queue.now)
 
-        # trigger events until we run out of them
+    # run the simulation, until we run out of events
+    while True:
         if event_queue.next() is None:
             break
-        if event_queue.now > snapshot_next:
-            snapshot_next += snapshot_interval
-            snapshots.append(new_snapshot(batmans, args))
-        # update selfish rates
-        if event_queue.now > upd_next:
-            upd_next += upd_time
-            update_selfishness(batmans)
 
     # Add last snapshot for final situation evaluation
-    snapshots.append(new_snapshot(batmans, args))
     return snapshots
