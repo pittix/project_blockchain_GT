@@ -2,12 +2,17 @@ from math import exp, sqrt
 from random import randint, random, seed
 import numpy as np
 # import pandas as pd
-from simulator.core import G, event_queue
+from simulator.core import G, event_queue, Event
 from simulator.layers import BatmanLayer, ApplicationLayer, Layer
 
 # default values
 LIGHT_SPEED = 299792458
 PROC_TIME = 0.001
+SNAPSHOT_TIME = 0.5
+THRES_VAR = 10
+batmans = {}
+args_copy = {}
+snapshots = []
 
 
 def interarrival_gen():
@@ -99,7 +104,8 @@ def calc_app(batman):
     return (tx_bytes, rx_bytes, num_app)
 
 
-def new_snapshot(batmans, args):
+def new_snapshot():
+    global snapshots, event_queue, batmans, args_copy
     selfish_count = 0
     altruistic_count = 0
     tot_tx_self = 0
@@ -119,7 +125,7 @@ def new_snapshot(batmans, args):
 
     this_snap = {
                 'time': event_queue.now,
-                **args,
+                **args_copy,
                 'altruistic_tx': tot_tx_altr,
                 'altruistic_rx': tot_rx_altr,
                 'selfish_tx': tot_tx_self,
@@ -127,7 +133,17 @@ def new_snapshot(batmans, args):
                 'selfish_num': selfish_count,
                 'altruistic_num': altruistic_count
                 }
-    return this_snap
+    prev_snapshots = snapshots[-10:]  # last 5 seconds
+    diff = 0
+    for snap in prev_snapshots:
+        diff += abs(selfish_count - snap["selfish_num"])
+    diff = diff / 10  # average the error
+    snapshots.append(this_snap)
+    if diff > THRES_VAR:  # changed a lot: continue simulation
+        next = event_queue.now + SNAPSHOT_TIME
+        event_queue.add(Event(new_snapshot, when=next))
+    else:
+        event_queue.clean()  # stop simulation if parameters are stable
 
 
 def update_selfishness(batmans):
@@ -145,6 +161,8 @@ def update_selfishness(batmans):
 
 
 def simulator_batman(args):
+    global args_copy, batmans, snapshots
+    args_copy = args
     s = args["s"]
     node_num = args["node_num"]
     dim = args["dim"]
@@ -153,7 +171,6 @@ def simulator_batman(args):
     selfish_rate = args["selfish_rate"]
     stop_time = args["stop_time"]
     upd_time = args["update_time"]
-    snapshot_interval = args["snapshot_interval"]
     BatmanLayer.drop_lim = args["drop_lim"]
 
     # 1) load queue for events created in simulator module
@@ -163,7 +180,10 @@ def simulator_batman(args):
     Layer.all_layers.clear()
     event_queue.clean()
     G.clear()
-
+    batmans = {}
+    snapshots = []
+    # add the snapshot event
+    event_queue.add(Event(new_snapshot, when=SNAPSHOT_TIME))
     # create a number of batman layers, corresponding to nodes
 
     # set deterministic number of selfish nodes: improves reliability of
@@ -190,7 +210,6 @@ def simulator_batman(args):
     # counter = 0
     snapshot_next = 0
     upd_next = 0
-    snapshots = []
     while True:
         # counter += 1
         # if counter % 10000 == 0:

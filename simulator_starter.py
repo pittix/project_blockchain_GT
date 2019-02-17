@@ -42,12 +42,11 @@ selfish_rates = np.arange(0.01, 0.1, 0.01)
 np.append(selfish_rates, np.arange(0.1, 0.7, 0.1))
 app_rates = np.arange(0.01, 0.1, 0.02)
 np.append(app_rates, np.arange(0.1, 0.6, 0.1))
-snapshots = np.arange(0.2, 1.5, 0.2)
 updates = np.arange(0.5, 5.1, 0.5)
 drop_scores = range(5, 15)
 # a = np.linspace(0, 0.5, num=10)
 tot_sim = len(scenarios) * len(seeds) * len(selfish_rates) * len(app_rates)
-tot_sim *= len(snapshots) * len(updates)*len(drop_scores)
+tot_sim *= len(updates)*len(drop_scores)
 print("Total number of combinations: {}".format(tot_sim))
 
 
@@ -56,18 +55,16 @@ def combinations():
         for selfish_rate in selfish_rates:
             for app_rate in app_rates:
                 for seed in seeds:
-                    for snapshot_interval in snapshots:
-                        for update_time in updates:
-                            for score_lim in drop_scores:
-                                yield {
-                                    **scenario,
-                                    'selfish_rate': selfish_rate,
-                                    'app_rate': app_rate,
-                                    's': seed,
-                                    'update_time': update_time,
-                                    'snapshot_interval': snapshot_interval,
-                                    'drop_lim': score_lim
-                                    }
+                    for update_time in updates:
+                        for score_lim in drop_scores:
+                            yield {
+                                **scenario,
+                                'selfish_rate': selfish_rate,
+                                'app_rate': app_rate,
+                                's': seed,
+                                'update_time': update_time,
+                                'drop_lim': score_lim
+                                }
 
 
 # init parameter generator
