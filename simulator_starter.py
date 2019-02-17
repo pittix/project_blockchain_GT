@@ -31,12 +31,11 @@ scenarios = [
 seeds = list(range(1000, 1100))
 
 # tunable parameters
-selfish_rates = np.arange(0.01, 0.1, 0.01)
-np.append(selfish_rates, np.arange(0.1, 0.7, 0.1))
-app_rates = np.arange(0.01, 0.11, 0.02)
-np.append(app_rates, np.arange(0.1, 0.6, 0.1))
-updates = np.arange(0.5, 5.1, 0.5)
-drop_scores = range(5, 15)
+selfish_rates = [0.1, 0.3, 0.5, 0.7]
+app_rates = np.arange(0.03, 0.08, 0.02)
+np.append(app_rates, np.arange(0.1, 0.6, 0.2))
+updates = [1, 2, 3]
+drop_scores = [5, 10, 15]
 # a = np.linspace(0, 0.5, num=10)
 tot_sim = len(scenarios) * len(seeds) * len(selfish_rates) * len(app_rates)
 tot_sim *= len(updates)*len(drop_scores)
@@ -71,8 +70,7 @@ time_str = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
 # mv_str = "mv results/simulation_results.hdf5 \
 #             results/simulation_results.hdf5.bak_{}".format(time_str)
 # subprocess.call(mv_str, shell=True)
-store = pd.HDFStore("/home/pittaroa/project_blockchain_GT/\
-        results/simulation_results_0_{}.hdf5".format(time_str))
+store = pd.HDFStore("/home/pittaroa/project_blockchain_GT/results/simulation_results_0_{}.hdf5".format(time_str))
 results = []
 failures = 0
 count_ended = 0
@@ -114,9 +112,7 @@ def process_finished(res):
     # failure happens meanwhile
     if count_ended % 10000 == 0:
         store.close()
-        store = pd.HDFStore("/home/pittaroa/project_blockchain_GT/\
-                results/simulation_results\
-                _{}_{}.hdf5".format(num_stores, time_str))
+        store = pd.HDFStore("/home/pittaroa/project_blockchain_GT/results/simulation_results_{}_{}.hdf5".format(num_stores, time_str))
         num_stores += 1
     start_new_thread()
 
@@ -137,6 +133,10 @@ while(available_threads > 0):
     start_new_thread()
     # avoid program from finishing until all processes are done
 time.sleep(1)  # wait 1 second before re-checking
+
+with open("/home/pittaroa/Public-Htdocs/progress.txt", "w") as file:
+    file.write("Started {} sim at time {}".format(tot_sim, time_str))
+
 while(len(results) > 0):
     time.sleep(10)  # wait 10 seconds before re-checking
     finish = [x.ready() for x in results]
@@ -145,7 +145,7 @@ while(len(results) > 0):
     new_res = [r for i, r in enumerate(results[:len(finish)]) if not finish[i]]
     results = new_res + results[len(finish):]
     # print("checking how many processes are running: ", len(results))
-    if count_ended % 500 == 0:
+    if count_ended % 100 == 0:
         with open("/home/pittaroa/Public-Htdocs/progress.txt", "w") as file:
             file.write("Done {} sim out of {} \n".format(count_ended, tot_sim))
             file.write("Progress done: {:.3%}".format(count_ended/tot_sim))
