@@ -81,9 +81,6 @@ def start_new_thread():
     global available_threads, combos, results, p
     try:
         tmp_var = next(combos)
-        # avoid the cases where the update time is lower than the snapshot time
-        while tmp_var["snapshot_interval"] > tmp_var["update_time"]:
-            tmp_var = next(combos)
         # start the thread and program a new start when the function ends
         res = p.apply_async(
                             simulator_batman,
