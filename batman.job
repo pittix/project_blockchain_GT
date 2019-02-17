@@ -13,7 +13,8 @@
 # Non redirigo l'output: ogni esecuzione generera' un file diverso.
 # Il file di output sara' test.job.oJOBID
 # Il file degli errori sara' test.job.eJOBID
-#
+#$ -o BATMAN_ok
+#$ -e BATMAN_err
 # Voglio ricevere una mail quando il job termina
 # o in caso venga abortito
 #
@@ -21,7 +22,7 @@
 
 # cd /home/pittaroa/project_blockchain_GT/
 # ../.local/bin/virtualenv -p python3.5 venv-cluster/
-source venv-cluster/bin/activate
+source wayne_manor/bin/activate
 # I'm inside the virtual env
 # pip install -r requirements.txt
 #pip install tables
